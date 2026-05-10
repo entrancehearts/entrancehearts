@@ -758,6 +758,64 @@
   </footer>
 
   <script>
+
+    // Update navbar for logged-in users
+async function updateNavbarForLoggedInUser() {
+  const { data } = await supabaseClient.auth.getSession();
+  
+  if (data.session) {
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('role')
+      .eq('id', data.session.user.id)
+      .single();
+    
+    const isAdmin = profile?.role === 'admin';
+    
+    // Update desktop navigation
+    const navLinks = document.querySelector('.nav-links');
+    if (navLinks) {
+      navLinks.innerHTML = `
+        <a href="browse.html" class="nav-link">🔥 Discover</a>
+        <a href="chat.html" class="nav-link">💬 Chats</a>
+        <a href="confessions.html" class="nav-link">💌 Confessions</a>
+        <a href="study.html" class="nav-link">📚 Study</a>
+        <a href="timer.html" class="nav-link">⏱️ Timer</a>
+        <a href="ai-match.html" class="nav-link">🤖 AI Match</a>
+        ${isAdmin ? `<a href="admin.html" class="btn-primary" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #1a1a2e;">👑 Admin</a>` : ''}
+        <a href="profile.html" class="btn-primary">👤 Profile</a>
+        <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
+      `;
+    }
+    
+    // Update mobile menu
+    const mobileMenu = document.querySelector('.mobile-menu');
+    if (mobileMenu) {
+      mobileMenu.innerHTML = `
+        <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
+        <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
+        <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
+        <a href="study.html" class="mobile-menu-item">📚 Study</a>
+        <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+        <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
+        ${isAdmin ? `<a href="admin.html" class="mobile-menu-item">👑 Admin</a>` : ''}
+        <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
+        <a href="#" class="mobile-menu-item" onclick="logout()">🚪 Logout</a>
+      `;
+    }
+  }
+}
+
+// Logout function
+async function logout() {
+  if (confirm('Logout?')) {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+}
+
+    
+    
     // ========== ANIMATED COUNTERS ==========
     function animateCounter(element, target) {
       let current = 0;
@@ -805,10 +863,11 @@ async function checkAdminAndShowButton() {
     }
   }
 }
+await updateNavbarForLoggedInUser();
 
+    
 // Call this function
 checkAdminAndShowButton();
-
 
     
     // ========== TESTIMONIALS FUNCTIONS ==========

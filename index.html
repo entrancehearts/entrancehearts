@@ -28,11 +28,10 @@
 
     :root {
       --gradient-pink: linear-gradient(135deg, #FF1493, #FF6B9D);
-      --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
     }
 
-    /* Animated Background Orbs */
-    .bg-orbs {
+    /* Animated Background */
+    .bg-animation {
       position: fixed;
       top: 0;
       left: 0;
@@ -41,23 +40,20 @@
       z-index: -1;
       overflow: hidden;
     }
-    .orb {
+    .bg-animation::before {
+      content: '';
       position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
-      animation: floatOrb 20s ease-in-out infinite;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 20% 50%, rgba(255,20,147,0.08), transparent 50%);
+      animation: rotateBg 30s linear infinite;
     }
-    .orb-1 { width: 400px; height: 400px; background: #FF1493; top: -100px; left: -100px; animation-delay: 0s; }
-    .orb-2 { width: 500px; height: 500px; background: #FF6B9D; bottom: -150px; right: -150px; animation-delay: 5s; }
-    .orb-3 { width: 300px; height: 300px; background: #e63946; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s; }
-    @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -30px) scale(1.1); }
-      66% { transform: translate(-20px, 20px) scale(0.9); }
+    @keyframes rotateBg {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    /* Premium Navbar */
+    /* Navbar */
     .navbar {
       position: fixed;
       top: 0;
@@ -166,6 +162,11 @@
       justify-content: center;
       flex-wrap: wrap;
       margin-bottom: 32px;
+      animation: fadeInDown 0.6s ease;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .hero-badge {
       background: rgba(255, 20, 147, 0.12);
@@ -176,12 +177,19 @@
       font-size: 0.8rem;
       font-weight: 600;
       backdrop-filter: blur(4px);
+      transition: all 0.3s;
     }
+    .hero-badge:hover { transform: translateY(-2px); border-color: #FF1493; }
     .hero-title {
       font-size: 3.5rem;
       font-weight: 800;
       line-height: 1.2;
       margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .hero-title .gradient-text {
       background: var(--gradient-pink);
@@ -194,6 +202,7 @@
       font-size: 1.1rem;
       max-width: 550px;
       margin: 0 auto 40px;
+      animation: fadeInUp 0.6s ease 0.1s both;
     }
 
     /* Floating Cards */
@@ -217,7 +226,9 @@
       width: 240px;
       box-shadow: 0 8px 32px rgba(255, 20, 147, 0.15);
       animation: float 3s ease-in-out infinite;
+      transition: all 0.3s;
     }
+    .float-card:hover { transform: translateY(-5px) scale(1.02); border-color: #FF1493; }
     .float-card:nth-child(1) { top: 0; left: 0; animation-delay: 0s; }
     .float-card:nth-child(2) { top: 70px; right: 0; animation-delay: 1s; }
     .float-card:nth-child(3) { bottom: 0; left: 30px; animation-delay: 0.5s; width: 200px; }
@@ -263,6 +274,7 @@
       justify-content: center;
       flex-wrap: wrap;
       margin-bottom: 50px;
+      animation: fadeInUp 0.6s ease 0.2s both;
     }
     .btn-large { padding: 14px 36px; font-size: 1rem; }
     .btn-outline {
@@ -286,6 +298,7 @@
       display: flex;
       gap: 48px;
       justify-content: center;
+      animation: fadeInUp 0.6s ease 0.3s both;
     }
     .hero-stat strong {
       display: block;
@@ -354,10 +367,9 @@
     .step-card h3, .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
     .step-card p, .feature-card p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); }
 
-    /* Testimonials - New Premium Section */
+    /* Testimonials */
     .testimonials-section {
-      background: linear-gradient(135deg, rgba(255,20,147,0.05), transparent);
-      padding: 80px 24px;
+      padding: 60px 24px;
     }
     .testimonials-grid {
       display: grid;
@@ -371,7 +383,7 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,20,147,0.15);
       border-radius: 24px;
-      padding: 28px 24px;
+      padding: 24px;
       transition: all 0.3s;
     }
     .testimonial-card:hover {
@@ -470,9 +482,21 @@
       justify-content: center;
       gap: 32px;
       margin: 20px 0;
+      flex-wrap: wrap;
     }
-    .footer-links a { color: rgba(255, 255, 255, 0.4); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
     .footer-links a:hover { color: #FF6B9D; }
+    .contact-email {
+      color: #FF6B9D;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .contact-email:hover { text-decoration: underline; }
 
     @media (max-width: 900px) {
       .steps-grid, .features-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
@@ -492,12 +516,7 @@
 </head>
 <body>
 
-  <!-- Animated Background Orbs -->
-  <div class="bg-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
+  <div class="bg-animation"></div>
 
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
@@ -507,9 +526,6 @@
         <a href="confessions.html" class="nav-link">💌 Confessions</a>
         <a href="study.html" class="nav-link">📚 Study</a>
         <a href="timer.html" class="nav-link">⏱️ Timer</a>
-        <a href="ai-match.html" class="nav-link">🤖 AI Match</a>
-        <a href="browse.html" class="nav-link">🔥 Discover</a>
-        <a href="chat.html" class="nav-link">💬 Chats</a>
         <a href="login.html" class="nav-link">Login</a>
         <a href="signup.html" class="btn-primary">✨ Join Free</a>
       </div>
@@ -556,9 +572,9 @@
     </div>
 
     <div class="hero-stats">
-      <div class="hero-stat"><strong class="counter" data-target="10000">0</strong><span>Active Users</span></div>
-      <div class="hero-stat"><strong class="counter" data-target="500">0</strong><span>Matches</span></div>
-      <div class="hero-stat"><strong class="counter" data-target="98">0</strong><span>AI Accuracy</span></div>
+      <div class="hero-stat"><strong>10K+</strong><span>Active Users</span></div>
+      <div class="hero-stat"><strong>500+</strong><span>Matches</span></div>
+      <div class="hero-stat"><strong>98%</strong><span>AI Accuracy</span></div>
     </div>
   </section>
 
@@ -586,13 +602,13 @@
     </div>
     <div class="features-grid">
       <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Matchmaking</h3><p>Smart matching based on your personality</p></div>
-          <div class="feature-card"><div class="feature-icon">🔒</div><h3>Verified Profiles</h3><p>Email verified accounts. Safe community</p></div>
+            <div class="feature-card"><div class="feature-icon">🔒</div><h3>Verified Profiles</h3><p>Email verified accounts. Safe community</p></div>
       <div class="feature-card"><div class="feature-icon">💬</div><h3>Real-time Chat</h3><p>Chat instantly with your matches</p></div>
       <div class="feature-card"><div class="feature-icon">🎯</div><h3>Niche Community</h3><p>Only CEE, IOE, +2 and Management</p></div>
     </div>
   </section>
 
-  <!-- Testimonials Section -->
+  <!-- Testimonials -->
   <div class="testimonials-section">
     <div class="section-header">
       <span class="section-tag">Success Stories</span>
@@ -645,7 +661,7 @@
       <div class="footer-links">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Service</a>
-        <a href="#">Contact Us</a>
+        <a href="mailto:entrance.hearts@gmail.com" class="contact-email"><i class="fas fa-envelope"></i> Contact Us</a>
       </div>
       <p>Made with ❤️ for Nepal's entrance exam aspirants</p>
       <p>© 2026 EntranceHearts. All rights reserved.</p>
@@ -678,35 +694,6 @@
         navbar.classList.remove('scrolled');
       }
     });
-
-    // Animated Counter
-    function animateCounter(element, target) {
-      let current = 0;
-      const increment = target / 50;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          element.innerText = target.toLocaleString();
-          clearInterval(timer);
-        } else {
-          element.innerText = Math.floor(current).toLocaleString();
-        }
-      }, 30);
-    }
-
-    // Intersection Observer for counters
-    const counters = document.querySelectorAll('.counter');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const target = parseInt(element.dataset.target);
-          animateCounter(element, target);
-          observer.unobserve(element);
-        }
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(counter => observer.observe(counter));
   </script>
 </body>
 </html>

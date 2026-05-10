@@ -3,41 +3,41 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Admin Panel — EntranceHearts 💕</title>
+  <title>Admin Panel — EntranceHearts 👑</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
-  
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: #0a0a0f;
       color: #ffffff;
+      min-height: 100vh;
     }
 
+    /* Navbar */
     .navbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 14px 20px;
+      padding: 14px 24px;
       background: rgba(10, 10, 15, 0.95);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 20, 147, 0.2);
+      border-bottom: 1px solid rgba(255, 20, 147, 0.15);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .logo {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
@@ -45,436 +45,701 @@
       -webkit-text-fill-color: transparent;
       text-decoration: none;
     }
-    .back-link {
-      color: rgba(255, 255, 255, 0.7);
+    .nav-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-outline {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,20,147,0.3);
+      padding: 8px 18px;
+      border-radius: 100px;
+      color: rgba(255,255,255,0.7);
       text-decoration: none;
-      font-size: 0.8rem;
-      padding: 6px 12px;
-      border-radius: 50px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 20, 147, 0.2);
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover {
+      background: rgba(255,20,147,0.1);
+      color: #FF6B9D;
     }
 
-    .hero-banner {
-      padding: 80px 20px 40px;
-      text-align: center;
+    /* Admin Layout */
+    .admin-container {
+      display: flex;
+      margin-top: 70px;
+      min-height: calc(100vh - 70px);
     }
-    .hero-icon {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: rgba(18, 18, 26, 0.95);
+      border-right: 1px solid rgba(255,20,147,0.15);
+      padding: 24px 0;
+      position: fixed;
+      height: calc(100vh - 70px);
+      overflow-y: auto;
     }
-    .hero-banner h1 {
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+    .sidebar-item i {
+      width: 24px;
+      font-size: 1.1rem;
+    }
+    .sidebar-item:hover, .sidebar-item.active {
+      background: rgba(255,20,147,0.1);
+      color: #FF6B9D;
+      border-left-color: #FF1493;
+    }
+    .sidebar-header {
+      padding: 0 24px 20px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255,20,147,0.1);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 24px 32px;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-header h1 {
       font-size: 1.6rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-weight: 700;
     }
-    .hero-banner p {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.8rem;
+    .refresh-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,20,147,0.25);
+      padding: 10px 20px;
+      border-radius: 100px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .refresh-btn:hover {
+      background: rgba(255,20,147,0.1);
+      color: #FF6B9D;
     }
 
-    .container {
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 20px 16px 80px;
-    }
-    
+    /* Stats Cards */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 25px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
     }
     .stat-card {
-      background: #141423;
-      border: 1px solid rgba(255,20,147,0.2);
+      background: rgba(18, 18, 26, 0.9);
+      border: 1px solid rgba(255,20,147,0.12);
       border-radius: 20px;
-      padding: 16px 12px;
+      padding: 20px;
       text-align: center;
     }
-    .stat-card h3 { 
-      font-size: 0.7rem; 
-      color: rgba(255,255,255,0.5); 
-      margin-bottom: 6px;
-    }
-    .stat-card .number { 
-      font-size: 1.5rem; 
-      font-weight: 800; 
-      background: linear-gradient(135deg, #FF1493, #FF6B9D); 
-      -webkit-background-clip: text; 
-      background-clip: text; 
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      scrollbar-width: none;
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 6px;
     }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      background: rgba(255,255,255,0.05);
-      border: none;
-      padding: 8px 18px;
-      color: rgba(255,255,255,0.6);
-      cursor: pointer;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-    .tab-btn i { margin-right: 6px; }
-    .tab-btn.active {
-      background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      color: white;
-    }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    
+
+    /* Tables */
     .table-container {
+      background: rgba(18, 18, 26, 0.9);
+      border: 1px solid rgba(255,20,147,0.12);
+      border-radius: 20px;
       overflow-x: auto;
-      background: #141423;
-      border-radius: 16px;
-      border: 1px solid rgba(255,20,147,0.1);
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 500px;
     }
     th, td {
-      padding: 12px 10px;
+      padding: 14px 16px;
       text-align: left;
       border-bottom: 1px solid rgba(255,20,147,0.08);
-      font-size: 0.75rem;
     }
     th {
       color: #FF6B9D;
       font-weight: 600;
+      font-size: 0.8rem;
     }
-    
+    td {
+      font-size: 0.85rem;
+    }
     .delete-btn {
       background: rgba(255,68,68,0.15);
-      border: 1px solid rgba(255,68,68,0.3);
-      color: #ff6666;
-      padding: 5px 10px;
+      border: none;
+      padding: 6px 12px;
       border-radius: 20px;
+      color: #ff8888;
       cursor: pointer;
       font-size: 0.7rem;
+      transition: all 0.2s;
     }
-    .verify-btn {
-      background: rgba(76,175,80,0.15);
-      border: 1px solid rgba(76,175,80,0.3);
-      color: #6fbf6f;
-      padding: 5px 10px;
-      border-radius: 20px;
-      cursor: pointer;
-      margin-right: 5px;
-      font-size: 0.7rem;
+    .delete-btn:hover {
+      background: rgba(255,68,68,0.3);
+      color: #ff4444;
     }
-    .refresh-btn {
+    .make-admin-btn {
       background: rgba(255,20,147,0.15);
-      border: 1px solid rgba(255,20,147,0.3);
-      padding: 8px 16px;
-      border-radius: 50px;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
       color: #FF6B9D;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
+      transition: all 0.2s;
     }
-    .search-box {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
+    .make-admin-btn:hover {
+      background: rgba(255,20,147,0.3);
     }
-    .search-box input, .search-box select {
-      padding: 10px 14px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,20,147,0.2);
-      border-radius: 50px;
-      color: white;
-      font-size: 0.8rem;
-      flex: 1;
-      min-width: 120px;
-    }
-    .badge {
-      display: inline-block;
+    .admin-badge {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
       padding: 3px 10px;
-      border-radius: 50px;
+      border-radius: 30px;
       font-size: 0.65rem;
       font-weight: 600;
+      display: inline-block;
     }
-    .badge.verified { background: rgba(76,175,80,0.2); color: #4caf50; }
-    .badge.unverified { background: rgba(255,68,68,0.2); color: #ff6666; }
-    .badge.category { background: rgba(255,20,147,0.15); color: #FF6B9D; }
-    
-    @media (min-width: 768px) {
-      .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-      .stats-grid .stat-card { padding: 24px 20px; }
-      .stat-card .number { font-size: 2rem; }
-      .container { padding: 30px 24px 80px; }
-      th, td { padding: 14px 16px; font-size: 0.85rem; }
+    .empty-state {
+      text-align: center;
+      padding: 50px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Page visibility */
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #13131f;
+      border: 1px solid rgba(255,20,147,0.3);
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      z-index: 2000;
+      display: none;
+    }
+    .toast.show { display: block; animation: fadeUp 0.25s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 200px; }
+      .main-content { margin-left: 200px; padding: 20px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      th, td { padding: 10px 12px; }
+    }
+    @media (max-width: 600px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 200; transition: transform 0.3s; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .mobile-menu-btn { display: block; }
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: rgba(255,20,147,0.1);
+      border: 1px solid rgba(255,20,147,0.25);
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: #FF6B9D;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .mobile-menu-btn { display: block; }
     }
   </style>
 </head>
 <body>
 
   <nav class="navbar">
-    <a href="index.html" class="logo">👑 EntranceHearts Admin</a>
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">👑 Admin Panel • EntranceHearts</a>
+    <div class="nav-right">
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <a href="index.html" class="btn-outline"><i class="fas fa-home"></i> Back to Site</a>
+    </div>
   </nav>
 
-  <div class="hero-banner">
-    <div class="hero-icon">👑</div>
-    <h1>Admin Dashboard</h1>
-    <p>Manage users, confessions, study materials, testimonials & feedback</p>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">ADMIN MENU</div>
+      <div class="sidebar-item active" data-page="dashboard">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </div>
+      <div class="sidebar-item" data-page="users">
+        <i class="fas fa-users"></i> Users
+      </div>
+      <div class="sidebar-item" data-page="confessions">
+        <i class="fas fa-comment-dots"></i> Confessions
+      </div>
+      <div class="sidebar-item" data-page="comments">
+        <i class="fas fa-reply"></i> Comments
+      </div>
+      <div class="sidebar-item" data-page="materials">
+        <i class="fas fa-book"></i> Study Materials
+      </div>
+      <div class="sidebar-item" data-page="testimonials">
+        <i class="fas fa-star"></i> Testimonials
+      </div>
+      <div class="sidebar-item" data-page="feedback">
+        <i class="fas fa-comment"></i> User Feedback
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+      <!-- Dashboard Page -->
+      <div class="page active" id="dashboardPage">
+        <div class="page-header">
+          <h1><i class="fas fa-chart-line"></i> Dashboard</h1>
+          <button class="refresh-btn" onclick="refreshCurrentPage()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card"><div class="stat-number" id="statUsers">-</div><div class="stat-label">Total Users</div></div>
+          <div class="stat-card"><div class="stat-number" id="statConfessions">-</div><div class="stat-label">Confessions</div></div>
+          <div class="stat-card"><div class="stat-number" id="statComments">-</div><div class="stat-label">Comments</div></div>
+          <div class="stat-card"><div class="stat-number" id="statMaterials">-</div><div class="stat-label">Study Materials</div></div>
+        </div>
+      </div>
+
+      <!-- Users Page -->
+      <div class="page" id="usersPage">
+        <div class="page-header">
+          <h1><i class="fas fa-users"></i> User Management</h1>
+          <button class="refresh-btn" onclick="loadUsers()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+          <table id="usersTable">
+            <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Confessions Page -->
+      <div class="page" id="confessionsPage">
+        <div class="page-header">
+          <h1><i class="fas fa-comment-dots"></i> Confession Management</h1>
+          <button class="refresh-btn" onclick="loadConfessions()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+          <table id="confessionsTable">
+            <thead><tr><th>Content</th><th>Exam</th><th>Likes</th><th>Posted By</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Comments Page -->
+      <div class="page" id="commentsPage">
+        <div class="page-header">
+          <h1><i class="fas fa-reply"></i> Comment Management</h1>
+          <button class="refresh-btn" onclick="loadComments()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+          <table id="commentsTable">
+            <thead><tr><th>Comment</th><th>On Confession</th><th>Posted By</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Study Materials Page -->
+      <div class="page" id="materialsPage">
+        <div class="page-header">
+          <h1><i class="fas fa-book"></i> Study Materials</h1>
+          <button class="refresh-btn" onclick="loadMaterials()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+          <table id="materialsTable">
+            <thead><tr><th>Title</th><th>Category</th><th>Downloads</th><th>Uploaded By</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Testimonials Page -->
+      <div class="page" id="testimonialsPage">
+        <div class="page-header">
+          <h1><i class="fas fa-star"></i> Testimonials</h1>
+          <button class="refresh-btn" onclick="loadTestimonials()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+          <table id="testimonialsTable">
+            <thead><tr><th>User</th><th>Exam</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody><tr><td colspan="5" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Feedback Page -->
+      <div class="page" id="feedbackPage">
+        <div class="page-header">
+          <h1><i class="fas fa-comment"></i> User Feedback</h1>
+          <button class="refresh-btn" onclick="loadFeedback()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+          <table id="feedbackTable">
+            <thead><tr><th>User</th><th>Type</th><th>Rating</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="container">
-    <!-- Stats -->
-    <div class="stats-grid" id="statsGrid">
-      <div class="stat-card"><h3><i class="fas fa-users"></i> Users</h3><div class="number" id="totalUsers">0</div></div>
-      <div class="stat-card"><h3><i class="fas fa-check-circle"></i> Verified</h3><div class="number" id="verifiedUsers">0</div></div>
-      <div class="stat-card"><h3><i class="fas fa-comment-dots"></i> Confessions</h3><div class="number" id="totalConfessions">0</div></div>
-      <div class="stat-card"><h3><i class="fas fa-book"></i> Materials</h3><div class="number" id="totalMaterials">0</div></div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('users')"><i class="fas fa-users"></i> Users</button>
-      <button class="tab-btn" onclick="showTab('confessions')"><i class="fas fa-comment-dots"></i> Confessions</button>
-      <button class="tab-btn" onclick="showTab('materials')"><i class="fas fa-book"></i> Materials</button>
-      <button class="tab-btn" onclick="showTab('testimonials')"><i class="fas fa-star"></i> Testimonials</button>
-      <button class="tab-btn" onclick="showTab('feedback')"><i class="fas fa-comment-dots"></i> Feedback</button>
-      <button class="tab-btn" onclick="showTab('likes')"><i class="fas fa-heart"></i> Likes</button>
-    </div>
-
-    <!-- Users Tab -->
-    <div id="usersTab" class="tab-content active">
-      <div class="search-box">
-        <input type="text" id="userSearch" placeholder="🔍 Search name, location..." onkeyup="searchUsers()">
-        <button class="refresh-btn" onclick="loadUsers()"><i class="fas fa-sync-alt"></i> Refresh</button>
-      </div>
-      <div class="table-container">
-        <table><thead><tr><th>Name</th><th>Email</th><th>Category</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="usersList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-      </div>
-    </div>
-
-    <!-- Confessions Tab -->
-    <div id="confessionsTab" class="tab-content">
-      <div class="search-box"><button class="refresh-btn" onclick="loadConfessions()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-      <div class="table-container">
-        <table><thead><tr><th>ID</th><th>Confession</th><th>Exam</th><th>Date</th><th>Likes</th><th>Actions</th></tr></thead>
-        <tbody id="confessionsList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-      </div>
-    </div>
-
-    <!-- Materials Tab -->
-    <div id="materialsTab" class="tab-content">
-      <div class="search-box"><button class="refresh-btn" onclick="loadMaterials()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-      <div class="table-container">
-        <table><thead><tr><th>Title</th><th>Category</th><th>File</th><th>Downloads</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="materialsList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-      </div>
-    </div>
-
-    <!-- Testimonials Tab (NEW) -->
-    <div id="testimonialsTab" class="tab-content">
-      <div class="search-box">
-        <input type="text" id="testimonialSearch" placeholder="🔍 Search by name or message..." onkeyup="searchTestimonials()">
-        <button class="refresh-btn" onclick="loadTestimonials()"><i class="fas fa-sync-alt"></i> Refresh</button>
-      </div>
-      <div class="table-container">
-        <table><thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Exam</th>
-            <th>Message</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="testimonialsList"><td><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-      </div>
-    </div>
-
-    <!-- Feedback Tab -->
-    <div id="feedbackTab" class="tab-content">
-      <div class="search-box">
-        <select id="feedbackFilter" onchange="loadFeedback()"><option value="all">All Types</option><option value="general">General</option><option value="bug">Bug</option><option value="feature">Feature</option><option value="complaint">Complaint</option></select>
-        <select id="feedbackStatusFilter" onchange="loadFeedback()"><option value="all">All Status</option><option value="pending">Pending</option><option value="reviewed">Reviewed</option><option value="resolved">Resolved</option></select>
-        <button class="refresh-btn" onclick="loadFeedback()"><i class="fas fa-sync-alt"></i> Refresh</button>
-      </div>
-      <div class="table-container">
-        <table><thead><tr><th>User</th><th>Type</th><th>Rating</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="feedbackList"><tr><td colspan="7" style="text-align:center">Loading...</td></tr></tbody>
-      </div>
-    </div>
-
-    <!-- Likes Tab -->
-    <div id="likesTab" class="tab-content">
-      <div class="search-box"><button class="refresh-btn" onclick="loadLikes()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
-      <div class="table-container">
-        <table><thead><tr><th>From</th><th>To</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="likesList"><td><td colspan="4" style="text-align:center">Loading...</td></tr></tbody>
-      </div>
-    </div>
-  </div>
+  <div id="toast" class="toast"></div>
 
   <script>
-    const ADMIN_CODE = "drsaurab@2022";
-    let allUsers = [], allConfessions = [], allMaterials = [], allLikes = [], allTestimonials = [];
+    let currentUserId = null;
+    let currentUserRole = null;
 
     async function checkAdmin() {
       const { data } = await supabaseClient.auth.getSession();
       if (!data.session) { window.location.href = 'login.html'; return; }
-      const code = prompt('👑 Enter Admin Code:');
-      if (code !== ADMIN_CODE) { alert('❌ Access Denied!'); window.location.href = 'index.html'; return; }
-      loadData();
+      currentUserId = data.session.user.id;
+      
+      const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', currentUserId).single();
+      currentUserRole = profile?.role;
+      
+      if (currentUserRole !== 'admin') {
+        showToast('❌ Admin access only!', 'error');
+        setTimeout(() => window.location.href = 'index.html', 1500);
+        return false;
+      }
+      return true;
     }
 
-    async function loadData() { 
-      await Promise.all([loadUsers(), loadConfessions(), loadMaterials(), loadLikes(), loadStats(), loadFeedback(), loadTestimonials()]); 
+    async function loadStats() {
+      const [users, confessions, comments, materials] = await Promise.all([
+        supabaseClient.from('profiles').select('id', { count: 'exact' }),
+        supabaseClient.from('confessions').select('id', { count: 'exact' }),
+        supabaseClient.from('confession_comments').select('id', { count: 'exact' }),
+        supabaseClient.from('study_materials').select('id', { count: 'exact' })
+      ]);
+      document.getElementById('statUsers').innerText = users.count || 0;
+      document.getElementById('statConfessions').innerText = confessions.count || 0;
+      document.getElementById('statComments').innerText = comments.count || 0;
+      document.getElementById('statMaterials').innerText = materials.count || 0;
     }
-    
-    async function loadUsers() { 
-      const { data } = await supabaseClient.from('profiles').select('*'); 
-      for(let u of (data||[])){ 
-        const {data:ad}=await supabaseClient.auth.admin.getUserById(u.id); 
-        u.email=ad?.user?.email||'—'; 
-      } 
-      allUsers=data||[]; 
-      renderUsers(); 
-    }
-    
-    async function loadConfessions() { 
-      const { data } = await supabaseClient.from('confessions').select('*').order('created_at',{ascending:false}); 
-      allConfessions=data||[]; 
-      renderConfessions(); 
-    }
-    
-    async function loadMaterials() { 
-      const { data } = await supabaseClient.from('study_materials').select('*').order('created_at',{ascending:false}); 
-      allMaterials=data||[]; 
-      renderMaterials(); 
-    }
-    
-    async function loadLikes() { 
-      const { data } = await supabaseClient.from('likes').select('*, profiles!from_user(name), profiles!to_user(name)').order('created_at',{ascending:false}); 
-      allLikes=data||[]; 
-      renderLikes(); 
-    }
-    
-    async function loadStats() { 
-      const { data:p } = await supabaseClient.from('profiles').select('id,is_verified'); 
-      const v = p?.filter(pp=>pp.is_verified===true).length||0; 
-      document.getElementById('totalUsers').innerText=p?.length||0; 
-      document.getElementById('verifiedUsers').innerText=v; 
-      document.getElementById('totalConfessions').innerText=allConfessions.length; 
-      document.getElementById('totalMaterials').innerText=allMaterials.length; 
-    }
-    
-    async function loadFeedback() { 
-      let q = supabaseClient.from('feedback').select('*').order('created_at',{ascending:false}); 
-      const tf=document.getElementById('feedbackFilter')?.value, sf=document.getElementById('feedbackStatusFilter')?.value; 
-      if(tf&&tf!=='all') q=q.eq('type',tf); 
-      if(sf&&sf!=='all') q=q.eq('status',sf); 
-      const {data}=await q; 
-      renderFeedback(data||[]); 
-    }
-    
-    // NEW: Load Testimonials
-    async function loadTestimonials() {
-      const { data } = await supabaseClient.from('testimonials').select('*').order('created_at', { ascending: false });
-      allTestimonials = data || [];
-      renderTestimonials();
-    }
-    
-    // NEW: Delete Testimonial
-    async function deleteTestimonial(id) {
-      if (confirm('Delete this testimonial?')) {
-        const { error } = await supabaseClient.from('testimonials').delete().eq('id', id);
-        if (error) {
-          showToast('❌ Failed to delete');
-        } else {
-          showToast('✅ Testimonial deleted');
-          loadTestimonials();
-        }
-      }
-    }
-    
-    function searchTestimonials() {
-      const search = document.getElementById('testimonialSearch')?.value.toLowerCase() || '';
-      const filtered = allTestimonials.filter(t => 
-        t.name?.toLowerCase().includes(search) || 
-        t.message?.toLowerCase().includes(search) ||
-        t.exam?.toLowerCase().includes(search)
-      );
-      renderTestimonials(filtered);
-    }
-    
-    function renderTestimonials(filteredList = null) {
-      const list = filteredList || allTestimonials;
-      const container = document.getElementById('testimonialsList');
-      if (list.length === 0) {
-        container.innerHTML = '<tr><td colspan="6" style="text-align:center">No testimonials yet</td></tr>';
+
+    async function loadUsers() {
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) { showToast('Error loading users'); return; }
+      
+      const tbody = document.querySelector('#usersTable tbody');
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No users found</td></tr>';
         return;
       }
-      container.innerHTML = list.map(t => `
+      
+      tbody.innerHTML = data.map(user => `
         <tr>
-          <td>#${t.id}</td>
-          <td>${escapeHtml(t.name || 'Anonymous')}</td>
-          <td><span class="badge category">${escapeHtml(t.exam || 'Aspirant')}</span></td>
-          <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(t.message?.substring(0, 80))}${t.message?.length > 80 ? '...' : ''}</td>
-          <td>${new Date(t.created_at).toLocaleDateString()}</td>
-          <td><button class="delete-btn" onclick="deleteTestimonial(${t.id})"><i class="fas fa-trash"></i> Delete</button></td>
+          <td><i class="fas fa-user-circle"></i> ${escapeHtml(user.name || 'Anonymous')}</td>
+          <td>${escapeHtml(user.email || '-')}</td>
+          <td>${user.role === 'admin' ? '<span class="admin-badge">👑 Admin</span>' : 'User'}</td>
+          <td>${formatDate(user.created_at)}</td>
+          <td>
+            ${user.role !== 'admin' ? `<button class="make-admin-btn" onclick="makeAdmin('${user.id}')">Make Admin</button>` : ''}
+            <button class="delete-btn" onclick="deleteUser('${user.id}')"><i class="fas fa-trash"></i> Delete</button>
+          </td>
         </tr>
       `).join('');
     }
-    
-    function renderUsers() { 
-      const s=document.getElementById('userSearch')?.value.toLowerCase()||''; 
-      const f=allUsers.filter(u=>u.name?.toLowerCase().includes(s)||u.location?.toLowerCase().includes(s)||u.category?.toLowerCase().includes(s)); 
-      document.getElementById('usersList').innerHTML=f.length?f.map(u=>`<tr><td><strong>${u.name||'—'}</strong></td><td>${u.email||'—'}</td><td><span class="badge category">${u.category||'—'}</span></td><td>${u.location||'—'}</td><td><span class="badge ${u.is_verified?'verified':'unverified'}">${u.is_verified?'✓ Verified':'○ Unverified'}</span></td><td>${!u.is_verified?`<button class="verify-btn" onclick="verifyUser('${u.id}')"><i class="fas fa-check"></i> Verify</button>`:''}<button class="delete-btn" onclick="deleteUser('${u.id}','${u.name}')"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No users found</td></tr>'; 
+
+    async function makeAdmin(userId) {
+      if (!confirm('Make this user an admin?')) return;
+      const { error } = await supabaseClient.from('profiles').update({ role: 'admin' }).eq('id', userId);
+      if (error) { showToast('Failed to make admin'); } else { showToast('✅ User is now admin!'); loadUsers(); loadStats(); }
     }
-    
-    function renderConfessions() { 
-      document.getElementById('confessionsList').innerHTML=allConfessions.length?allConfessions.map(c=>`<tr><td>#${c.id}</td><td style="max-width:250px; overflow:hidden; text-overflow:ellipsis;">${c.text?.substring(0,60)}${c.text?.length>60?'...':''}</td><td><span class="badge category">${c.exam||'General'}</span></td><td>${new Date(c.created_at).toLocaleDateString()}</td><td>❤️ ${c.likes||0}</td><td><button class="delete-btn" onclick="deleteConfession(${c.id})"><i class="fas fa-trash"></i> Delete</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No confessions</td></tr>'; 
+
+    async function deleteUser(userId) {
+      if (!confirm('⚠️ Delete this user? ALL their data will be removed!')) return;
+      await supabaseClient.from('likes').delete().or(`from_user.eq.${userId},to_user.eq.${userId}`);
+      await supabaseClient.from('messages').delete().or(`from_user.eq.${userId},to_user.eq.${userId}`);
+      await supabaseClient.from('confessions').delete().eq('user_id', userId);
+      await supabaseClient.from('confession_comments').delete().eq('user_id', userId);
+      await supabaseClient.from('study_materials').delete().eq('uploaded_by', userId);
+      await supabaseClient.from('profiles').delete().eq('id', userId);
+      await supabaseClient.auth.admin.deleteUser(userId);
+      showToast('User deleted');
+      loadUsers();
+      loadStats();
     }
-    
-    function renderMaterials() { 
-      document.getElementById('materialsList').innerHTML=allMaterials.length?allMaterials.map(m=>`<tr><td><strong>${m.title}</strong></td><td><span class="badge category">${m.category}</span></td><td><i class="fas fa-file"></i> ${m.file_name}</td><td>⬇️ ${m.downloads||0}</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMaterial(${m.id})"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No materials</td></tr>'; 
+
+    async function loadConfessions() {
+      const { data, error } = await supabaseClient
+        .from('confessions')
+        .select('*, profiles(name)')
+        .order('created_at', { ascending: false });
+      
+      if (error) { showToast('Error loading confessions'); return; }
+      
+      const tbody = document.querySelector('#confessionsTable tbody');
+      if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No confessions found</td></tr>'; return; }
+      
+      tbody.innerHTML = data.map(c => `
+        <tr>
+          <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(c.text?.substring(0, 80))}${c.text?.length > 80 ? '...' : ''}</td>
+          <td>${c.exam || 'General'}</td>
+          <td>❤️ ${c.likes || 0}</td>
+          <td>${c.profiles?.name || 'Anonymous'}</td>
+          <td>${formatDate(c.created_at)}</td>
+          <td><button class="delete-btn" onclick="deleteConfession('${c.id}')"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `).join('');
     }
-    
-    function renderLikes() { 
-      document.getElementById('likesList').innerHTML=allLikes.length?allLikes.map(l=>`<tr><td>${l.profiles?.[0]?.name||'Unknown'}</td><td>${l.profiles?.[1]?.name||'Unknown'}</td><td>${new Date(l.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteLike('${l.id}')"><i class="fas fa-trash"></i> Delete</button></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center">No likes</td></tr>'; 
+
+    async function deleteConfession(id) {
+      if (!confirm('Delete this confession?')) return;
+      await supabaseClient.from('confession_comments').delete().eq('confession_id', id);
+      await supabaseClient.from('confessions').delete().eq('id', id);
+      showToast('Confession deleted');
+      loadConfessions();
+      loadStats();
     }
-    
-    function renderFeedback(feedback) { 
-      document.getElementById('feedbackList').innerHTML=feedback.length?feedback.map(f=>`<tr><td><strong>${f.user_name||f.user_email}</strong><br><small>${f.user_email}</small></td><td><span class="badge category">${getIcon(f.type)} ${f.type}</span></td><td>${f.rating?'⭐'.repeat(f.rating):'—'}</td><td style="max-width:200px;">${escapeHtml(f.message)}</td><td>${new Date(f.created_at).toLocaleDateString()}</td><td><select onchange="updateFeedbackStatus(${f.id},this.value)"><option value="pending" ${f.status==='pending'?'selected':''}>⏳ Pending</option><option value="reviewed" ${f.status==='reviewed'?'selected':''}>👀 Reviewed</option><option value="resolved" ${f.status==='resolved'?'selected':''}>✅ Resolved</option></select></td><td><button class="delete-btn" onclick="deleteFeedback(${f.id})"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center">No feedback</td></tr>'; 
+
+    async function loadComments() {
+      const { data, error } = await supabaseClient
+        .from('confession_comments')
+        .select('*, profiles(name), confessions(text)')
+        .order('created_at', { ascending: false });
+      
+      if (error) { showToast('Error loading comments'); return; }
+      
+      const tbody = document.querySelector('#commentsTable tbody');
+      if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No comments found</td></tr>'; return; }
+      
+      tbody.innerHTML = data.map(c => `
+        <tr>
+          <td style="max-width: 200px;">${escapeHtml(c.text?.substring(0, 60))}${c.text?.length > 60 ? '...' : ''}</td>
+              <td style="max-width: 150px;">${escapeHtml(c.confessions?.text?.substring(0, 40))}...</td>
+          <td>${c.profiles?.name || 'Anonymous'}</td>
+          <td>${formatDate(c.created_at)}</td>
+          <td><button class="delete-btn" onclick="deleteComment('${c.id}')"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `).join('');
     }
-    
-    function getIcon(t){ const i={general:'💬',bug:'🐛',feature:'✨',complaint:'😞'}; return i[t]||'📝'; }
-    async function updateFeedbackStatus(id,status){ await supabaseClient.from('feedback').update({status}).eq('id',id); showToast('Status updated'); loadFeedback(); }
-    async function deleteFeedback(id){ if(confirm('Delete this feedback?')){ await supabaseClient.from('feedback').delete().eq('id',id); showToast('Feedback deleted'); loadFeedback(); } }
-    async function verifyUser(id){ if(confirm('Verify this user?')){ await supabaseClient.from('profiles').update({is_verified:true}).eq('id',id); showToast('✅ Verified'); loadUsers(); loadStats(); } }
-    async function deleteUser(id,name){ if(!confirm(`Delete "${name}"? All data will be lost!`)) return; if(prompt('Type "DELETE" to confirm')!=='DELETE'){ showToast('Cancelled'); return; } await supabaseClient.from('likes').delete().or(`from_user.eq.${id},to_user.eq.${id}`); await supabaseClient.from('messages').delete().or(`from_user.eq.${id},to_user.eq.${id}`); await supabaseClient.from('confessions').delete().eq('user_id',id); await supabaseClient.from('confession_comments').delete().eq('user_id',id); await supabaseClient.from('study_materials').delete().eq('uploaded_by',id); await supabaseClient.from('profiles').delete().eq('id',id); showToast(`✅ ${name} deleted`); loadUsers(); loadStats(); }
-    async function deleteConfession(id){ if(confirm('Delete this confession?')){ await supabaseClient.from('confessions').delete().eq('id',id); showToast('🗑️ Deleted'); loadConfessions(); loadStats(); } }
-    async function deleteMaterial(id){ if(confirm('Delete this material?')){ await supabaseClient.from('study_materials').delete().eq('id',id); showToast('📚 Deleted'); loadMaterials(); loadStats(); } }
-    async function deleteLike(id){ if(confirm('Delete this like?')){ await supabaseClient.from('likes').delete().eq('id',id); showToast('💔 Deleted'); loadLikes(); } }
-    function searchUsers(){ renderUsers(); }
-    function showTab(tab){ document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(`${tab}Tab`).classList.add('active'); event.target.classList.add('active'); }
-    function showToast(msg){ const t=document.createElement('div'); t.innerHTML=msg; t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#141423;border:1px solid #FF1493;padding:12px 24px;border-radius:50px;color:white;z-index:1000;font-size:0.85rem;'; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
-    function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>]/g,function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; }); }
-    checkAdmin();
+
+    async function deleteComment(id) {
+      if (!confirm('Delete this comment?')) return;
+      await supabaseClient.from('confession_comments').delete().eq('id', id);
+      showToast('Comment deleted');
+      loadComments();
+      loadStats();
+    }
+
+    async function loadMaterials() {
+      const { data, error } = await supabaseClient
+        .from('study_materials')
+        .select('*, profiles(name)')
+        .order('created_at', { ascending: false });
+      
+      if (error) { showToast('Error loading materials'); return; }
+      
+      const tbody = document.querySelector('#materialsTable tbody');
+      if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No study materials found</td></tr>'; return; }
+      
+      tbody.innerHTML = data.map(m => `
+        <tr>
+          <td>${escapeHtml(m.title)}</td>
+          <td>${m.category}</td>
+          <td>⬇️ ${m.downloads || 0}</td>
+          <td>${m.profiles?.name || 'Anonymous'}</td>
+          <td>${formatDate(m.created_at)}</td>
+          <td><button class="delete-btn" onclick="deleteMaterial('${m.id}', '${m.file_url}')"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteMaterial(id, fileUrl) {
+      if (!confirm('Delete this study material?')) return;
+      await supabaseClient.from('study_materials').delete().eq('id', id);
+      showToast('Material deleted');
+      loadMaterials();
+      loadStats();
+    }
+
+    async function loadTestimonials() {
+      const { data, error } = await supabaseClient
+        .from('testimonials')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) { showToast('Error loading testimonials'); return; }
+      
+      const tbody = document.querySelector('#testimonialsTable tbody');
+      if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No testimonials found</td></tr>'; return; }
+      
+      tbody.innerHTML = data.map(t => `
+        <tr>
+          <td>${escapeHtml(t.name || 'Anonymous')}</td>
+          <td>${escapeHtml(t.exam || '-')}</td>
+          <td style="max-width: 250px;">${escapeHtml(t.message?.substring(0, 80))}${t.message?.length > 80 ? '...' : ''}</td>
+          <td>${formatDate(t.created_at)}</td>
+          <td><button class="delete-btn" onclick="deleteTestimonial('${t.id}')"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteTestimonial(id) {
+      if (!confirm('Delete this testimonial?')) return;
+      await supabaseClient.from('testimonials').delete().eq('id', id);
+      showToast('Testimonial deleted');
+      loadTestimonials();
+    }
+
+    async function loadFeedback() {
+      const { data, error } = await supabaseClient
+        .from('feedback')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) { showToast('Error loading feedback'); return; }
+      
+      const tbody = document.querySelector('#feedbackTable tbody');
+      if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No feedback found</td></tr>'; return; }
+      
+      tbody.innerHTML = data.map(f => `
+        <tr>
+          <td>${escapeHtml(f.user_name || 'Anonymous')}</td>
+          <td>${getFeedbackTypeIcon(f.type)} ${f.type || 'general'}</td>
+          <td>${f.rating ? '⭐'.repeat(f.rating) : '-'}</td>
+          <td style="max-width: 250px;">${escapeHtml(f.message?.substring(0, 80))}${f.message?.length > 80 ? '...' : ''}</td>
+          <td>${formatDate(f.created_at)}</td>
+          <td><button class="delete-btn" onclick="deleteFeedback('${f.id}')"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function getFeedbackTypeIcon(type) {
+      const icons = { bug: '🐛', feature: '✨', complaint: '😞', general: '💬' };
+      return icons[type] || '💬';
+    }
+
+    async function deleteFeedback(id) {
+      if (!confirm('Delete this feedback?')) return;
+      await supabaseClient.from('feedback').delete().eq('id', id);
+      showToast('Feedback deleted');
+      loadFeedback();
+    }
+
+    function refreshCurrentPage() {
+      const activePage = document.querySelector('.sidebar-item.active')?.dataset.page;
+      if (activePage === 'dashboard') loadStats();
+      else if (activePage === 'users') loadUsers();
+      else if (activePage === 'confessions') loadConfessions();
+      else if (activePage === 'comments') loadComments();
+      else if (activePage === 'materials') loadMaterials();
+      else if (activePage === 'testimonials') loadTestimonials();
+      else if (activePage === 'feedback') loadFeedback();
+      showToast('Refreshed!');
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // Sidebar navigation
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const page = item.dataset.page;
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`${page}Page`).classList.add('active');
+        
+        if (page === 'dashboard') loadStats();
+        else if (page === 'users') loadUsers();
+        else if (page === 'confessions') loadConfessions();
+        else if (page === 'comments') loadComments();
+        else if (page === 'materials') loadMaterials();
+        else if (page === 'testimonials') loadTestimonials();
+        else if (page === 'feedback') loadFeedback();
+      });
+    });
+
+    // Mobile menu
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    if (menuBtn) {
+      menuBtn.onclick = () => sidebar.classList.toggle('open');
+    }
+
+    async function init() {
+      const isAdmin = await checkAdmin();
+      if (!isAdmin) return;
+      loadStats();
+      loadUsers();
+    }
+    init();
   </script>
 </body>
 </html>

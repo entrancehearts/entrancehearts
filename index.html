@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>EntranceHearts 💕 — Nepal's #1 Dating App for Students</title>
   <meta name="description" content="Nepal's first dating & friendship app for CEE, IOE, +2 and Management students. Find your perfect match!"/>
-  <link rel="canonical" href="https://entrancehearts.vercel.app/"/>
+  <link rel="canonical" href="https://entrancehearts.github.io/entrancehearts/"/>
   <meta property="og:title" content="EntranceHearts 💕 — Find Your Match"/>
   <meta property="og:description" content="Nepal's first dating app for students"/>
   <meta property="og:image" content="/icon-512.png"/>
@@ -18,17 +18,7 @@
   <link rel="stylesheet" href="style.css"/>
   
   <style>
-    /* ========================================
-       ENTRANCEHEARTS - PREMIUM DARK THEME
-       Pink Gradient | Professional Dating App Style
-       ======================================== */
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: #0a0a0f;
@@ -36,13 +26,38 @@
       overflow-x: hidden;
     }
 
-    /* Premium Gradients */
     :root {
       --gradient-pink: linear-gradient(135deg, #FF1493, #FF6B9D);
       --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
     }
 
-    /* Navbar */
+    /* Animated Background Orbs */
+    .bg-orbs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: floatOrb 20s ease-in-out infinite;
+    }
+    .orb-1 { width: 400px; height: 400px; background: #FF1493; top: -100px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 500px; height: 500px; background: #FF6B9D; bottom: -150px; right: -150px; animation-delay: 5s; }
+    .orb-3 { width: 300px; height: 300px; background: #e63946; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s; }
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    /* Premium Navbar */
     .navbar {
       position: fixed;
       top: 0;
@@ -55,17 +70,8 @@
       border-bottom: 1px solid rgba(255, 20, 147, 0.2);
       transition: all 0.3s;
     }
-    .navbar.scrolled {
-      padding: 12px 32px;
-      background: rgba(10, 10, 15, 0.95);
-    }
-    .nav-container {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .navbar.scrolled { padding: 12px 32px; background: rgba(10, 10, 15, 0.95); }
+    .nav-container { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
     .logo {
       font-size: 1.4rem;
       font-weight: 800;
@@ -75,12 +81,7 @@
       -webkit-text-fill-color: transparent;
       text-decoration: none;
     }
-    .nav-links {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    .nav-links { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .nav-link {
       color: rgba(255, 255, 255, 0.7);
       padding: 8px 16px;
@@ -90,10 +91,7 @@
       font-size: 0.85rem;
       transition: all 0.3s;
     }
-    .nav-link:hover {
-      color: #FF6B9D;
-      background: rgba(255, 20, 147, 0.1);
-    }
+    .nav-link:hover { color: #FF6B9D; background: rgba(255, 20, 147, 0.1); }
     .btn-primary {
       background: var(--gradient-pink);
       color: white;
@@ -105,10 +103,7 @@
       transition: all 0.3s;
       box-shadow: 0 2px 12px rgba(255, 20, 147, 0.3);
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
-    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4); }
     .btn-ghost {
       color: rgba(255, 255, 255, 0.7);
       padding: 8px 16px;
@@ -118,10 +113,41 @@
       font-size: 0.85rem;
       transition: all 0.3s;
     }
-    .btn-ghost:hover {
+    .btn-ghost:hover { color: #FF6B9D; background: rgba(255, 20, 147, 0.1); }
+    .mobile-menu-btn {
+      display: none;
+      background: rgba(255, 20, 147, 0.15);
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      border-radius: 12px;
+      padding: 10px 14px;
       color: #FF6B9D;
-      background: rgba(255, 20, 147, 0.1);
+      cursor: pointer;
+      font-size: 1.2rem;
     }
+    @media (max-width: 768px) { .mobile-menu-btn { display: block; } .nav-links { display: none; } }
+    .mobile-menu {
+      position: fixed;
+      top: 70px;
+      right: -100%;
+      width: 280px;
+      background: #141423;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      border-radius: 20px;
+      padding: 20px;
+      z-index: 999;
+      transition: right 0.3s;
+    }
+    .mobile-menu.open { right: 16px; }
+    .mobile-menu-item {
+      display: block;
+      padding: 12px 16px;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .mobile-menu-item:hover { background: rgba(255, 20, 147, 0.15); color: #FF6B9D; }
 
     /* Hero Section */
     .hero {
@@ -133,7 +159,6 @@
       text-align: center;
       padding: 120px 24px 80px;
       position: relative;
-      background: radial-gradient(circle at 50% 0%, rgba(255, 20, 147, 0.08), transparent 60%);
     }
     .hero-badge-container {
       display: flex;
@@ -150,6 +175,7 @@
       border-radius: 100px;
       font-size: 0.8rem;
       font-weight: 600;
+      backdrop-filter: blur(4px);
     }
     .hero-title {
       font-size: 3.5rem;
@@ -231,7 +257,6 @@
       50% { transform: translateX(-50%) scale(1.05); }
     }
 
-    /* CTA Buttons */
     .hero-cta {
       display: flex;
       gap: 16px;
@@ -239,10 +264,7 @@
       flex-wrap: wrap;
       margin-bottom: 50px;
     }
-    .btn-large {
-      padding: 14px 36px;
-      font-size: 1rem;
-    }
+    .btn-large { padding: 14px 36px; font-size: 1rem; }
     .btn-outline {
       color: #FF6B9D;
       padding: 14px 32px;
@@ -260,7 +282,6 @@
       transform: translateY(-2px);
     }
 
-    /* Stats */
     .hero-stats {
       display: flex;
       gap: 48px;
@@ -275,10 +296,7 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .hero-stat span {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.4);
-    }
+    .hero-stat span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.4); }
 
     /* Sections */
     .section {
@@ -286,10 +304,7 @@
       max-width: 1280px;
       margin: 0 auto;
     }
-    .section-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
+    .section-header { text-align: center; margin-bottom: 50px; }
     .section-tag {
       display: inline-block;
       background: rgba(255, 20, 147, 0.12);
@@ -301,17 +316,9 @@
       font-weight: 600;
       margin-bottom: 16px;
     }
-    .section h2 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-    .section-sub {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.95rem;
-    }
+    .section h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .section-sub { color: rgba(255, 255, 255, 0.4); font-size: 0.95rem; }
 
-    /* Grids */
     .steps-grid, .features-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -343,21 +350,79 @@
       margin: 0 auto 18px;
       color: white;
     }
-    .feature-icon {
-      font-size: 2.5rem;
-      margin-bottom: 16px;
-    }
-    .step-card h3, .feature-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .step-card p, .feature-card p {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.5);
-    }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .step-card h3, .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .step-card p, .feature-card p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); }
 
-    /* Premium Grid */
+    /* Testimonials - New Premium Section */
+    .testimonials-section {
+      background: linear-gradient(135deg, rgba(255,20,147,0.05), transparent);
+      padding: 80px 24px;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .testimonial-card {
+      background: rgba(20, 20, 35, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,20,147,0.15);
+      border-radius: 24px;
+      padding: 28px 24px;
+      transition: all 0.3s;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,20,147,0.4);
+    }
+    .testimonial-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gradient-pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .testimonial-name { font-weight: 700; font-size: 0.85rem; }
+    .testimonial-title { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+
+    /* Trust Badges */
+    .trust-section {
+      padding: 40px 24px 60px;
+      text-align: center;
+    }
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8rem;
+    }
+    .trust-badge i { font-size: 1.2rem; color: #FF6B9D; }
+
     .premium-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -379,22 +444,10 @@
       border-color: #FF1493;
       box-shadow: 0 8px 32px rgba(255, 20, 147, 0.2);
     }
-    .premium-card-icon {
-      font-size: 3rem;
-      margin-bottom: 16px;
-    }
-    .premium-card h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .premium-card p {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 20px;
-    }
+    .premium-card-icon { font-size: 3rem; margin-bottom: 16px; }
+    .premium-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+    .premium-card p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 20px; }
 
-    /* CTA Section */
     .cta-section {
       background: linear-gradient(135deg, rgba(255, 20, 147, 0.08), rgba(255, 107, 157, 0.04));
       border: 1px solid rgba(255, 20, 147, 0.2);
@@ -404,17 +457,9 @@
       max-width: 800px;
       margin: 60px auto;
     }
-    .cta-section h2 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-    .cta-section p {
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 32px;
-    }
+    .cta-section h2 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+    .cta-section p { color: rgba(255, 255, 255, 0.5); margin-bottom: 32px; }
 
-    /* Footer */
     .footer {
       border-top: 1px solid rgba(255, 20, 147, 0.15);
       padding: 48px 24px;
@@ -426,70 +471,33 @@
       gap: 32px;
       margin: 20px 0;
     }
-    .footer-links a {
-      color: rgba(255, 255, 255, 0.4);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover {
-      color: #FF6B9D;
-    }
+    .footer-links a { color: rgba(255, 255, 255, 0.4); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: #FF6B9D; }
 
-    /* Mobile Menu */
-    .mobile-menu-btn {
-      display: none;
-      background: rgba(255, 20, 147, 0.15);
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      border-radius: 12px;
-      padding: 10px 14px;
-      color: #FF6B9D;
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
     @media (max-width: 900px) {
-      .steps-grid, .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid, .features-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .mobile-menu-btn { display: block; }
       .hero-title { font-size: 2.2rem; }
-      .steps-grid, .features-grid { grid-template-columns: 1fr; }
+      .steps-grid, .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
       .premium-grid { grid-template-columns: 1fr; }
       .hero-stats { gap: 24px; }
+      .trust-badges { gap: 20px; }
     }
     @media (max-width: 480px) {
       .floating-cards { transform: scale(0.85); }
       .hero-cta { flex-direction: column; align-items: center; }
     }
-    .mobile-menu {
-      position: fixed;
-      top: 70px;
-      right: -100%;
-      width: 280px;
-      background: #141423;
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      border-radius: 20px;
-      padding: 20px;
-      z-index: 999;
-      transition: right 0.3s;
-    }
-    .mobile-menu.open { right: 16px; }
-    .mobile-menu-item {
-      display: block;
-      padding: 12px 16px;
-      color: white;
-      text-decoration: none;
-      border-radius: 12px;
-    }
-    .mobile-menu-item:hover {
-      background: rgba(255, 20, 147, 0.15);
-      color: #FF6B9D;
-    }
   </style>
 </head>
 <body>
+
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
 
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
@@ -499,6 +507,9 @@
         <a href="confessions.html" class="nav-link">💌 Confessions</a>
         <a href="study.html" class="nav-link">📚 Study</a>
         <a href="timer.html" class="nav-link">⏱️ Timer</a>
+        <a href="ai-match.html" class="nav-link">🤖 AI Match</a>
+        <a href="browse.html" class="nav-link">🔥 Discover</a>
+        <a href="chat.html" class="nav-link">💬 Chats</a>
         <a href="login.html" class="nav-link">Login</a>
         <a href="signup.html" class="btn-primary">✨ Join Free</a>
       </div>
@@ -545,9 +556,9 @@
     </div>
 
     <div class="hero-stats">
-      <div class="hero-stat"><strong>10K+</strong><span>Active Users</span></div>
-      <div class="hero-stat"><strong>500+</strong><span>Matches</span></div>
-      <div class="hero-stat"><strong>98%</strong><span>AI Accuracy</span></div>
+      <div class="hero-stat"><strong class="counter" data-target="10000">0</strong><span>Active Users</span></div>
+      <div class="hero-stat"><strong class="counter" data-target="500">0</strong><span>Matches</span></div>
+      <div class="hero-stat"><strong class="counter" data-target="98">0</strong><span>AI Accuracy</span></div>
     </div>
   </section>
 
@@ -575,11 +586,44 @@
     </div>
     <div class="features-grid">
       <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Matchmaking</h3><p>Smart matching based on your personality</p></div>
-      <div class="feature-card"><div class="feature-icon">🔒</div><h3>Verified Profiles</h3><p>Email verified accounts. Safe community</p></div>
+          <div class="feature-card"><div class="feature-icon">🔒</div><h3>Verified Profiles</h3><p>Email verified accounts. Safe community</p></div>
       <div class="feature-card"><div class="feature-icon">💬</div><h3>Real-time Chat</h3><p>Chat instantly with your matches</p></div>
       <div class="feature-card"><div class="feature-icon">🎯</div><h3>Niche Community</h3><p>Only CEE, IOE, +2 and Management</p></div>
     </div>
   </section>
+
+  <!-- Testimonials Section -->
+  <div class="testimonials-section">
+    <div class="section-header">
+      <span class="section-tag">Success Stories</span>
+      <h2>What Our <span class="gradient-text">Users Say</span></h2>
+      <p class="section-sub">Real stories from real aspirants</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-text">"Finally found someone who understands my CEE journey! The AI matching is amazing."</div>
+        <div class="testimonial-author"><div class="testimonial-avatar">👩</div><div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-title">CEE Aspirant</div></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-text">"Made so many study friends through this app. The confession wall is my favorite!"</div>
+        <div class="testimonial-author"><div class="testimonial-avatar">👨</div><div><div class="testimonial-name">Rohan KC</div><div class="testimonial-title">IOE Student</div></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-text">"As a +2 student, I was nervous to join. But the community is so welcoming!"</div>
+        <div class="testimonial-author"><div class="testimonial-avatar">👩</div><div><div class="testimonial-name">Sita Gurung</div><div class="testimonial-title">+2 Student</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Badges -->
+  <div class="trust-section">
+    <div class="trust-badges">
+      <div class="trust-badge"><i class="fas fa-shield-alt"></i> 100% Anonymous</div>
+      <div class="trust-badge"><i class="fas fa-user-check"></i> Verified Profiles</div>
+      <div class="trust-badge"><i class="fas fa-clock"></i> 24/7 Support</div>
+      <div class="trust-badge"><i class="fas fa-lock"></i> Secure & Private</div>
+    </div>
+  </div>
 
   <!-- Premium Cards -->
   <div class="premium-grid">
@@ -634,6 +678,35 @@
         navbar.classList.remove('scrolled');
       }
     });
+
+    // Animated Counter
+    function animateCounter(element, target) {
+      let current = 0;
+      const increment = target / 50;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.innerText = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.innerText = Math.floor(current).toLocaleString();
+        }
+      }, 30);
+    }
+
+    // Intersection Observer for counters
+    const counters = document.querySelectorAll('.counter');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const target = parseInt(element.dataset.target);
+          animateCounter(element, target);
+          observer.unobserve(element);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(counter => observer.observe(counter));
   </script>
 </body>
 </html>

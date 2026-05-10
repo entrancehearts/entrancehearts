@@ -31,7 +31,7 @@
       overflow-x: hidden;
     }
 
-    /* Subtle Animated Background - No Pink Overwhelm */
+    /* Subtle Animated Background */
     .bg-animation {
       position: fixed;
       top: 0;
@@ -101,16 +101,6 @@
       box-shadow: 0 2px 8px rgba(255, 20, 147, 0.2);
     }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255, 20, 147, 0.3); }
-    .btn-ghost {
-      color: rgba(255, 255, 255, 0.65);
-      padding: 8px 16px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-    .btn-ghost:hover { color: #FF6B9D; background: rgba(255, 20, 147, 0.08); }
     .mobile-menu-btn {
       display: none;
       background: rgba(255, 20, 147, 0.1);
@@ -368,7 +358,7 @@
     .step-card h3, .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
     .step-card p, .feature-card p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); }
 
-    /* Testimonials Wall */
+    /* Testimonials Wall - Public Only (No Admin Features) */
     .testimonials-wall {
       background: linear-gradient(135deg, rgba(255,20,147,0.02), transparent);
       padding: 60px 20px;
@@ -388,7 +378,6 @@
       border-radius: 20px;
       padding: 20px;
       transition: all 0.2s;
-      position: relative;
     }
     .testimonial-card:hover {
       transform: translateY(-4px);
@@ -419,20 +408,6 @@
     .testimonial-name { font-weight: 700; font-size: 0.8rem; }
     .testimonial-title { font-size: 0.65rem; color: rgba(255,255,255,0.4); }
     .testimonial-date { font-size: 0.55rem; color: rgba(255,255,255,0.3); margin-top: 6px; }
-    .admin-testimonial-delete {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(255,68,68,0.15);
-      border: none;
-      color: #ff6666;
-      padding: 3px 8px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.6rem;
-      display: none;
-    }
-    .testimonial-card:hover .admin-testimonial-delete { display: block; }
 
     .post-testimonial {
       max-width: 550px;
@@ -489,21 +464,6 @@
       transition: all 0.2s;
     }
     .post-testimonial button:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,20,147,0.3); }
-    .admin-mode-toggle {
-      text-align: center;
-      margin-bottom: 14px;
-    }
-    .admin-mode-toggle button {
-      background: rgba(255,20,147,0.1);
-      border: 1px solid rgba(255,20,147,0.25);
-      padding: 5px 14px;
-      border-radius: 20px;
-      color: #FF6B9D;
-      cursor: pointer;
-      font-size: 0.65rem;
-      transition: all 0.2s;
-    }
-    .admin-mode-toggle button:hover { background: rgba(255,20,147,0.2); }
 
     .trust-badges {
       display: flex;
@@ -588,6 +548,33 @@
       margin-top: 12px;
     }
 
+    /* Back Button Footer */
+    .back-footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+    }
+    .back-btn-footer {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 40px;
+      padding: 8px 22px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .back-btn-footer:hover {
+      background: rgba(255, 20, 147, 0.08);
+      border-color: #FF6B9D;
+      color: #FF6B9D;
+      transform: translateX(-3px);
+    }
+
     @media (max-width: 900px) {
       .steps-grid, .features-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -612,30 +599,24 @@
 
   <div class="bg-animation"></div>
 
-  <!-- Navbar - ONLY Landing Page Buttons (No Back Button) -->
+  <!-- Navbar - Clean Header (No Back Button in Header) -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">💕 EntranceHearts</a>
-      <div class="nav-links">
-  <a href="confessions.html" class="nav-link">💌 Confessions</a>
-  <a href="study.html" class="nav-link">📚 Study</a>
-  <a href="timer.html" class="nav-link">⏱️ Timer</a>
-  <a href="login.html" class="nav-link">Login</a>
-  <a href="signup.html" class="btn-primary">✨ Join Free</a>
+      <div class="nav-links" id="navLinks">
+        <!-- Desktop nav will be dynamically updated based on login status -->
+        <a href="confessions.html" class="nav-link">💌 Confessions</a>
+        <a href="study.html" class="nav-link">📚 Study</a>
+        <a href="timer.html" class="nav-link">⏱️ Timer</a>
+        <a href="login.html" class="nav-link">Login</a>
+        <a href="signup.html" class="btn-primary">✨ Join Free</a>
       </div>
       <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
   </nav>
 
-    <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="login.html" class="mobile-menu-item">🔐 Login</a>
-    <a href="signup.html" class="mobile-menu-item">✨ Join Free</a>
-    <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
-    <a href="study.html" class="mobile-menu-item">📚 Study</a>
-    <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
-    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin Panel</a>
-  </div>
+  <!-- Mobile Menu - Dynamically filled -->
+  <div class="mobile-menu" id="mobileMenu"></div>
 
   <!-- Hero Section -->
   <section class="hero">
@@ -650,7 +631,7 @@
     <p class="hero-subtitle">Nepal's first dating & friendship app built exclusively for entrance exam students.</p>
 
     <div class="floating-cards">
-      <div class="float-card"><div class="float-avatar">👩</div><div><div class="float-name">Priya S.</div><div class="float-meta">CEE Aspirant • KTM</div></div></div>
+           <div class="float-card"><div class="float-avatar">👩</div><div><div class="float-name">Priya S.</div><div class="float-meta">CEE Aspirant • KTM</div></div></div>
       <div class="float-card"><div class="float-avatar">👨</div><div><div class="float-name">Rohan K.</div><div class="float-meta">IOE Aspirant • PKR</div></div></div>
       <div class="float-card"><div class="float-avatar">👩</div><div><div class="float-name">Sita G.</div><div class="float-meta">+2 Student • BRT</div></div></div>
       <div class="match-pill">💕 It's a Match!</div>
@@ -699,23 +680,21 @@
     </div>
   </section>
 
-  <!-- Testimonials Wall -->
+  <!-- Testimonials Wall - Public Only (No Admin Delete Buttons) -->
   <div class="testimonials-wall">
     <div class="section-header">
       <span class="section-tag">Success Stories</span>
       <h2>What Our <span class="gradient-text">Users Say</span></h2>
       <p class="section-sub">Real stories from real aspirants</p>
     </div>
-
     <div class="testimonials-grid" id="testimonialsList">
       <div style="text-align:center; padding:40px;">Loading testimonials...</div>
     </div>
-
     <div class="post-testimonial">
       <h3>Share Your Experience 💬</h3>
       <input type="text" id="testimonialName" placeholder="Your name (optional)">
       <input type="text" id="testimonialExam" placeholder="Your exam (CEE/IOE/+2/Management)">
-      <textarea id="testimonialMessage" placeholder="Share your experience with EntranceHearts..."></textarea>
+      <textarea id="testimonialMessage" placeholder="Share your experience with EntranceHearts... (min 10 characters)"></textarea>
       <button onclick="postTestimonial()">Post Testimonial</button>
     </div>
   </div>
@@ -755,65 +734,88 @@
     </div>
   </footer>
 
+  <!-- Back Button at Bottom (Not Congested in Header) -->
+  <div class="back-footer">
+    <a href="browse.html" class="back-btn-footer">
+      <i class="fas fa-chevron-left"></i> Go to Dashboard
+    </a>
+  </div>
+
   <script>
-
-    // Update navbar for logged-in users
-async function updateNavbarForLoggedInUser() {
-  const { data } = await supabaseClient.auth.getSession();
-  
-  if (data.session) {
-    const { data: profile } = await supabaseClient
-      .from('profiles')
-      .select('role')
-      .eq('id', data.session.user.id)
-      .single();
-    
-    const isAdmin = profile?.role === 'admin';
-    
-    // Update desktop navigation
-    const navLinks = document.querySelector('.nav-links');
-    if (navLinks) {
-      navLinks.innerHTML = `
-        <a href="browse.html" class="nav-link">🔥 Discover</a>
-        <a href="chat.html" class="nav-link">💬 Chats</a>
-        <a href="confessions.html" class="nav-link">💌 Confessions</a>
-        <a href="study.html" class="nav-link">📚 Study</a>
-        <a href="timer.html" class="nav-link">⏱️ Timer</a>
-        <a href="ai-match.html" class="nav-link">🤖 AI Match</a>
-        ${isAdmin ? `<a href="admin.html" class="btn-primary" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #1a1a2e;">👑 Admin</a>` : ''}
-        <a href="profile.html" class="btn-primary">👤 Profile</a>
-        <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
-      `;
+    // ========== NAVBAR & MOBILE MENU DYNAMIC UPDATE ==========
+    async function updateNavbarForLoggedInUser() {
+      const { data } = await supabaseClient.auth.getSession();
+      const navLinks = document.getElementById('navLinks');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (data.session) {
+        // User is logged in - show app navigation
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('id', data.session.user.id)
+          .single();
+        
+        const isAdmin = profile?.role === 'admin';
+        
+        if (navLinks) {
+          navLinks.innerHTML = `
+            <a href="browse.html" class="nav-link">🔥 Discover</a>
+            <a href="chat.html" class="nav-link">💬 Chats</a>
+            <a href="confessions.html" class="nav-link">💌 Confessions</a>
+            <a href="study.html" class="nav-link">📚 Study</a>
+            <a href="timer.html" class="nav-link">⏱️ Timer</a>
+            <a href="ai-match.html" class="nav-link">🤖 AI Match</a>
+            ${isAdmin ? `<a href="admin.html" class="btn-primary" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #1a1a2e;">👑 Admin</a>` : ''}
+            <a href="profile.html" class="btn-primary">👤 Profile</a>
+            <a href="#" class="nav-link" onclick="logout()">🚪 Logout</a>
+          `;
+        }
+        
+        if (mobileMenu) {
+          mobileMenu.innerHTML = `
+            <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
+            <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
+            <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
+            <a href="study.html" class="mobile-menu-item">📚 Study</a>
+            <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+            <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
+            ${isAdmin ? `<a href="admin.html" class="mobile-menu-item">👑 Admin</a>` : ''}
+            <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
+            <a href="#" class="mobile-menu-item" onclick="logout()">🚪 Logout</a>
+          `;
+        }
+      } else {
+        // User is logged out - show landing navigation
+        if (navLinks) {
+          navLinks.innerHTML = `
+            <a href="confessions.html" class="nav-link">💌 Confessions</a>
+            <a href="study.html" class="nav-link">📚 Study</a>
+            <a href="timer.html" class="nav-link">⏱️ Timer</a>
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="signup.html" class="btn-primary">✨ Join Free</a>
+          `;
+        }
+        
+        if (mobileMenu) {
+          mobileMenu.innerHTML = `
+            <a href="login.html" class="mobile-menu-item">🔐 Login</a>
+            <a href="signup.html" class="mobile-menu-item">✨ Join Free</a>
+            <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
+            <a href="study.html" class="mobile-menu-item">📚 Study</a>
+            <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+          `;
+        }
+      }
     }
-    
-    // Update mobile menu
-    const mobileMenu = document.querySelector('.mobile-menu');
-    if (mobileMenu) {
-      mobileMenu.innerHTML = `
-        <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
-        <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
-        <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
-        <a href="study.html" class="mobile-menu-item">📚 Study</a>
-        <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
-        <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
-        ${isAdmin ? `<a href="admin.html" class="mobile-menu-item">👑 Admin</a>` : ''}
-        <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
-        <a href="#" class="mobile-menu-item" onclick="logout()">🚪 Logout</a>
-      `;
+
+    async function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+      }
     }
-  }
-}
 
-// Logout function
-async function logout() {
-  if (confirm('Logout?')) {
-    await supabaseClient.auth.signOut();
-    window.location.href = 'index.html';
-  }
-}
-
-    
-    
     // ========== ANIMATED COUNTERS ==========
     function animateCounter(element, target) {
       let current = 0;
@@ -842,39 +844,7 @@ async function logout() {
     }, { threshold: 0.5 });
     counters.forEach(counter => observer.observe(counter));
 
-
-    // Check if user is admin - show admin button
-async function checkAdminAndShowButton() {
-  const { data } = await supabaseClient.auth.getSession();
-  if (data.session) {
-    const { data: profile } = await supabaseClient
-      .from('profiles')
-      .select('role')
-      .eq('id', data.session.user.id)
-      .single();
-    
-    if (profile?.role === 'admin') {
-      const adminBtn = document.getElementById('adminBtn');
-      const mobileAdminBtn = document.getElementById('mobileAdminBtn');
-      if (adminBtn) adminBtn.style.display = 'inline-flex';
-      if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
-    }
-  }
-}
-
-
-    // Call this after page loads
-(async function() {
-  await updateNavbarForLoggedInUser();
-  checkAdminAndShowButton();
-})();
-    
-    
-    // ========== TESTIMONIALS FUNCTIONS ==========
-    let testimonials = [];
-    let isTestimonialAdmin = false;
-    const ADMIN_CODE = "drsaurab@2022";
-
+    // ========== PUBLIC TESTIMONIALS FUNCTIONS (No Admin Delete) ==========
     async function loadTestimonials() {
       try {
         const { data, error } = await supabaseClient
@@ -882,23 +852,23 @@ async function checkAdminAndShowButton() {
           .select('*')
           .order('created_at', { ascending: false });
         if (error) throw error;
-        testimonials = data || [];
-        renderTestimonials();
+        const testimonials = data || [];
+        renderTestimonials(testimonials);
       } catch(e) {
         console.error('Error loading testimonials:', e);
         document.getElementById('testimonialsList').innerHTML = '<div style="text-align:center; padding:40px;">Failed to load testimonials</div>';
       }
     }
 
-    function renderTestimonials() {
+    function renderTestimonials(testimonials) {
       const container = document.getElementById('testimonialsList');
       if (!testimonials.length) {
         container.innerHTML = '<div style="text-align:center; padding:40px;">No testimonials yet. Be the first to share!</div>';
         return;
       }
+      
       container.innerHTML = testimonials.map(t => `
-        <div class="testimonial-card" data-id="${t.id}">
-          ${isTestimonialAdmin ? `<button class="admin-testimonial-delete" onclick="deleteTestimonial('${t.id}')"><i class="fas fa-trash"></i> Delete</button>` : ''}
+        <div class="testimonial-card">
           <div class="testimonial-text">"${escapeHtml(t.message)}"</div>
           <div class="testimonial-author">
             <div class="testimonial-avatar">${getAvatarEmoji(t.name)}</div>
@@ -951,37 +921,8 @@ async function checkAdminAndShowButton() {
         document.getElementById('testimonialName').value = '';
         document.getElementById('testimonialExam').value = '';
         document.getElementById('testimonialMessage').value = '';
-        alert('✅ Thank you for your testimonial! It will appear shortly.');
+        alert('✅ Thank you for your testimonial!');
         loadTestimonials();
-      }
-    }
-
-    async function deleteTestimonial(id) {
-      if (!isTestimonialAdmin) {
-        alert('Admin mode required to delete');
-        return;
-      }
-      if (confirm('Delete this testimonial?')) {
-        const { error } = await supabaseClient.from('testimonials').delete().eq('id', id);
-        if (error) {
-          alert('Failed to delete');
-        } else {
-          loadTestimonials();
-        }
-      }
-    }
-
-    function toggleTestimonialAdminMode() {
-      const code = prompt('Enter Admin Code:');
-      if (code === ADMIN_CODE) {
-        isTestimonialAdmin = true;
-        const btn = document.getElementById('toggleAdminTestimonialBtn');
-        btn.textContent = '👑 Admin Mode (ON)';
-        btn.style.background = 'rgba(255,20,147,0.2)';
-        renderTestimonials();
-        alert('Admin mode activated! You can now delete testimonials.');
-      } else {
-        alert('Wrong code!');
       }
     }
 
@@ -1020,8 +961,11 @@ async function checkAdminAndShowButton() {
       else if (navbar) navbar.classList.remove('scrolled');
     });
 
-    // Load testimonials
-    loadTestimonials();
+    // Initialize everything
+    (async function init() {
+      await updateNavbarForLoggedInUser();
+      await loadTestimonials();
+    })();
   </script>
 </body>
 </html>

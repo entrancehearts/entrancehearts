@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Login — EntranceHearts 💕</title>
+  <title>Login — EntranceHearts</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -24,10 +24,9 @@
       background: #0a0a0f;
       color: #ffffff;
       min-height: 100vh;
-      position: relative;
     }
 
-    /* Animated Background */
+    /* Subtle Animated Background - NO PINK GLOW OVERWHELM */
     .animated-bg {
       position: fixed;
       top: 0;
@@ -38,54 +37,56 @@
       overflow: hidden;
     }
 
+    /* Very subtle orbs - barely visible */
     .gradient-orb {
       position: absolute;
-      width: 500px;
-      height: 500px;
+      width: 400px;
+      height: 400px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 20, 147, 0.15), transparent);
-      top: -200px;
-      right: -150px;
-      animation: floatOrb 10s ease-in-out infinite;
+      background: radial-gradient(circle, rgba(255, 20, 147, 0.04), transparent);
+      top: -150px;
+      right: -100px;
+      animation: floatOrb 12s ease-in-out infinite;
     }
 
     .gradient-orb-bottom {
       position: absolute;
-      width: 500px;
-      height: 500px;
+      width: 400px;
+      height: 400px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 107, 157, 0.1), transparent);
-      bottom: -200px;
-      left: -150px;
-      animation: floatOrbReverse 12s ease-in-out infinite;
+      background: radial-gradient(circle, rgba(255, 107, 157, 0.03), transparent);
+      bottom: -150px;
+      left: -100px;
+      animation: floatOrbReverse 14s ease-in-out infinite;
     }
 
     @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-      50% { transform: translate(30px, -20px) scale(1.1); opacity: 0.8; }
+      0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+      50% { transform: translate(20px, -15px); opacity: 0.6; }
     }
 
     @keyframes floatOrbReverse {
-      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-      50% { transform: translate(-40px, 30px) scale(1.05); opacity: 0.6; }
+      0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+      50% { transform: translate(-25px, 20px); opacity: 0.5; }
     }
 
+    /* Floating hearts - very subtle */
     .floating-heart {
       position: absolute;
-      font-size: 1.2rem;
-      opacity: 0.08;
+      font-size: 1rem;
+      opacity: 0.04;
       animation: floatHeart linear infinite;
       pointer-events: none;
     }
 
     @keyframes floatHeart {
       0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.1; }
-      90% { opacity: 0.08; }
+      10% { opacity: 0.04; }
+      90% { opacity: 0.04; }
       100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
     }
 
-    /* Main Layout - Back Button at Bottom */
+    /* Main Layout */
     .main-container {
       min-height: 100vh;
       display: flex;
@@ -95,44 +96,42 @@
       padding: 40px 20px;
     }
 
-    /* Logo Header (top) */
+    /* Logo Header */
     .logo-header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
     }
 
     .logo-icon {
-      font-size: 3rem;
-      animation: gentlePulse 2s ease-in-out infinite;
+      font-size: 2.5rem;
       display: inline-block;
-    }
-
-    @keyframes gentlePulse {
-      0%, 100% { transform: scale(1); text-shadow: 0 0 0px #FF1493; }
-      50% { transform: scale(1.05); text-shadow: 0 0 15px #FF1493; }
     }
 
     .logo-text {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #FF1493, #FF6B9D, #FFB6C1);
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .logo-text span {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -0.5px;
     }
 
-    /* Typing Animation for Subtitle */
+    /* Typing Animation */
     .subtitle-wrapper {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 28px;
     }
 
     .animated-subtitle {
-      font-size: 0.95rem;
-      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.45);
       display: inline-block;
-      border-right: 2px solid #FF6B9D;
+      border-right: 1.5px solid #FF1493;
       white-space: nowrap;
       overflow: hidden;
       animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
@@ -145,152 +144,145 @@
 
     @keyframes blink-caret {
       from, to { border-color: transparent; }
-      50% { border-color: #FF6B9D; }
+      50% { border-color: #FF1493; }
     }
 
-    /* Login Card */
+    /* Login Card - Dark theme, subtle borders */
     .auth-card {
-      background: rgba(18, 18, 30, 0.85);
-      backdrop-filter: blur(20px);
-      border-radius: 40px;
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      padding: 40px 35px;
+      background: rgba(18, 18, 26, 0.92);
+      backdrop-filter: blur(16px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      padding: 36px 32px;
       width: 100%;
-      max-width: 450px;
-      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
-      transition: transform 0.3s ease;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
     }
 
     .auth-card:hover {
-      transform: translateY(-5px);
+      border-color: rgba(255, 20, 147, 0.35);
+      transform: translateY(-2px);
     }
 
     .welcome-title {
-      font-size: 2rem;
-      font-weight: 800;
+      font-size: 1.8rem;
+      font-weight: 700;
       text-align: center;
-      background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      color: #ffffff;
+      margin-bottom: 6px;
     }
 
     .welcome-sub {
       text-align: center;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.85rem;
-      margin-bottom: 30px;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.8rem;
+      margin-bottom: 28px;
     }
 
     /* Messages */
     .error-msg, .success-msg {
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 0.85rem;
-      margin-bottom: 20px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-bottom: 18px;
       display: none;
-      animation: slideDown 0.3s ease;
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .error-msg {
-      background: rgba(255, 68, 68, 0.12);
+      background: rgba(255, 68, 68, 0.1);
       border-left: 3px solid #ff6666;
       color: #ffa2a2;
     }
 
     .success-msg {
-      background: rgba(76, 175, 80, 0.12);
+      background: rgba(76, 175, 80, 0.08);
       border-left: 3px solid #6fbf6f;
       color: #a3e0a3;
     }
 
     /* Form Groups */
     .form-group {
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .form-group label {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 500;
       margin-bottom: 8px;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.6);
     }
 
     .form-group label i {
       color: #FF6B9D;
-      width: 20px;
+      width: 18px;
+      font-size: 0.8rem;
     }
 
     .form-group input {
       width: 100%;
-      padding: 14px 18px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1.5px solid rgba(255, 20, 147, 0.25);
-      border-radius: 30px;
-      color: white;
-      font-size: 0.95rem;
+      padding: 13px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 24px;
+      color: #ffffff;
+      font-size: 0.9rem;
       transition: all 0.3s;
     }
 
     .form-group input:focus {
       outline: none;
       border-color: #FF1493;
-      background: rgba(255, 20, 147, 0.08);
-      box-shadow: 0 0 0 4px rgba(255, 20, 147, 0.1);
+      background: rgba(255, 20, 147, 0.05);
+      box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.08);
     }
 
     .form-group input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.25);
     }
 
-    /* Submit Button */
+    /* Login Button */
     .login-btn {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       border: none;
-      border-radius: 50px;
+      border-radius: 40px;
       color: white;
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
       margin-top: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .login-btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+      box-shadow: 0 6px 20px rgba(255, 20, 147, 0.3);
     }
 
     .login-btn:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
     /* Forgot Password */
     .forgot-link {
       text-align: center;
-      margin: 10px 0;
+      margin: 8px 0;
     }
 
     .forgot-link a {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.8rem;
       text-decoration: none;
       transition: color 0.2s;
       cursor: pointer;
@@ -303,95 +295,86 @@
     /* Sign Up Link */
     .signup-link {
       text-align: center;
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 20, 147, 0.2);
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.5);
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 20, 147, 0.12);
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.45);
     }
 
     .signup-link a {
       color: #FF6B9D;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
       transition: color 0.2s;
     }
 
     .signup-link a:hover {
       color: #FF1493;
-      text-decoration: underline;
     }
 
-    /* Feature Carousel */
+    /* Feature Badges */
     .features-carousel {
-      margin-top: 40px;
+      margin-top: 32px;
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .feature-badge {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 20, 147, 0.2);
-      border-radius: 50px;
-      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 20, 147, 0.15);
+      border-radius: 40px;
+      padding: 8px 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      animation: fadeInUp 0.5s ease backwards;
-      animation-delay: calc(var(--i, 0) * 0.1s);
+      gap: 8px;
+      transition: all 0.2s;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .feature-badge:hover {
+      border-color: rgba(255, 20, 147, 0.3);
+      background: rgba(255, 20, 147, 0.05);
     }
 
     .feature-badge i {
       color: #FF6B9D;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
     }
 
     .feature-badge span {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
       font-weight: 500;
     }
 
-    /* Back Button - Positioned at Bottom */
+    /* Back Button - At Bottom */
     .back-footer {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 36px;
     }
 
     .back-btn-footer {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      border-radius: 50px;
-      padding: 10px 24px;
-      color: rgba(255, 255, 255, 0.7);
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 40px;
+      padding: 8px 22px;
+      color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       transition: all 0.3s;
     }
 
     .back-btn-footer:hover {
-      background: rgba(255, 20, 147, 0.15);
+      background: rgba(255, 20, 147, 0.08);
       border-color: #FF6B9D;
       color: #FF6B9D;
-      transform: translateX(-4px);
+      transform: translateX(-3px);
     }
 
     /* Modal Styles */
@@ -402,8 +385,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(15px);
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(12px);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -411,7 +394,7 @@
 
     .modal-overlay.active {
       display: flex;
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.25s ease;
     }
 
     @keyframes fadeIn {
@@ -420,42 +403,48 @@
     }
 
     .modal-card {
-      background: #141423;
-      border: 1px solid rgba(255, 20, 147, 0.4);
-      border-radius: 32px;
-      padding: 32px;
+      background: #13131f;
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      border-radius: 28px;
+      padding: 28px 24px;
       text-align: center;
-      max-width: 400px;
+      max-width: 380px;
       width: 90%;
     }
 
     .modal-card h3 {
-      margin: 12px 0 6px;
-      font-size: 1.5rem;
+      margin: 10px 0 6px;
+      font-size: 1.3rem;
+      color: #ffffff;
     }
 
     .modal-card p {
       color: rgba(255, 255, 255, 0.5);
       margin-bottom: 20px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
     .modal-input {
       width: 100%;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      border-radius: 25px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 20, 147, 0.25);
+      border-radius: 22px;
       color: white;
       margin-bottom: 16px;
     }
 
+    .modal-input:focus {
+      outline: none;
+      border-color: #FF1493;
+    }
+
     .modal-btn {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       border: none;
-      border-radius: 50px;
+      border-radius: 40px;
       color: white;
       font-weight: 600;
       cursor: pointer;
@@ -464,12 +453,18 @@
 
     .modal-cancel {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       background: transparent;
       border: 1px solid rgba(255, 20, 147, 0.3);
-      border-radius: 50px;
-      color: rgba(255, 255, 255, 0.7);
+      border-radius: 40px;
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-cancel:hover {
+      border-color: #FF6B9D;
+      color: #FF6B9D;
     }
 
     .otp-inputs {
@@ -480,13 +475,13 @@
     }
 
     .otp-input {
-      width: 48px;
-      height: 54px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 20, 147, 0.4);
+      width: 46px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 20, 147, 0.3);
       color: white;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       text-align: center;
     }
@@ -494,26 +489,39 @@
     .otp-input:focus {
       outline: none;
       border-color: #FF1493;
-      background: rgba(255, 20, 147, 0.1);
+      background: rgba(255, 20, 147, 0.08);
     }
 
-    .resend-btn {
+    .resend-link {
+      margin-top: 14px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .resend-link button {
       background: none;
       border: none;
       color: #FF6B9D;
       cursor: pointer;
-      font-size: 0.8rem;
-      margin-left: 5px;
+      font-weight: 500;
     }
 
     /* Mobile Responsive */
     @media (max-width: 550px) {
+      .main-container {
+        padding: 30px 16px;
+      }
+      
       .auth-card {
-        padding: 30px 22px;
+        padding: 28px 22px;
       }
       
       .welcome-title {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+      }
+      
+      .logo-text {
+        font-size: 1.3rem;
       }
       
       .feature-badge {
@@ -521,20 +529,43 @@
       }
       
       .feature-badge span {
-        font-size: 0.75rem;
-      }
-      
-      .otp-input {
-        width: 42px;
-        height: 48px;
-        font-size: 1.2rem;
+        font-size: 0.7rem;
       }
       
       .animated-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         white-space: normal;
         animation: none;
         border-right: none;
+      }
+      
+      .otp-input {
+        width: 40px;
+        height: 46px;
+        font-size: 1.1rem;
+      }
+      
+      .back-btn-footer {
+        padding: 7px 18px;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .features-carousel {
+        gap: 8px;
+      }
+      
+      .feature-badge {
+        padding: 5px 12px;
+      }
+      
+      .feature-badge i {
+        font-size: 0.75rem;
+      }
+      
+      .feature-badge span {
+        font-size: 0.65rem;
       }
     }
   </style>
@@ -550,25 +581,25 @@
     <!-- Logo Header -->
     <div class="logo-header">
       <div class="logo-icon">💕</div>
-      <div class="logo-text">EntranceHearts</div>
+      <div class="logo-text">Welcome to <span>EntranceHearts</span></div>
     </div>
 
     <!-- Animated Subtitle -->
     <div class="subtitle-wrapper">
-      <div class="animated-subtitle">✨ Nepal's Dating App for CEE/IOE/+2 Students ✨</div>
+      <div class="animated-subtitle">Nepal's Dating App for CEE | IOE | +2 | Management Students</div>
     </div>
 
     <!-- Login Card -->
     <div class="auth-card">
       <div class="welcome-title">Welcome Back!</div>
-      <div class="welcome-sub">Login to continue your romantic & study journey</div>
+      <div class="welcome-sub">Login to continue your journey</div>
 
       <div class="error-msg" id="errorMsg"></div>
       <div class="success-msg" id="successMsg"></div>
 
       <div class="form-group">
         <label><i class="fas fa-envelope"></i> Email Address</label>
-        <input type="email" id="email" placeholder="hello@entrancehearts.com" autocomplete="email" />
+        <input type="email" id="email" placeholder="your@email.com" autocomplete="email" />
       </div>
 
       <div class="form-group">
@@ -583,22 +614,22 @@
       <div class="forgot-link">
         <a id="forgotPasswordLink"><i class="far fa-question-circle"></i> Forgot password?</a>
       </div>
+
+      <!-- Sign Up Link Inside Card -->
+      <div class="signup-link">
+        ✨ New here? <a href="signup.html">Create free account <i class="fas fa-arrow-right"></i></a>
+      </div>
     </div>
 
-    <!-- Feature Carousel -->
+    <!-- Feature Badges -->
     <div class="features-carousel">
-      <div class="feature-badge" style="--i:0"><i class="fas fa-heart"></i><span>Perfect Match</span></div>
-      <div class="feature-badge" style="--i:1"><i class="fas fa-comment-dots"></i><span>Confessions</span></div>
-      <div class="feature-badge" style="--i:2"><i class="fas fa-book-open"></i><span>Study Hub</span></div>
-      <div class="feature-badge" style="--i:3"><i class="fas fa-clock"></i><span>Study Timer</span></div>
+      <div class="feature-badge"><i class="fas fa-heart"></i><span>Perfect Match</span></div>
+      <div class="feature-badge"><i class="fas fa-comment-dots"></i><span>Confessions</span></div>
+      <div class="feature-badge"><i class="fas fa-book-open"></i><span>Study Hub</span></div>
+      <div class="feature-badge"><i class="fas fa-clock"></i><span>Timer</span></div>
     </div>
 
-    <!-- Sign Up Link -->
-    <div class="signup-link">
-      ✨ New here? <a href="signup.html">Create free account <i class="fas fa-arrow-right"></i></a>
-    </div>
-
-    <!-- Back Button - Placed at Bottom -->
+    <!-- Back Button - At Bottom (Not Congested) -->
     <div class="back-footer">
       <a href="index.html" class="back-btn-footer">
         <i class="fas fa-chevron-left"></i> Back to Home
@@ -609,7 +640,7 @@
   <!-- Reset Password Modals -->
   <div id="resetEmailModal" class="modal-overlay">
     <div class="modal-card">
-      <i class="fas fa-key" style="font-size: 2.5rem; color: #FF6B9D;"></i>
+      <i class="fas fa-key" style="font-size: 2rem; color: #FF6B9D;"></i>
       <h3>Reset Password</h3>
       <p>Enter your email to receive OTP</p>
       <input type="email" id="resetEmail" class="modal-input" placeholder="your@email.com" />
@@ -620,7 +651,7 @@
 
   <div id="otpModal" class="modal-overlay">
     <div class="modal-card">
-      <i class="fas fa-envelope-open-text" style="font-size: 2rem;"></i>
+      <i class="fas fa-envelope-open-text" style="font-size: 1.8rem;"></i>
       <h3>Verification Code</h3>
       <p>OTP sent to <strong id="otpEmailDisplay" style="color:#FF6B9D;"></strong></p>
       <div class="otp-inputs">
@@ -632,16 +663,16 @@
         <input class="otp-input" id="otp6" maxlength="1" oninput="otpMove(this,'')" onkeydown="otpBack(event,this,'otp5')">
       </div>
       <button id="verifyOtpBtn" class="modal-btn">Verify OTP</button>
-      <div class="resend-link" style="margin-top: 12px;">
+      <div class="resend-link">
         <span>Didn't receive code?</span>
-        <button id="resendOtpBtn" class="resend-btn">Resend OTP</button>
+        <button id="resendOtpBtn">Resend OTP</button>
       </div>
     </div>
   </div>
 
   <div id="newPasswordModal" class="modal-overlay">
     <div class="modal-card">
-      <i class="fas fa-lock" style="font-size: 2rem;"></i>
+      <i class="fas fa-lock" style="font-size: 1.8rem;"></i>
       <h3>Create New Password</h3>
       <input type="password" id="newPassword" class="modal-input" placeholder="New password (min 8 characters)" />
       <input type="password" id="confirmPassword" class="modal-input" placeholder="Confirm password" />
@@ -650,15 +681,15 @@
   </div>
 
   <script>
-    // Create Floating Hearts
+    // Create Floating Hearts - VERY SUBTLE
     function createFloatingHearts() {
       const container = document.querySelector('.animated-bg');
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 20; i++) {
         const heart = document.createElement('div');
         heart.className = 'floating-heart';
-        heart.innerHTML = ['💕', '❤️', '💖', '💗', '💓', '🌸', '✨'][Math.floor(Math.random() * 7)];
+        heart.innerHTML = ['💕', '❤️', '💖', '💗'][Math.floor(Math.random() * 4)];
         heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 1.5 + 0.7) + 'rem';
+        heart.style.fontSize = (Math.random() * 1.2 + 0.6) + 'rem';
         heart.style.animationDuration = (Math.random() * 12 + 10) + 's';
         heart.style.animationDelay = Math.random() * 15 + 's';
         container.appendChild(heart);
@@ -706,16 +737,14 @@
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) throw error;
 
-        // Check if profile exists
         const { data: profile } = await supabaseClient.from('profiles').select('id').eq('id', data.user.id).single();
         
-        // Handle temp user data if exists
         const tempUser = localStorage.getItem('ehTempUser');
         if (tempUser && !profile) {
           const userData = JSON.parse(tempUser);
           await supabaseClient.from('profiles').insert({ id: data.user.id, ...userData });
           localStorage.removeItem('ehTempUser');
-        }
+       }
 
         showSuccess('Login successful! Redirecting...');
         setTimeout(() => {
@@ -728,7 +757,6 @@
       }
     }
 
-    // Enter key support
     document.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') handleLogin();
     });
@@ -788,7 +816,7 @@
 
       try {
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/update-password.html'
+          redirectTo: 'https://entrancehearts.github.io/entrancehearts/update-password.html'
         });
         if (error) throw error;
 
@@ -798,7 +826,6 @@
         document.getElementById('otpModal').classList.add('active');
         showSuccess('OTP sent to your email!');
 
-        // Start resend timer
         const resendBtn = document.getElementById('resendOtpBtn');
         resendSeconds = 30;
         resendBtn.disabled = true;
@@ -884,12 +911,11 @@
     async function resendOtp() {
       try {
         const { error } = await supabaseClient.auth.resetPasswordForEmail(resetEmailGlobal, {
-          redirectTo: window.location.origin + '/update-password.html'
+          redirectTo: 'https://entrancehearts.github.io/entrancehearts/update-password.html'
         });
         if (error) throw error;
         showSuccess('New OTP sent!');
         
-        // Reset timer
         const resendBtn = document.getElementById('resendOtpBtn');
         resendSeconds = 30;
         resendBtn.disabled = true;

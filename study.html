@@ -21,7 +21,7 @@
       min-height: 100vh;
     }
 
-    /* Navbar - Clean Header (No Back Button) */
+    /* Navbar - Clean Header */
     .navbar {
       position: fixed;
       top: 0;
@@ -165,7 +165,7 @@
     /* Category Tabs */
     .category-tabs {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 25px;
       flex-wrap: wrap;
       justify-content: center;
@@ -173,15 +173,15 @@
     .cat-btn {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 20, 147, 0.2);
-      padding: 8px 20px;
+      padding: 10px 24px;
       border-radius: 100px;
       color: rgba(255, 255, 255, 0.65);
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .cat-btn i { margin-right: 5px; }
+    .cat-btn i { margin-right: 6px; }
     .cat-btn.active {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       border-color: transparent;
@@ -189,16 +189,20 @@
     }
     .cat-btn:hover { transform: translateY(-2px); background: rgba(255,20,147,0.1); }
     
-    /* Upload Section */
+    /* Upload Section - Only visible when logged in */
     .upload-section {
       background: rgba(18, 18, 26, 0.9);
       border: 1px solid rgba(255, 20, 147, 0.15);
       border-radius: 24px;
       padding: 24px;
       margin-bottom: 28px;
+      display: none;
+    }
+    .upload-section.show {
+      display: block;
     }
     .upload-title {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 18px;
       display: flex;
@@ -256,6 +260,19 @@
     .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255,20,147,0.3); }
     .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     
+    /* Login to upload message */
+    .login-to-upload {
+      background: rgba(255,20,147,0.08);
+      border: 1px solid rgba(255,20,147,0.2);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-to-upload i { font-size: 2rem; color: #FF6B9D; margin-bottom: 10px; display: block; }
+    .login-to-upload p { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+    .login-to-upload a { color: #FF6B9D; text-decoration: none; font-weight: 600; }
+    
     /* Sort Section */
     .sort-section {
       display: flex;
@@ -270,9 +287,9 @@
     .sort-btn {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 20, 147, 0.2);
-      padding: 5px 14px;
+      padding: 6px 16px;
       border-radius: 100px;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       cursor: pointer;
       color: rgba(255, 255, 255, 0.6);
     }
@@ -296,7 +313,7 @@
       background: rgba(18, 18, 26, 0.9);
       border: 1px solid rgba(255, 20, 147, 0.12);
       border-radius: 20px;
-      padding: 18px;
+      padding: 20px;
       transition: all 0.2s;
     }
     .material-card:hover { border-color: rgba(255,20,147,0.3); transform: translateY(-2px); }
@@ -304,7 +321,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
       gap: 8px;
     }
@@ -315,15 +332,15 @@
     }
     .material-badge {
       background: rgba(255,20,147,0.1);
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 100px;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: #FF6B9D;
     }
     .material-description {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: rgba(255, 255, 255, 0.65);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       line-height: 1.4;
     }
     .material-meta {
@@ -332,18 +349,17 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 12px;
-      font-size: 0.65rem;
+      margin-bottom: 14px;
+      font-size: 0.7rem;
       color: rgba(255, 255, 255, 0.4);
     }
-    .material-meta i { margin-right: 3px; }
     .download-btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 20, 147, 0.2);
-      padding: 7px 18px;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      border: none;
+      padding: 8px 20px;
       border-radius: 100px;
       color: white;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
@@ -351,7 +367,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .download-btn:hover { background: #FF1493; border-color: #FF1493; transform: translateY(-1px); }
+    .download-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,20,147,0.3); }
     
     .empty-state {
       text-align: center;
@@ -413,7 +429,7 @@
     /* Back Button Footer */
     .back-footer {
       text-align: center;
-      margin-top: 24px;
+      margin-top: 28px;
     }
     .back-btn-footer {
       display: inline-flex;
@@ -449,7 +465,7 @@
 </head>
 <body>
 
-  <!-- Navbar - Clean Header (No Back Button) -->
+  <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">📚 Study Segment</a>
@@ -460,9 +476,7 @@
         <a href="study.html" class="btn-ghost-nav" style="color: #FF6B9D;">📚 Study</a>
         <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
         <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
-        <a href="admin.html" class="btn-admin-nav" id="adminBtn" style="display: none;">
-  <i class="fas fa-crown"></i> Admin Panel
-        </a>
+        <a href="admin.html" class="btn-ghost-nav" id="adminBtn" style="display: none;">👑 Admin</a>
         <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
       </div>
       <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
@@ -477,9 +491,9 @@
     <a href="study.html" class="mobile-menu-item">📚 Study</a>
     <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
     <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
-    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin Panel</a>
+    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin</a>
     <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
-    <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
+    <a href="#" class="mobile-menu-item" onclick="logout()">🚪 Logout</a>
   </div>
 
   <!-- Hero Banner -->
@@ -504,8 +518,8 @@
       <button class="cat-btn" data-cat="Management"><i class="fas fa-chart-line"></i> Management</button>
     </div>
 
-    <!-- Upload Section -->
-    <div class="upload-section">
+    <!-- Upload Section (shown only when logged in) -->
+    <div class="upload-section" id="uploadSection">
       <div class="upload-title"><i class="fas fa-cloud-upload-alt"></i> Share Your Study Material</div>
       <div class="upload-form">
         <div class="form-row">
@@ -529,6 +543,13 @@
         <div id="selectedFileName" class="selected-file">No file selected</div>
         <button class="upload-btn" onclick="uploadMaterial()"><i class="fas fa-share"></i> Share Material</button>
       </div>
+    </div>
+
+    <!-- Login to upload message (shown when NOT logged in) -->
+    <div class="login-to-upload" id="loginToUploadMsg">
+      <i class="fas fa-lock"></i>
+      <p>Login to upload study materials and help fellow aspirants!</p>
+      <a href="login.html">Login to Contribute →</a>
     </div>
 
     <!-- Sort Options -->
@@ -568,25 +589,44 @@
     let currentSort = "newest";
     let currentUserId = null;
     let currentFile = null;
+    let isLoggedIn = false;
+
+    async function logout() {
+      if (confirm('Logout?')) {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+      }
+    }
 
     async function init() {
       const { data } = await supabaseClient.auth.getSession();
-      if (!data.session) { window.location.href = 'login.html'; return; }
-      currentUserId = data.session.user.id;
-
-      // Check if user is admin
-const { data: profile } = await supabaseClient
-  .from('profiles')
-  .select('role')
-  .eq('id', currentUserId)
-  .single();
-
-if (profile?.role === 'admin') {
-  const adminBtn = document.getElementById('adminBtn');
-  const mobileAdminBtn = document.getElementById('mobileAdminBtn');
-  if (adminBtn) adminBtn.style.display = 'inline-flex';
-  if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
-}
+      
+      if (data.session) {
+        isLoggedIn = true;
+        currentUserId = data.session.user.id;
+        
+        // Show upload section, hide login message
+        document.getElementById('uploadSection').classList.add('show');
+        document.getElementById('loginToUploadMsg').style.display = 'none';
+        
+        // Check if user is admin
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('id', currentUserId)
+          .single();
+        
+        if (profile?.role === 'admin') {
+          const adminBtn = document.getElementById('adminBtn');
+          const mobileAdminBtn = document.getElementById('mobileAdminBtn');
+          if (adminBtn) adminBtn.style.display = 'inline-flex';
+          if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
+        }
+      } else {
+        // Not logged in - hide upload section, show login message
+        document.getElementById('uploadSection').classList.remove('show');
+        document.getElementById('loginToUploadMsg').style.display = 'block';
+      }
       
       await loadMaterials();
     }
@@ -606,7 +646,11 @@ if (profile?.role === 'admin') {
         .select('*, profiles(name)')
         .order('created_at', { ascending: false });
       
-      if (error) { showToast('Failed to load materials'); return; }
+      if (error) { 
+        console.error('Error loading materials:', error);
+        showToast('Failed to load materials'); 
+        return; 
+      }
       materials = data || [];
       updateStats();
       renderMaterials();
@@ -631,6 +675,12 @@ if (profile?.role === 'admin') {
     });
 
     async function uploadMaterial() {
+      if (!isLoggedIn) {
+        showToast('Please login to upload materials');
+        window.location.href = 'login.html';
+        return;
+      }
+      
       const title = document.getElementById('materialTitle').value.trim();
       const category = document.getElementById('materialCategory').value;
       const description = document.getElementById('materialDesc').value.trim();
@@ -669,19 +719,31 @@ if (profile?.role === 'admin') {
 
         showToast('✅ Material uploaded successfully!');
         await loadMaterials();
-      } catch (err) { showToast('❌ Upload failed: ' + err.message); }
+      } catch (err) { 
+        console.error('Upload error:', err);
+        showToast('❌ Upload failed: ' + err.message); 
+      }
 
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-share"></i> Share Material';
     }
 
     async function downloadMaterial(id, fileUrl, fileName) {
+      if (!isLoggedIn) {
+        showToast('Please login to download materials');
+        window.location.href = 'login.html';
+        return;
+      }
+      
       try {
         await supabaseClient.rpc('increment_downloads', { material_id: id });
         window.open(fileUrl, '_blank');
         showToast(`📥 Downloading: ${fileName}`);
         await loadMaterials();
-      } catch(err) { showToast('Download failed'); }
+      } catch(err) { 
+        console.error('Download error:', err);
+        showToast('Download failed'); 
+      }
     }
 
     function renderMaterials() {
@@ -711,7 +773,7 @@ if (profile?.role === 'admin') {
             <span><i class="fas fa-user"></i> ${m.profiles?.name || 'Anonymous'} • <i class="far fa-clock"></i> ${formatDate(m.created_at)}</span>
             <span><i class="fas fa-download"></i> ${m.downloads || 0} downloads</span>
           </div>
-          <button class="download-btn" onclick="downloadMaterial(${m.id}, '${m.file_url}', '${m.file_name}')">
+          <button class="download-btn" onclick="downloadMaterial('${m.id}', '${m.file_url}', '${m.file_name}')">
             <i class="fas fa-download"></i> Download
           </button>
         </div>
@@ -728,9 +790,24 @@ if (profile?.role === 'admin') {
       return date.toLocaleDateString();
     }
 
-    function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+    function escapeHtml(str) { 
+      if (!str) return ''; 
+      return String(str).replace(/[&<>]/g, function(m) { 
+        if (m === '&') return '&amp;'; 
+        if (m === '<') return '&lt;'; 
+        if (m === '>') return '&gt;'; 
+        return m; 
+      }); 
+    }
+    
+    function showToast(msg) { 
+      const t = document.getElementById('toast'); 
+      t.textContent = msg; 
+      t.classList.add('show'); 
+      setTimeout(() => t.classList.remove('show'), 3000); 
+    }
 
+    // Category filter
     document.querySelectorAll('.cat-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -740,6 +817,7 @@ if (profile?.role === 'admin') {
       });
     });
 
+    // Sort filter
     document.querySelectorAll('.sort-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
@@ -753,8 +831,16 @@ if (profile?.role === 'admin') {
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
-      menuBtn.onclick = () => { mobileMenu.classList.toggle('open'); menuBtn.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰'; };
-      document.addEventListener('click', (e) => { if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.remove('open'); menuBtn.textContent = '☰'; } });
+      menuBtn.onclick = () => { 
+        mobileMenu.classList.toggle('open'); 
+        menuBtn.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰'; 
+      };
+      document.addEventListener('click', (e) => { 
+        if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { 
+          mobileMenu.classList.remove('open'); 
+          menuBtn.textContent = '☰'; 
+        } 
+      });
     }
 
     window.addEventListener('scroll', () => {

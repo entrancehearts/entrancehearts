@@ -620,6 +620,8 @@
         <a href="confessions.html" class="nav-link">💌 Confessions</a>
         <a href="study.html" class="nav-link">📚 Study</a>
         <a href="timer.html" class="nav-link">⏱️ Timer</a>
+        <a href="admin.html" class="btn-admin-nav" id="adminBtn" style="display: none;">
+    <i class="fas fa-crown"></i> Admin Panel  </a>
         <a href="login.html" class="nav-link">Login</a>
         <a href="signup.html" class="btn-primary">✨ Join Free</a>
       </div>
@@ -634,6 +636,7 @@
     <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
     <a href="study.html" class="mobile-menu-item">📚 Study</a>
     <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin Panel</a>
   </div>
 
   <!-- Hero Section -->
@@ -783,6 +786,31 @@
     }, { threshold: 0.5 });
     counters.forEach(counter => observer.observe(counter));
 
+
+    // Check if user is admin - show admin button
+async function checkAdminAndShowButton() {
+  const { data } = await supabaseClient.auth.getSession();
+  if (data.session) {
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('role')
+      .eq('id', data.session.user.id)
+      .single();
+    
+    if (profile?.role === 'admin') {
+      const adminBtn = document.getElementById('adminBtn');
+      const mobileAdminBtn = document.getElementById('mobileAdminBtn');
+      if (adminBtn) adminBtn.style.display = 'inline-flex';
+      if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
+    }
+  }
+}
+
+// Call this function
+checkAdminAndShowButton();
+
+
+    
     // ========== TESTIMONIALS FUNCTIONS ==========
     let testimonials = [];
     let isTestimonialAdmin = false;

@@ -21,7 +21,6 @@
       min-height: 100vh;
     }
 
-    /* Navbar */
     .navbar {
       position: fixed;
       top: 0;
@@ -64,7 +63,6 @@
       font-size: 0.75rem;
     }
 
-    /* Sidebar - Mobile Friendly */
     .sidebar {
       position: fixed;
       top: 60px;
@@ -78,9 +76,7 @@
       transition: left 0.3s ease;
       overflow-y: auto;
     }
-    .sidebar.open {
-      left: 0;
-    }
+    .sidebar.open { left: 0; }
     .sidebar-item {
       display: flex;
       align-items: center;
@@ -90,11 +86,8 @@
       font-size: 0.85rem;
       cursor: pointer;
       border-left: 3px solid transparent;
-      transition: all 0.2s;
     }
-    .sidebar-item i {
-      width: 22px;
-    }
+    .sidebar-item i { width: 22px; }
     .sidebar-item:hover, .sidebar-item.active {
       background: rgba(255,20,147,0.1);
       color: #FF6B9D;
@@ -108,8 +101,6 @@
       color: rgba(255,255,255,0.4);
       border-bottom: 1px solid rgba(255,20,147,0.1);
     }
-
-    /* Overlay for mobile */
     .sidebar-overlay {
       position: fixed;
       top: 0;
@@ -120,11 +111,8 @@
       z-index: 150;
       display: none;
     }
-    .sidebar-overlay.open {
-      display: block;
-    }
+    .sidebar-overlay.open { display: block; }
 
-    /* Main Content */
     .main-content {
       margin-top: 60px;
       padding: 20px 16px 80px;
@@ -137,10 +125,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .page-header h1 {
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
+    .page-header h1 { font-size: 1.3rem; font-weight: 700; }
     .refresh-btn {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,20,147,0.25);
@@ -151,7 +136,6 @@
       font-size: 0.75rem;
     }
 
-    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -173,18 +157,9 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .stat-label {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.5);
-      margin-top: 4px;
-    }
+    .stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
 
-    /* Cards for Mobile (instead of tables) */
-    .card-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .card-list { display: flex; flex-direction: column; gap: 12px; }
     .admin-card {
       background: rgba(18, 18, 26, 0.9);
       border: 1px solid rgba(255,20,147,0.12);
@@ -199,17 +174,8 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .admin-card-title {
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #FF6B9D;
-    }
-    .admin-card-content {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 10px;
-      word-break: break-word;
-    }
+    .admin-card-title { font-weight: 700; font-size: 0.9rem; color: #FF6B9D; }
+    .admin-card-content { font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-bottom: 10px; word-break: break-word; }
     .admin-card-meta {
       display: flex;
       justify-content: space-between;
@@ -243,21 +209,9 @@
       border-radius: 20px;
       font-size: 0.6rem;
     }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px;
-      color: rgba(255,255,255,0.4);
-      font-size: 0.85rem;
-    }
-
-    .page {
-      display: none;
-    }
-    .page.active {
-      display: block;
-    }
-
+    .empty-state { text-align: center; padding: 40px; color: rgba(255,255,255,0.4); font-size: 0.85rem; }
+    .page { display: none; }
+    .page.active { display: block; }
     .toast {
       position: fixed;
       bottom: 20px;
@@ -274,23 +228,11 @@
     .toast.show { display: block; }
 
     @media (min-width: 768px) {
-      .sidebar {
-        left: 0 !important;
-        width: 240px;
-      }
-      .main-content {
-        margin-left: 240px;
-        padding: 20px 24px 80px;
-      }
-      .mobile-menu-btn {
-        display: none;
-      }
-      .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .sidebar-overlay {
-        display: none !important;
-      }
+      .sidebar { left: 0 !important; width: 240px; }
+      .main-content { margin-left: 240px; padding: 20px 24px 80px; }
+      .mobile-menu-btn { display: none; }
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+      .sidebar-overlay { display: none !important; }
     }
   </style>
 </head>
@@ -316,7 +258,7 @@
     <div class="sidebar-item" data-page="feedback"><i class="fas fa-comment"></i> Feedback</div>
   </div>
 
-  <div class="main-content" id="mainContent">
+  <div class="main-content">
     <!-- Dashboard -->
     <div class="page active" id="dashboardPage">
       <div class="page-header">
@@ -331,37 +273,31 @@
       </div>
     </div>
 
-    <!-- Users Page -->
     <div class="page" id="usersPage">
       <div class="page-header"><h1><i class="fas fa-users"></i> Users</h1><button class="refresh-btn" onclick="loadUsers()">Refresh</button></div>
       <div id="usersList" class="card-list"><div class="empty-state">Loading...</div></div>
     </div>
 
-    <!-- Confessions Page -->
     <div class="page" id="confessionsPage">
       <div class="page-header"><h1><i class="fas fa-comment-dots"></i> Confessions</h1><button class="refresh-btn" onclick="loadConfessions()">Refresh</button></div>
       <div id="confessionsList" class="card-list"><div class="empty-state">Loading...</div></div>
     </div>
 
-    <!-- Comments Page -->
     <div class="page" id="commentsPage">
       <div class="page-header"><h1><i class="fas fa-reply"></i> Comments</h1><button class="refresh-btn" onclick="loadComments()">Refresh</button></div>
       <div id="commentsList" class="card-list"><div class="empty-state">Loading...</div></div>
     </div>
 
-    <!-- Study Materials Page -->
     <div class="page" id="materialsPage">
       <div class="page-header"><h1><i class="fas fa-book"></i> Study Materials</h1><button class="refresh-btn" onclick="loadMaterials()">Refresh</button></div>
       <div id="materialsList" class="card-list"><div class="empty-state">Loading...</div></div>
     </div>
 
-    <!-- Testimonials Page -->
     <div class="page" id="testimonialsPage">
       <div class="page-header"><h1><i class="fas fa-star"></i> Testimonials</h1><button class="refresh-btn" onclick="loadTestimonials()">Refresh</button></div>
       <div id="testimonialsList" class="card-list"><div class="empty-state">Loading...</div></div>
     </div>
 
-    <!-- Feedback Page -->
     <div class="page" id="feedbackPage">
       <div class="page-header"><h1><i class="fas fa-comment"></i> Feedback</h1><button class="refresh-btn" onclick="loadFeedback()">Refresh</button></div>
       <div id="feedbackList" class="card-list"><div class="empty-state">Loading...</div></div>
@@ -388,25 +324,23 @@
     }
 
     async function loadStats() {
-      const users = await supabaseClient.from('profiles').select('id', { count: 'exact' });
-      const confessions = await supabaseClient.from('confessions').select('id', { count: 'exact' });
-      const comments = await supabaseClient.from('confession_comments').select('id', { count: 'exact' });
-      const materials = await supabaseClient.from('study_materials').select('id', { count: 'exact' });
-      
-      document.getElementById('statUsers').innerText = users.count || 0;
-      document.getElementById('statConfessions').innerText = confessions.count || 0;
-      document.getElementById('statComments').innerText = comments.count || 0;
-      document.getElementById('statMaterials').innerText = materials.count || 0;
+      try {
+        const { count: users } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+        const { count: confessions } = await supabaseClient.from('confessions').select('*', { count: 'exact', head: true });
+        const { count: comments } = await supabaseClient.from('confession_comments').select('*', { count: 'exact', head: true });
+        const { count: materials } = await supabaseClient.from('study_materials').select('*', { count: 'exact', head: true });
+        
+        document.getElementById('statUsers').innerText = users || 0;
+        document.getElementById('statConfessions').innerText = confessions || 0;
+        document.getElementById('statComments').innerText = comments || 0;
+        document.getElementById('statMaterials').innerText = materials || 0;
+      } catch(e) { console.error('Stats error:', e); }
     }
 
     async function loadUsers() {
       const { data } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('usersList');
-      
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state">No users found</div>';
-        return;
-      }
+      if (!data?.length) { container.innerHTML = '<div class="empty-state">No users found</div>'; return; }
       
       container.innerHTML = data.map(user => `
         <div class="admin-card">
@@ -429,7 +363,7 @@
     async function makeAdmin(userId) {
       if (!confirm('Make this user an admin?')) return;
       const { error } = await supabaseClient.from('profiles').update({ role: 'admin' }).eq('id', userId);
-      if (error) { showToast('Failed to make admin'); } else { showToast('✅ User is now admin!'); loadUsers(); loadStats(); }
+      if (error) { showToast('Failed: ' + error.message); } else { showToast('✅ User is now admin!'); loadUsers(); loadStats(); }
     }
 
     async function deleteUser(userId) {
@@ -446,13 +380,9 @@
     }
 
     async function loadConfessions() {
-      const { data } = await supabaseClient.from('confessions').select('*, profiles(name)').order('created_at', { ascending: false });
+      const { data } = await supabaseClient.from('confessions').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('confessionsList');
-      
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state">No confessions found</div>';
-        return;
-      }
+      if (!data?.length) { container.innerHTML = '<div class="empty-state">No confessions found</div>'; return; }
       
       container.innerHTML = data.map(c => `
         <div class="admin-card">
@@ -463,7 +393,6 @@
           <div class="admin-card-content">${escapeHtml(c.text)}</div>
           <div class="admin-card-meta">
             <span>❤️ ${c.likes || 0} likes</span>
-            <span>👤 ${c.profiles?.name || 'Anonymous'}</span>
             <span>📅 ${formatDate(c.created_at)}</span>
           </div>
         </div>
@@ -480,13 +409,9 @@
     }
 
     async function loadComments() {
-      const { data } = await supabaseClient.from('confession_comments').select('*, profiles(name), confessions(text)').order('created_at', { ascending: false });
+      const { data } = await supabaseClient.from('confession_comments').select('*, confessions(text)').order('created_at', { ascending: false });
       const container = document.getElementById('commentsList');
-      
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state">No comments found</div>';
-        return;
-      }
+      if (!data?.length) { container.innerHTML = '<div class="empty-state">No comments found</div>'; return; }
       
       container.innerHTML = data.map(c => `
         <div class="admin-card">
@@ -497,7 +422,6 @@
           <div class="admin-card-content">💬 ${escapeHtml(c.text)}</div>
           <div class="admin-card-content" style="font-size:0.7rem; color:#FF6B9D;">📝 On: ${escapeHtml(c.confessions?.text?.substring(0, 80))}...</div>
           <div class="admin-card-meta">
-            <span>👤 ${c.profiles?.name || 'Anonymous'}</span>
             <span>📅 ${formatDate(c.created_at)}</span>
           </div>
         </div>
@@ -513,13 +437,9 @@
     }
 
     async function loadMaterials() {
-      const { data } = await supabaseClient.from('study_materials').select('*, profiles(name)').order('created_at', { ascending: false });
+      const { data } = await supabaseClient.from('study_materials').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('materialsList');
-      
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state">No study materials found</div>';
-        return;
-      }
+      if (!data?.length) { container.innerHTML = '<div class="empty-state">No study materials found</div>'; return; }
       
       container.innerHTML = data.map(m => `
         <div class="admin-card">
@@ -529,7 +449,6 @@
           </div>
           <div class="admin-card-content">📁 ${m.category} • ⬇️ ${m.downloads || 0} downloads</div>
           <div class="admin-card-meta">
-            <span>👤 ${m.profiles?.name || 'Anonymous'}</span>
             <span>📅 ${formatDate(m.created_at)}</span>
           </div>
         </div>
@@ -547,16 +466,12 @@
     async function loadTestimonials() {
       const { data } = await supabaseClient.from('testimonials').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('testimonialsList');
-      
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state">No testimonials found</div>';
-        return;
-      }
+      if (!data?.length) { container.innerHTML = '<div class="empty-state">No testimonials found</div>'; return; }
       
       container.innerHTML = data.map(t => `
         <div class="admin-card">
           <div class="admin-card-header">
-                 <span class="admin-card-title"><i class="fas fa-star"></i> ${escapeHtml(t.name || 'Anonymous')}</span>
+            <span class="admin-card-title"><i class="fas fa-star"></i> ${escapeHtml(t.name || 'Anonymous')}</span>
             <button class="delete-btn" onclick="deleteTestimonial('${t.id}')">Delete</button>
           </div>
           <div class="admin-card-content">"${escapeHtml(t.message)}"</div>
@@ -571,17 +486,13 @@
     async function deleteTestimonial(id) {
       if (!confirm('Delete this testimonial?')) return;
       const { error } = await supabaseClient.from('testimonials').delete().eq('id', id);
-      if (error) { showToast('Failed to delete: ' + error.message); } else { showToast('Testimonial deleted'); loadTestimonials(); loadStats(); }
+      if (error) { showToast('Failed: ' + error.message); } else { showToast('Testimonial deleted'); loadTestimonials(); loadStats(); }
     }
 
     async function loadFeedback() {
-      const { data } = await supabaseClient.from('feedback').select('*').order('created_at', { ascending: false });
+        const { data } = await supabaseClient.from('feedback').select('*').order('created_at', { ascending: false });
       const container = document.getElementById('feedbackList');
-      
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty-state">No feedback found</div>';
-        return;
-      }
+      if (!data?.length) { container.innerHTML = '<div class="empty-state">No feedback found</div>'; return; }
       
       container.innerHTML = data.map(f => `
         <div class="admin-card">
@@ -660,7 +571,6 @@
       });
     });
 
-    // Mobile menu toggle
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('sidebarOverlay').classList.toggle('open');
@@ -673,8 +583,13 @@
     async function init() {
       const isAdmin = await checkAdmin();
       if (!isAdmin) return;
-      loadStats();
-      loadUsers();
+      await loadStats();
+      await loadUsers();
+      await loadConfessions();
+      await loadComments();
+      await loadMaterials();
+      await loadTestimonials();
+      await loadFeedback();
     }
     init();
   </script>

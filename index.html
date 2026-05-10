@@ -617,13 +617,11 @@
     <div class="nav-container">
       <a href="index.html" class="logo">💕 EntranceHearts</a>
       <div class="nav-links">
-        <a href="confessions.html" class="nav-link">💌 Confessions</a>
-        <a href="study.html" class="nav-link">📚 Study</a>
-        <a href="timer.html" class="nav-link">⏱️ Timer</a>
-        <a href="admin.html" class="btn-admin-nav" id="adminBtn" style="display: none;">
-    <i class="fas fa-crown"></i> Admin Panel  </a>
-        <a href="login.html" class="nav-link">Login</a>
-        <a href="signup.html" class="btn-primary">✨ Join Free</a>
+  <a href="confessions.html" class="nav-link">💌 Confessions</a>
+  <a href="study.html" class="nav-link">📚 Study</a>
+  <a href="timer.html" class="nav-link">⏱️ Timer</a>
+  <a href="login.html" class="nav-link">Login</a>
+  <a href="signup.html" class="btn-primary">✨ Join Free</a>
       </div>
       <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
@@ -863,12 +861,14 @@ async function checkAdminAndShowButton() {
     }
   }
 }
-await updateNavbarForLoggedInUser();
 
+
+    // Call this after page loads
+(async function() {
+  await updateNavbarForLoggedInUser();
+  checkAdminAndShowButton();
+})();
     
-// Call this function
-checkAdminAndShowButton();
-
     
     // ========== TESTIMONIALS FUNCTIONS ==========
     let testimonials = [];

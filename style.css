@@ -950,3 +950,23 @@ h1, h2, h3 {
   background: rgba(255,20,147,0.15);
   color: var(--pink-secondary);
 }
+
+
+/* Admin Button - Gold Style */
+.btn-admin-nav {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a2e;
+  padding: 8px 18px;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-admin-nav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}

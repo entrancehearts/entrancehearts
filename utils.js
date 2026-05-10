@@ -11,7 +11,7 @@ function showToast(message, type = 'success') {
   toast.className = 'toast-premium';
   toast.innerHTML = `
     <div style="display: flex; align-items: center; gap: 8px;">
-      <span>${type === 'success' ? 'âœ…' : type === 'error' ? 'âŒ' : 'â„¹ï¸'}</span>
+      <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
       <span>${message}</span>
     </div>
   `;
@@ -39,7 +39,7 @@ function timeAgo(date) {
 
 // Confetti effect for matches
 function showConfetti() {
-  const colors = ['#ff6b9d', '#e63946', '#ff8fb3', '#ffb3c6'];
+  const colors = ['#FF6B9D', '#FF1493', '#FF8FB3', '#FFB3C6'];
   for (let i = 0; i < 50; i++) {
     const confetti = document.createElement('div');
     confetti.style.position = 'fixed';
@@ -57,21 +57,24 @@ function showConfetti() {
   }
 }
 
-// Add confetti animation to document
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes confettiFall {
-    0% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
+// Add confetti animation to document (only if not already added)
+if (!document.querySelector('#confetti-styles')) {
+  const style = document.createElement('style');
+  style.id = 'confetti-styles';
+  style.textContent = `
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
-    100% {
-      transform: translateY(100vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
-`;
-document.head.appendChild(style);
+  `;
+  document.head.appendChild(style);
+}
 
 // Format number with K/M
 function formatNumber(num) {
@@ -105,6 +108,6 @@ async function copyToClipboard(text) {
 
 // Get random emoji for loading states
 function getRandomEmoji() {
-  const emojis = ['ðŸ’•', 'ðŸ”¥', 'ðŸ’­', 'ðŸ“š', 'ðŸ¤–', 'ðŸ’¬', 'âœ¨', 'â­', 'ðŸ’–', 'ðŸŽ¯'];
+  const emojis = ['💕', '🔥', '💭', '📚', '🤖', '💬', '✨', '⭐', '💖', '🎯'];
   return emojis[Math.floor(Math.random() * emojis.length)];
 }

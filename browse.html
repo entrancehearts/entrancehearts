@@ -8,10 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Direct Supabase connection
     const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = supabase.createClient(SUPBASE_URL, SUPABASE_ANON_KEY);
   </script>
   
   <style>
@@ -22,25 +21,24 @@
       color: #ffffff;
     }
 
-    /* Mobile-First Navbar */
+    /* Navbar */
     .navbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 12px 16px;
+      padding: 14px 20px;
       background: rgba(10, 10, 15, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 20, 147, 0.2);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
     }
+    .navbar.scrolled { padding: 10px 20px; background: rgba(10, 10, 15, 0.98); }
     .logo {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
@@ -48,29 +46,30 @@
       -webkit-text-fill-color: transparent;
       text-decoration: none;
     }
-    .desktop-nav {
-      display: none;
-      gap: 8px;
-      align-items: center;
-    }
+    .desktop-nav { display: flex; gap: 10px; align-items: center; }
     .btn-ghost-nav {
       color: rgba(255, 255, 255, 0.7);
-      padding: 6px 12px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .btn-primary-nav {
-      background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      color: white;
       padding: 6px 14px;
       border-radius: 50px;
       text-decoration: none;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 500;
+      transition: all 0.3s;
     }
+    .btn-ghost-nav:hover { color: #FF6B9D; background: rgba(255,20,147,0.1); }
+    .btn-primary-nav {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-primary-nav:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,20,147,0.3); }
     .mobile-menu-btn {
+      display: none;
       background: rgba(255,20,147,0.15);
       border: 1px solid rgba(255,20,147,0.3);
       border-radius: 10px;
@@ -79,10 +78,8 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    @media (min-width: 768px) {
-      .desktop-nav { display: flex; }
-      .mobile-menu-btn { display: none; }
-    }
+    @media (max-width: 768px) { .mobile-menu-btn { display: block; } .desktop-nav { display: none; } }
+    @media (min-width: 769px) { .mobile-menu-btn { display: none; } }
     .mobile-menu {
       position: fixed;
       top: 60px;
@@ -109,15 +106,17 @@
 
     /* Hero Banner */
     .hero-banner {
-      padding: 70px 20px 30px;
+      padding: 80px 20px 40px;
       text-align: center;
     }
     .hero-icon {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+      animation: float 3s ease-in-out infinite;
     }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     .hero-banner h1 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
@@ -126,12 +125,12 @@
     }
     .hero-banner p {
       color: rgba(255, 255, 255, 0.5);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
     }
 
     /* Main Container */
     .page {
-      max-width: 100%;
+      max-width: 500px;
       margin: 0 auto;
       padding: 20px 16px 80px;
     }
@@ -141,7 +140,7 @@
       text-align: center;
     }
     .page-title {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
@@ -154,7 +153,6 @@
       margin-top: 2px;
     }
     
-    /* Filter Row - Scrollable */
     .filter-row {
       display: flex;
       gap: 8px;
@@ -174,6 +172,7 @@
       font-weight: 500;
       cursor: pointer;
       white-space: nowrap;
+      transition: all 0.2s;
     }
     .filter-btn.active {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
@@ -181,13 +180,12 @@
       color: white;
     }
     
-    /* Swipe Card */
     .swipe-card {
       background: #141423;
       border: 1px solid rgba(255,20,147,0.2);
       border-radius: 24px;
       overflow: hidden;
-      margin-bottom: 20px;
+      transition: all 0.3s;
     }
     .swipe-card.hide-left {
       transform: translateX(-120%) rotate(-15deg);
@@ -279,16 +277,19 @@
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.2s;
     }
     .btn-pass {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: rgba(255, 255, 255, 0.7);
     }
+    .btn-pass:hover { border-color: #ff4444; color: #ff4444; transform: scale(1.02); }
     .btn-like {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       color: white;
     }
+    .btn-like:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(255,20,147,0.3); }
     
     .loading-state { text-align: center; padding: 40px 20px; }
     .loading-spin {
@@ -297,17 +298,13 @@
       display: block;
       margin-bottom: 12px;
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     
     .empty-state { text-align: center; padding: 40px 20px; display: none; }
     .e-emoji { font-size: 2.5rem; margin-bottom: 12px; }
     .empty-state h3 { font-size: 1.1rem; margin-bottom: 6px; }
     .empty-state p { color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; }
     
-    /* Match Popup */
     .match-popup {
       position: fixed;
       top: 0;
@@ -330,8 +327,11 @@
       text-align: center;
       max-width: 300px;
       width: 85%;
+      animation: popIn 0.4s ease;
     }
-    .match-hearts { font-size: 3rem; margin-bottom: 12px; }
+    @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .match-hearts { font-size: 3rem; margin-bottom: 12px; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     .match-title {
       font-size: 1.5rem;
       font-weight: 900;
@@ -350,7 +350,9 @@
       color: white;
       text-decoration: none;
       margin-bottom: 10px;
+      transition: all 0.2s;
     }
+    .match-btn:hover { transform: translateY(-2px); }
     .skip-btn {
       width: 100%;
       padding: 10px;
@@ -359,9 +361,10 @@
       border-radius: 50px;
       color: rgba(255, 255, 255, 0.7);
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .skip-btn:hover { border-color: #FF1493; color: #FF6B9D; }
     
-    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -386,29 +389,31 @@
       font-weight: 600;
       padding: 5px 10px;
       border-radius: 30px;
+      transition: all 0.2s;
     }
     .nav-item span:first-child { font-size: 1.2rem; }
+    .nav-item:hover { color: #FF6B9D; background: rgba(255,20,147,0.1); }
     .nav-item.active { color: #FF6B9D; }
   </style>
 </head>
 <body>
 
-  <!-- Mobile-First Navbar -->
   <nav class="navbar" id="navbar">
-    <a href="index.html" class="logo">💕 EntranceHearts</a>
-    <div class="desktop-nav">
-      <a href="browse.html" class="btn-ghost-nav" style="color: #FF6B9D;">🔥 Discover</a>
-      <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
-      <a href="confessions.html" class="btn-ghost-nav">💌 Confessions</a>
-      <a href="study.html" class="btn-ghost-nav">📚 Study</a>
-      <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
-      <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
-      <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
+    <div style="max-width: 1280px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+      <a href="index.html" class="logo">💕 EntranceHearts</a>
+      <div class="desktop-nav">
+        <a href="browse.html" class="btn-ghost-nav" style="color: #FF6B9D;">🔥 Discover</a>
+        <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
+        <a href="confessions.html" class="btn-ghost-nav">💌 Confessions</a>
+        <a href="study.html" class="btn-ghost-nav">📚 Study</a>
+        <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
+        <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
+        <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
   </nav>
 
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
     <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
@@ -420,7 +425,6 @@
     <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
   </div>
 
-  <!-- Hero Banner -->
   <div class="hero-banner">
     <div class="hero-icon">🔥✨</div>
     <h1>Discover Matches</h1>
@@ -455,7 +459,6 @@
     </div>
   </div>
 
-  <!-- Match Popup -->
   <div class="match-popup" id="matchPopup">
     <div class="match-box">
       <div class="match-hearts">💕</div>
@@ -466,7 +469,6 @@
     </div>
   </div>
 
-  <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <a href="browse.html" class="nav-item active"><span>🔥</span><span>Discover</span></a>
     <a href="chat.html" class="nav-item"><span>💬</span><span>Chats</span></a>
@@ -673,7 +675,6 @@
       });
     }
 
-    // Mobile Menu
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {

@@ -243,6 +243,10 @@
       padding: 28px;
       margin-bottom: 32px;
       transition: all 0.3s;
+      display: none;
+    }
+    .upload-section.visible {
+      display: block;
     }
     .upload-section:hover {
       border-color: rgba(255, 20, 147, 0.35);
@@ -334,7 +338,7 @@
       cursor: not-allowed;
     }
 
-    /* Login Reminder */
+    /* Login Reminder - Visible when not logged in */
     .login-reminder {
       background: rgba(255, 20, 147, 0.08);
       border: 1px solid rgba(255, 20, 147, 0.2);
@@ -342,6 +346,10 @@
       padding: 28px;
       text-align: center;
       margin-bottom: 32px;
+      display: block;
+    }
+    .login-reminder.hidden {
+      display: none;
     }
     .login-reminder i {
       font-size: 2rem;
@@ -665,8 +673,8 @@
       <button class="cat-btn" data-cat="Management"><i class="fas fa-chart-line"></i> Management</button>
     </div>
 
-    <!-- Upload Section (only for logged in users) -->
-    <div id="uploadSection" class="upload-section" style="display: none;">
+    <!-- Upload Section (hidden by default) -->
+    <div id="uploadSection" class="upload-section">
       <div class="upload-title"><i class="fas fa-cloud-upload-alt"></i> Share Your Study Material</div>
       <div class="upload-form">
         <div class="form-row">
@@ -692,7 +700,7 @@
       </div>
     </div>
 
-    <!-- Login Reminder (for guests) -->
+    <!-- Login Reminder (visible by default) -->
     <div id="loginReminder" class="login-reminder">
       <i class="fas fa-lock"></i>
       <p>Login to upload study materials and help fellow aspirants!</p>
@@ -704,7 +712,7 @@
       <span class="sort-label"><i class="fas fa-sort"></i> Sort by:</span>
       <div class="sort-buttons">
         <button class="sort-btn active" data-sort="newest">📅 Newest</button>
-            <button class="sort-btn" data-sort="oldest">📅 Oldest</button>
+        <button class="sort-btn" data-sort="oldest">📅 Oldest</button>
         <button class="sort-btn" data-sort="downloads">⬇️ Most Downloads</button>
       </div>
     </div>
@@ -744,7 +752,6 @@
     let isLoggedIn = false;
     let selectedFile = null;
 
-    // Logout function
     async function logout() {
       if (confirm('Are you sure you want to logout?')) {
         await supabaseClient.auth.signOut();
@@ -752,30 +759,26 @@
       }
     }
 
-    // Show toast notification
     function showToast(message, isError = false) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.style.borderColor = isError ? '#ff4444' : '#FF1493';
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Initialize page
     async function init() {
       const { data } = await supabaseClient.auth.getSession();
-      
+      const uploadSection = document.getElementById('uploadSection');
+      const loginReminder = document.getElementById('loginReminder');
+
       if (data.session) {
         isLoggedIn = true;
         currentUserId = data.session.user.id;
         
-        // Show upload section, hide login reminder
-        document.getElementById('uploadSection').style.display = 'block';
-        document.getElementById('loginReminder').style.display = 'none';
+        if (uploadSection) uploadSection.classList.add('visible');
+        if (loginReminder) loginReminder.classList.add('hidden');
         
-        // Check admin status
         const { data: profile } = await supabaseClient
           .from('profiles')
           .select('role')
@@ -783,19 +786,19 @@
           .single();
         
         if (profile?.role === 'admin') {
-          document.getElementById('adminBtn').style.display = 'inline-flex';
-          document.getElementById('mobileAdminBtn').style.display = 'block';
+          const adminBtn = document.getElementById('adminBtn');
+          const mobileAdminBtn = document.getElementById('mobileAdminBtn');
+          if (adminBtn) adminBtn.style.display = 'inline-flex';
+          if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
         }
       } else {
-        // Show login reminder, hide upload section
-        document.getElementById('uploadSection').style.display = 'none';
-        document.getElementById('loginReminder').style.display = 'block';
+        if (uploadSection) uploadSection.classList.remove('visible');
+        if (loginReminder) loginReminder.classList.remove('hidden');
       }
       
       await loadMaterials();
     }
 
-    // Load materials from database
     async function loadMaterials() {
       const { data, error } = await supabaseClient
         .from('study_materials')
@@ -804,7 +807,7 @@
       
       if (error) {
         console.error('Error loading materials:', error);
-        showToast('Failed to load materials', true);
+        document.getElementById('materialsGrid').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Failed to load materials. Please refresh.</p></div>`;
         return;
       }
       
@@ -813,7 +816,6 @@
       renderMaterials();
     }
 
-    // Update statistics
     function updateStats() {
       const uniqueContributors = [...new Set(materials.map(m => m.uploaded_by))];
       const totalDownloads = materials.reduce((sum, m) => sum + (m.downloads || 0), 0);
@@ -822,7 +824,6 @@
       document.getElementById('totalContributors').innerText = uniqueContributors.length;
     }
 
-    // Get file icon based on extension
     function getFileIcon(fileName) {
       const ext = fileName?.split('.').pop()?.toLowerCase() || '';
       if (ext === 'pdf') return '<i class="fas fa-file-pdf" style="color: #ff4444;"></i>';
@@ -832,7 +833,6 @@
       return '<i class="fas fa-file-alt"></i>';
     }
 
-    // Format date
     function formatDate(dateStr) {
       const date = new Date(dateStr);
       const now = new Date();
@@ -843,7 +843,6 @@
       return date.toLocaleDateString();
     }
 
-    // Escape HTML
     function escapeHtml(str) {
       if (!str) return '';
       const div = document.createElement('div');
@@ -851,16 +850,13 @@
       return div.innerHTML;
     }
 
-    // Render materials
     function renderMaterials() {
       const container = document.getElementById('materialsGrid');
       
-      // Filter by category
       let filtered = currentCategory === 'all' 
         ? materials 
         : materials.filter(m => m.category === currentCategory);
       
-      // Sort
       if (currentSort === 'newest') {
         filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       } else if (currentSort === 'oldest') {
@@ -869,7 +865,6 @@
         filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
       }
       
-      // Update category stats
       const categoryNames = {
         'all': 'All Categories',
         'CEE': 'CEE (MBBS)',
@@ -879,13 +874,11 @@
       };
       document.getElementById('categoryStats').innerHTML = `📚 ${categoryNames[currentCategory]} • ${filtered.length} ${filtered.length === 1 ? 'material' : 'materials'}`;
       
-      // Show empty state
       if (filtered.length === 0) {
         container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><p>No study materials yet. Be the first to share!</p></div>`;
         return;
       }
       
-      // Render materials
       container.innerHTML = filtered.map(m => `
         <div class="material-card">
           <div class="material-header">
@@ -905,7 +898,6 @@
       `).join('');
     }
 
-    // File selection handler
     document.getElementById('fileInput').addEventListener('change', function(e) {
       selectedFile = e.target.files[0];
       if (selectedFile) {
@@ -916,7 +908,6 @@
       }
     });
 
-    // Upload material
     async function uploadMaterial() {
       if (!isLoggedIn) {
         showToast('Please login to upload materials', true);
@@ -928,22 +919,10 @@
       const category = document.getElementById('materialCategory').value;
       const description = document.getElementById('materialDesc').value.trim();
       
-      if (!title) {
-        showToast('Please enter a title', true);
-        return;
-      }
-      if (!description) {
-        showToast('Please enter a description', true);
-        return;
-      }
-      if (!selectedFile) {
-        showToast('Please select a file to upload', true);
-        return;
-      }
-      if (selectedFile.size > 10 * 1024 * 1024) {
-        showToast('File too large! Max 10MB', true);
-        return;
-      }
+      if (!title) { showToast('Please enter a title', true); return; }
+      if (!description) { showToast('Please enter a description', true); return; }
+      if (!selectedFile) { showToast('Please select a file to upload', true); return; }
+      if (selectedFile.size > 10 * 1024 * 1024) { showToast('File too large! Max 10MB', true); return; }
       
       const btn = document.getElementById('uploadBtn');
       btn.disabled = true;
@@ -954,35 +933,18 @@
         const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 8)}.${fileExt}`;
         const filePath = `${currentUserId}/${fileName}`;
         
-        // Upload to storage
-        const { error: uploadError } = await supabaseClient.storage
-          .from('study_files')
-          .upload(filePath, selectedFile);
-        
+        const { error: uploadError } = await supabaseClient.storage.from('study_files').upload(filePath, selectedFile);
         if (uploadError) throw uploadError;
         
-        // Get public URL
-        const { data: urlData } = supabaseClient.storage
-          .from('study_files')
-          .getPublicUrl(filePath);
+        const { data: urlData } = supabaseClient.storage.from('study_files').getPublicUrl(filePath);
         
-        // Save to database
-        const { error: dbError } = await supabaseClient
-          .from('study_materials')
-          .insert({
-            title,
-            category,
-            description,
-            file_name: selectedFile.name,
-            file_url: urlData.publicUrl,
-            file_type: fileExt,
-            uploaded_by: currentUserId,
-            downloads: 0
-          });
-        
+        const { error: dbError } = await supabaseClient.from('study_materials').insert({
+          title, category, description, file_name: selectedFile.name,
+          file_url: urlData.publicUrl, file_type: fileExt,
+          uploaded_by: currentUserId, downloads: 0
+        });
         if (dbError) throw dbError;
         
-        // Clear form
         document.getElementById('materialTitle').value = '';
         document.getElementById('materialDesc').value = '';
         document.getElementById('fileInput').value = '';
@@ -1001,7 +963,6 @@
       btn.innerHTML = '<i class="fas fa-share"></i> Share Material';
     }
 
-    // Download material
     async function downloadMaterial(id, fileUrl, fileName) {
       if (!isLoggedIn) {
         showToast('Please login to download materials', true);
@@ -1010,15 +971,9 @@
       }
       
       try {
-        // Increment download count using RPC function
-        const { error: rpcError } = await supabaseClient.rpc('increment_downloads', { material_id: id });
-        if (rpcError) console.error('RPC error:', rpcError);
-        
-        // Open download link
+        await supabaseClient.rpc('increment_downloads', { material_id: id });
         window.open(fileUrl, '_blank');
         showToast(`📥 Downloading: ${fileName}`);
-        
-        // Reload to update download count
         await loadMaterials();
       } catch (err) {
         console.error('Download error:', err);
@@ -1026,7 +981,6 @@
       }
     }
 
-    // Category filter
     document.querySelectorAll('.cat-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -1036,7 +990,6 @@
       });
     });
     
-    // Sort filter
     document.querySelectorAll('.sort-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
@@ -1046,7 +999,6 @@
       });
     });
 
-    // Mobile menu
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1062,7 +1014,6 @@
       });
     }
     
-    // Scroll effect for navbar
     window.addEventListener('scroll', () => {
       const navbar = document.querySelector('.navbar');
       if (navbar && window.scrollY > 50) {
@@ -1072,7 +1023,6 @@
       }
     });
     
-    // Start
     init();
   </script>
 </body>

@@ -16,6 +16,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Direct Supabase connection
+    const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
+    let supabaseClient = null;
+    if (typeof supabase !== 'undefined') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  </script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -367,15 +377,20 @@
     .step-card h3, .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
     .step-card p, .feature-card p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); }
 
-    /* Testimonials */
-    .testimonials-section {
+    /* Testimonials Wall */
+    .testimonials-wall {
+      background: linear-gradient(135deg, rgba(255,20,147,0.05), transparent);
       padding: 60px 24px;
+    }
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 40px;
     }
     .testimonials-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 0 auto;
     }
     .testimonial-card {
@@ -385,6 +400,7 @@
       border-radius: 24px;
       padding: 24px;
       transition: all 0.3s;
+      position: relative;
     }
     .testimonial-card:hover {
       transform: translateY(-5px);
@@ -414,17 +430,88 @@
     }
     .testimonial-name { font-weight: 700; font-size: 0.85rem; }
     .testimonial-title { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+    .testimonial-date { font-size: 0.6rem; color: rgba(255,255,255,0.3); margin-top: 8px; }
+    .admin-testimonial-delete {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,68,68,0.15);
+      border: none;
+      color: #ff6666;
+      padding: 4px 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.65rem;
+      display: none;
+    }
+    .testimonial-card:hover .admin-testimonial-delete { display: block; }
 
-    /* Trust Badges */
-    .trust-section {
-      padding: 40px 24px 60px;
+    /* Post Testimonial Form */
+    .post-testimonial {
+      max-width: 600px;
+      margin: 40px auto 0;
+      background: #141423;
+      border: 1px solid rgba(255,20,147,0.2);
+      border-radius: 28px;
+      padding: 28px;
+    }
+    .post-testimonial h3 {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
       text-align: center;
     }
+    .post-testimonial textarea {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,20,147,0.2);
+      border-radius: 16px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 100px;
+      margin-bottom: 16px;
+    }
+    .post-testimonial input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,20,147,0.2);
+      border-radius: 14px;
+      color: white;
+      margin-bottom: 16px;
+    }
+    .post-testimonial button {
+      width: 100%;
+      padding: 12px;
+      background: var(--gradient-pink);
+      border: none;
+      border-radius: 100px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .admin-mode-toggle {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .admin-mode-toggle button {
+      background: rgba(255,20,147,0.15);
+      border: 1px solid rgba(255,20,147,0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      color: #FF6B9D;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+
     .trust-badges {
       display: flex;
       justify-content: center;
       gap: 40px;
       flex-wrap: wrap;
+      padding: 40px 24px;
     }
     .trust-badge {
       display: flex;
@@ -491,12 +578,7 @@
       transition: color 0.2s;
     }
     .footer-links a:hover { color: #FF6B9D; }
-    .contact-email {
-      color: #FF6B9D;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .contact-email:hover { text-decoration: underline; }
+    .contact-email { color: #FF6B9D; text-decoration: none; font-weight: 500; }
 
     @media (max-width: 900px) {
       .steps-grid, .features-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
@@ -506,7 +588,6 @@
       .steps-grid, .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
       .premium-grid { grid-template-columns: 1fr; }
       .hero-stats { gap: 24px; }
-      .trust-badges { gap: 20px; }
     }
     @media (max-width: 480px) {
       .floating-cards { transform: scale(0.85); }
@@ -518,7 +599,7 @@
 
   <div class="bg-animation"></div>
 
-  <!-- Navbar -->
+  <!-- Navbar - NO Profile, Discover, Chats, AI Match -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">💕 EntranceHearts</a>
@@ -540,10 +621,6 @@
     <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
     <a href="study.html" class="mobile-menu-item">📚 Study</a>
     <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
-    <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
-    <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
-    <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
-    <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
   </div>
 
   <!-- Hero Section -->
@@ -560,7 +637,7 @@
 
     <div class="floating-cards">
       <div class="float-card"><div class="float-avatar">👩</div><div><div class="float-name">Priya S.</div><div class="float-meta">CEE Aspirant • KTM</div></div></div>
-      <div class="float-card"><div class="float-avatar">👨</div><div><div class="float-name">Rohan K.</div><div class="float-meta">IOE Aspirant • PKR</div></div></div>
+         <div class="float-card"><div class="float-avatar">👨</div><div><div class="float-name">Rohan K.</div><div class="float-meta">IOE Aspirant • PKR</div></div></div>
       <div class="float-card"><div class="float-avatar">👩</div><div><div class="float-name">Sita G.</div><div class="float-meta">+2 Student • BTL</div></div></div>
       <div class="match-pill">💕 It's a Match!</div>
     </div>
@@ -572,9 +649,9 @@
     </div>
 
     <div class="hero-stats">
-      <div class="hero-stat"><strong>10K+</strong><span>Active Users</span></div>
-      <div class="hero-stat"><strong>500+</strong><span>Matches</span></div>
-      <div class="hero-stat"><strong>98%</strong><span>AI Accuracy</span></div>
+      <div class="hero-stat"><strong class="counter" data-target="10000">0</strong><span>Active Users</span></div>
+      <div class="hero-stat"><strong class="counter" data-target="500">0</strong><span>Matches</span></div>
+      <div class="hero-stat"><strong class="counter" data-target="98">0</strong><span>AI Accuracy</span></div>
     </div>
   </section>
 
@@ -602,43 +679,44 @@
     </div>
     <div class="features-grid">
       <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Matchmaking</h3><p>Smart matching based on your personality</p></div>
-            <div class="feature-card"><div class="feature-icon">🔒</div><h3>Verified Profiles</h3><p>Email verified accounts. Safe community</p></div>
+      <div class="feature-card"><div class="feature-icon">🔒</div><h3>Verified Profiles</h3><p>Email verified accounts. Safe community</p></div>
       <div class="feature-card"><div class="feature-icon">💬</div><h3>Real-time Chat</h3><p>Chat instantly with your matches</p></div>
       <div class="feature-card"><div class="feature-icon">🎯</div><h3>Niche Community</h3><p>Only CEE, IOE, +2 and Management</p></div>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <div class="testimonials-section">
-    <div class="section-header">
+  <!-- Testimonials Wall -->
+  <div class="testimonials-wall" id="testimonialsWall">
+    <div class="testimonials-header">
       <span class="section-tag">Success Stories</span>
       <h2>What Our <span class="gradient-text">Users Say</span></h2>
       <p class="section-sub">Real stories from real aspirants</p>
     </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="testimonial-text">"Finally found someone who understands my CEE journey! The AI matching is amazing."</div>
-        <div class="testimonial-author"><div class="testimonial-avatar">👩</div><div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-title">CEE Aspirant</div></div></div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-text">"Made so many study friends through this app. The confession wall is my favorite!"</div>
-        <div class="testimonial-author"><div class="testimonial-avatar">👨</div><div><div class="testimonial-name">Rohan KC</div><div class="testimonial-title">IOE Student</div></div></div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-text">"As a +2 student, I was nervous to join. But the community is so welcoming!"</div>
-        <div class="testimonial-author"><div class="testimonial-avatar">👩</div><div><div class="testimonial-name">Sita Gurung</div><div class="testimonial-title">+2 Student</div></div></div>
-      </div>
+
+    <div class="admin-mode-toggle">
+      <button id="toggleAdminTestimonialBtn" onclick="toggleTestimonialAdminMode()">👑 Admin Mode</button>
+    </div>
+
+    <div class="testimonials-grid" id="testimonialsList">
+      <div style="text-align:center; padding:40px;">Loading testimonials...</div>
+    </div>
+
+    <!-- Post Testimonial Form -->
+    <div class="post-testimonial">
+      <h3>Share Your Experience 💬</h3>
+      <input type="text" id="testimonialName" placeholder="Your name (optional)">
+      <input type="text" id="testimonialExam" placeholder="Your exam (CEE/IOE/+2/Management)">
+      <textarea id="testimonialMessage" placeholder="Share your experience with EntranceHearts..."></textarea>
+      <button onclick="postTestimonial()">Post Testimonial</button>
     </div>
   </div>
 
   <!-- Trust Badges -->
-  <div class="trust-section">
-    <div class="trust-badges">
-      <div class="trust-badge"><i class="fas fa-shield-alt"></i> 100% Anonymous</div>
-      <div class="trust-badge"><i class="fas fa-user-check"></i> Verified Profiles</div>
-      <div class="trust-badge"><i class="fas fa-clock"></i> 24/7 Support</div>
-      <div class="trust-badge"><i class="fas fa-lock"></i> Secure & Private</div>
-    </div>
+  <div class="trust-badges">
+    <div class="trust-badge"><i class="fas fa-shield-alt"></i> 100% Anonymous</div>
+    <div class="trust-badge"><i class="fas fa-user-check"></i> Verified Profiles</div>
+    <div class="trust-badge"><i class="fas fa-clock"></i> 24/7 Support</div>
+    <div class="trust-badge"><i class="fas fa-lock"></i> Secure & Private</div>
   </div>
 
   <!-- Premium Cards -->
@@ -669,6 +747,159 @@
   </footer>
 
   <script>
+    // ========== ANIMATED COUNTERS ==========
+    function animateCounter(element, target) {
+      let current = 0;
+      const increment = target / 50;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.innerText = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.innerText = Math.floor(current).toLocaleString();
+        }
+      }, 30);
+    }
+
+    const counters = document.querySelectorAll('.counter');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const target = parseInt(element.dataset.target);
+          animateCounter(element, target);
+          observer.unobserve(element);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(counter => observer.observe(counter));
+
+    // ========== TESTIMONIALS FUNCTIONS ==========
+    let testimonials = [];
+    let isTestimonialAdmin = false;
+    const ADMIN_CODE = "drsaurab@2022";
+
+    async function loadTestimonials() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('testimonials')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        testimonials = data || [];
+        renderTestimonials();
+      } catch(e) {
+        console.error('Error loading testimonials:', e);
+        document.getElementById('testimonialsList').innerHTML = '<div style="text-align:center; padding:40px;">Failed to load testimonials</div>';
+      }
+    }
+
+    function renderTestimonials() {
+      const container = document.getElementById('testimonialsList');
+      if (!testimonials.length) {
+        container.innerHTML = '<div style="text-align:center; padding:40px;">No testimonials yet. Be the first to share!</div>';
+        return;
+      }
+      container.innerHTML = testimonials.map(t => `
+        <div class="testimonial-card" data-id="${t.id}">
+          ${isTestimonialAdmin ? `<button class="admin-testimonial-delete" onclick="deleteTestimonial('${t.id}')"><i class="fas fa-trash"></i> Delete</button>` : ''}
+          <div class="testimonial-text">"${escapeHtml(t.message)}"</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">${getAvatarEmoji(t.name)}</div>
+            <div>
+              <div class="testimonial-name">${escapeHtml(t.name || 'Anonymous')}</div>
+              <div class="testimonial-title">${escapeHtml(t.exam || 'Aspirant')}</div>
+            </div>
+          </div>
+          <div class="testimonial-date">${formatDate(t.created_at)}</div>
+        </div>
+      `).join('');
+    }
+
+    function getAvatarEmoji(name) {
+      if (!name) return '👤';
+      const firstChar = name.charAt(0).toLowerCase();
+      if ('aeiou'.includes(firstChar)) return '👩';
+      return '👨';
+    }
+
+    async function postTestimonial() {
+      const name = document.getElementById('testimonialName').value.trim();
+      const exam = document.getElementById('testimonialExam').value.trim();
+      const message = document.getElementById('testimonialMessage').value.trim();
+      
+      if (!message) {
+        alert('Please write a testimonial message');
+        return;
+      }
+      if (message.length < 10) {
+        alert('Please write at least 10 characters');
+        return;
+      }
+      
+      const { data, error } = await supabaseClient
+        .from('testimonials')
+        .insert({
+          name: name || 'Anonymous',
+          exam: exam || 'Aspirant',
+          message: message,
+          user_id: (await supabaseClient.auth.getSession()).data.session?.user?.id || null,
+          is_approved: true
+        });
+      
+      if (error) {
+        alert('Failed to post testimonial. Please try again.');
+        console.error(error);
+      } else {
+        document.getElementById('testimonialName').value = '';
+        document.getElementById('testimonialExam').value = '';
+        document.getElementById('testimonialMessage').value = '';
+        alert('✅ Thank you for your testimonial! It will appear shortly.');
+        loadTestimonials();
+      }
+    }
+
+    async function deleteTestimonial(id) {
+      if (!isTestimonialAdmin) {
+        alert('Admin mode required to delete');
+        return;
+      }
+      if (confirm('Delete this testimonial?')) {
+        const { error } = await supabaseClient.from('testimonials').delete().eq('id', id);
+        if (error) {
+          alert('Failed to delete');
+        } else {
+          loadTestimonials();
+        }
+      }
+    }
+
+    function toggleTestimonialAdminMode() {
+      const code = prompt('Enter Admin Code:');
+      if (code === ADMIN_CODE) {
+        isTestimonialAdmin = true;
+        document.getElementById('toggleAdminTestimonialBtn').textContent = '👑 Admin Mode (ON)';
+        document.getElementById('toggleAdminTestimonialBtn').style.background = 'rgba(255,20,147,0.3)';
+        renderTestimonials();
+        alert('Admin mode activated! You can now delete testimonials.');
+      } else {
+        alert('Wrong code!');
+      }
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
     // Mobile Menu Toggle
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -688,12 +919,12 @@
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');
-      if (navbar && window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else if (navbar) {
-        navbar.classList.remove('scrolled');
-      }
+      if (navbar && window.scrollY > 50) navbar.classList.add('scrolled');
+      else if (navbar) navbar.classList.remove('scrolled');
     });
+
+    // Load testimonials on page load
+    loadTestimonials();
   </script>
 </body>
 </html>

@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Direct Supabase connection (no external file needed for reliability)
     const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -23,7 +22,6 @@
       color: #ffffff;
     }
 
-    /* Mobile-first Navbar */
     .navbar {
       position: fixed;
       top: 0;
@@ -37,8 +35,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
     }
     .logo {
       font-size: 1.2rem;
@@ -59,7 +55,6 @@
       border: 1px solid rgba(255, 20, 147, 0.2);
     }
 
-    /* Hero Section */
     .hero-banner {
       padding: 80px 20px 40px;
       text-align: center;
@@ -81,14 +76,12 @@
       font-size: 0.8rem;
     }
 
-    /* Container */
     .container {
       max-width: 100%;
       margin: 0 auto;
       padding: 20px 16px 80px;
     }
     
-    /* Stats Grid - Mobile Friendly */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -116,7 +109,6 @@
       -webkit-text-fill-color: transparent;
     }
     
-    /* Tabs - Scrollable on Mobile */
     .tabs {
       display: flex;
       gap: 8px;
@@ -145,7 +137,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
-    /* Tables - Horizontal Scroll */
     .table-container {
       overflow-x: auto;
       background: #141423;
@@ -168,7 +159,6 @@
       font-weight: 600;
     }
     
-    /* Buttons */
     .delete-btn {
       background: rgba(255,68,68,0.15);
       border: 1px solid rgba(255,68,68,0.3);
@@ -243,7 +233,7 @@
   <div class="hero-banner">
     <div class="hero-icon">👑</div>
     <h1>Admin Dashboard</h1>
-    <p>Manage users, confessions, study materials & feedback</p>
+    <p>Manage users, confessions, study materials, testimonials & feedback</p>
   </div>
 
   <div class="container">
@@ -260,6 +250,7 @@
       <button class="tab-btn active" onclick="showTab('users')"><i class="fas fa-users"></i> Users</button>
       <button class="tab-btn" onclick="showTab('confessions')"><i class="fas fa-comment-dots"></i> Confessions</button>
       <button class="tab-btn" onclick="showTab('materials')"><i class="fas fa-book"></i> Materials</button>
+      <button class="tab-btn" onclick="showTab('testimonials')"><i class="fas fa-star"></i> Testimonials</button>
       <button class="tab-btn" onclick="showTab('feedback')"><i class="fas fa-comment-dots"></i> Feedback</button>
       <button class="tab-btn" onclick="showTab('likes')"><i class="fas fa-heart"></i> Likes</button>
     </div>
@@ -273,7 +264,6 @@
       <div class="table-container">
         <table><thead><tr><th>Name</th><th>Email</th><th>Category</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="usersList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-        </table>
       </div>
     </div>
 
@@ -283,7 +273,6 @@
       <div class="table-container">
         <table><thead><tr><th>ID</th><th>Confession</th><th>Exam</th><th>Date</th><th>Likes</th><th>Actions</th></tr></thead>
         <tbody id="confessionsList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-        </table>
       </div>
     </div>
 
@@ -293,7 +282,27 @@
       <div class="table-container">
         <table><thead><tr><th>Title</th><th>Category</th><th>File</th><th>Downloads</th><th>Date</th><th>Actions</th></tr></thead>
         <tbody id="materialsList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
-        </table>
+      </div>
+    </div>
+
+    <!-- Testimonials Tab (NEW) -->
+    <div id="testimonialsTab" class="tab-content">
+      <div class="search-box">
+        <input type="text" id="testimonialSearch" placeholder="🔍 Search by name or message..." onkeyup="searchTestimonials()">
+        <button class="refresh-btn" onclick="loadTestimonials()"><i class="fas fa-sync-alt"></i> Refresh</button>
+      </div>
+      <div class="table-container">
+        <table><thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Exam</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="testimonialsList"><td><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
       </div>
     </div>
 
@@ -307,7 +316,6 @@
       <div class="table-container">
         <table><thead><tr><th>User</th><th>Type</th><th>Rating</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="feedbackList"><tr><td colspan="7" style="text-align:center">Loading...</td></tr></tbody>
-        </table>
       </div>
     </div>
 
@@ -316,15 +324,14 @@
       <div class="search-box"><button class="refresh-btn" onclick="loadLikes()"><i class="fas fa-sync-alt"></i> Refresh</button></div>
       <div class="table-container">
         <table><thead><tr><th>From</th><th>To</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="likesList"><tr><td colspan="4" style="text-align:center">Loading...</td></tr></tbody>
-        </table>
+        <tbody id="likesList"><td><td colspan="4" style="text-align:center">Loading...</td></tr></tbody>
       </div>
     </div>
   </div>
 
   <script>
     const ADMIN_CODE = "drsaurab@2022";
-    let allUsers = [], allConfessions = [], allMaterials = [], allLikes = [];
+    let allUsers = [], allConfessions = [], allMaterials = [], allLikes = [], allTestimonials = [];
 
     async function checkAdmin() {
       const { data } = await supabaseClient.auth.getSession();
@@ -334,19 +341,127 @@
       loadData();
     }
 
-    async function loadData() { await Promise.all([loadUsers(), loadConfessions(), loadMaterials(), loadLikes(), loadStats(), loadFeedback()]); }
-    async function loadUsers() { const { data } = await supabaseClient.from('profiles').select('*'); for(let u of (data||[])){ const {data:ad}=await supabaseClient.auth.admin.getUserById(u.id); u.email=ad?.user?.email||'—'; } allUsers=data||[]; renderUsers(); }
-    async function loadConfessions() { const { data } = await supabaseClient.from('confessions').select('*').order('created_at',{ascending:false}); allConfessions=data||[]; renderConfessions(); }
-    async function loadMaterials() { const { data } = await supabaseClient.from('study_materials').select('*').order('created_at',{ascending:false}); allMaterials=data||[]; renderMaterials(); }
-    async function loadLikes() { const { data } = await supabaseClient.from('likes').select('*, profiles!from_user(name), profiles!to_user(name)').order('created_at',{ascending:false}); allLikes=data||[]; renderLikes(); }
-    async function loadStats() { const { data:p } = await supabaseClient.from('profiles').select('id,is_verified'); const v = p?.filter(pp=>pp.is_verified===true).length||0; document.getElementById('totalUsers').innerText=p?.length||0; document.getElementById('verifiedUsers').innerText=v; document.getElementById('totalConfessions').innerText=allConfessions.length; document.getElementById('totalMaterials').innerText=allMaterials.length; }
-    async function loadFeedback() { let q = supabaseClient.from('feedback').select('*').order('created_at',{ascending:false}); const tf=document.getElementById('feedbackFilter')?.value, sf=document.getElementById('feedbackStatusFilter')?.value; if(tf&&tf!=='all') q=q.eq('type',tf); if(sf&&sf!=='all') q=q.eq('status',sf); const {data}=await q; renderFeedback(data||[]); }
+    async function loadData() { 
+      await Promise.all([loadUsers(), loadConfessions(), loadMaterials(), loadLikes(), loadStats(), loadFeedback(), loadTestimonials()]); 
+    }
     
-    function renderUsers() { const s=document.getElementById('userSearch')?.value.toLowerCase()||'', f=allUsers.filter(u=>u.name?.toLowerCase().includes(s)||u.location?.toLowerCase().includes(s)||u.category?.toLowerCase().includes(s)); document.getElementById('usersList').innerHTML=f.length?f.map(u=>`<tr><td><strong>${u.name||'—'}</strong></td><td>${u.email||'—'}</td><td><span class="badge category">${u.category||'—'}</span></td><td>${u.location||'—'}</td><td><span class="badge ${u.is_verified?'verified':'unverified'}">${u.is_verified?'✓ Verified':'○ Unverified'}</span></td><td>${!u.is_verified?`<button class="verify-btn" onclick="verifyUser('${u.id}')"><i class="fas fa-check"></i> Verify</button>`:''}<button class="delete-btn" onclick="deleteUser('${u.id}','${u.name}')"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No users found</td></tr>'; }
-    function renderConfessions() { document.getElementById('confessionsList').innerHTML=allConfessions.length?allConfessions.map(c=>`<tr><td>#${c.id}</td><td style="max-width:250px; overflow:hidden; text-overflow:ellipsis;">${c.text?.substring(0,60)}${c.text?.length>60?'...':''}</td><td><span class="badge category">${c.exam||'General'}</span></td><td>${new Date(c.created_at).toLocaleDateString()}</td><td>❤️ ${c.likes||0}</td><td><button class="delete-btn" onclick="deleteConfession(${c.id})"><i class="fas fa-trash"></i> Delete</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No confessions</td></tr>'; }
-    function renderMaterials() { document.getElementById('materialsList').innerHTML=allMaterials.length?allMaterials.map(m=>`<tr><td><strong>${m.title}</strong></td><td><span class="badge category">${m.category}</span></td><td><i class="fas fa-file"></i> ${m.file_name}</td><td>⬇️ ${m.downloads||0}</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMaterial(${m.id})"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No materials</td></tr>'; }
-    function renderLikes() { document.getElementById('likesList').innerHTML=allLikes.length?allLikes.map(l=>`<tr><td>${l.profiles?.[0]?.name||'Unknown'}</td><td>${l.profiles?.[1]?.name||'Unknown'}</td><td>${new Date(l.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteLike('${l.id}')"><i class="fas fa-trash"></i> Delete</button></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center">No likes</td></tr>'; }
-    function renderFeedback(feedback) { document.getElementById('feedbackList').innerHTML=feedback.length?feedback.map(f=>`<tr><td><strong>${f.user_name||f.user_email}</strong><br><small>${f.user_email}</small></td><td><span class="badge category">${getIcon(f.type)} ${f.type}</span></td><td>${f.rating?'⭐'.repeat(f.rating):'—'}</td><td style="max-width:200px;">${escapeHtml(f.message)}</td><td>${new Date(f.created_at).toLocaleDateString()}</td><td><select onchange="updateFeedbackStatus(${f.id},this.value)"><option value="pending" ${f.status==='pending'?'selected':''}>⏳ Pending</option><option value="reviewed" ${f.status==='reviewed'?'selected':''}>👀 Reviewed</option><option value="resolved" ${f.status==='resolved'?'selected':''}>✅ Resolved</option></select></td><td><button class="delete-btn" onclick="deleteFeedback(${f.id})"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center">No feedback</td></tr>'; }
+    async function loadUsers() { 
+      const { data } = await supabaseClient.from('profiles').select('*'); 
+      for(let u of (data||[])){ 
+        const {data:ad}=await supabaseClient.auth.admin.getUserById(u.id); 
+        u.email=ad?.user?.email||'—'; 
+      } 
+      allUsers=data||[]; 
+      renderUsers(); 
+    }
+    
+    async function loadConfessions() { 
+      const { data } = await supabaseClient.from('confessions').select('*').order('created_at',{ascending:false}); 
+      allConfessions=data||[]; 
+      renderConfessions(); 
+    }
+    
+    async function loadMaterials() { 
+      const { data } = await supabaseClient.from('study_materials').select('*').order('created_at',{ascending:false}); 
+      allMaterials=data||[]; 
+      renderMaterials(); 
+    }
+    
+    async function loadLikes() { 
+      const { data } = await supabaseClient.from('likes').select('*, profiles!from_user(name), profiles!to_user(name)').order('created_at',{ascending:false}); 
+      allLikes=data||[]; 
+      renderLikes(); 
+    }
+    
+    async function loadStats() { 
+      const { data:p } = await supabaseClient.from('profiles').select('id,is_verified'); 
+      const v = p?.filter(pp=>pp.is_verified===true).length||0; 
+      document.getElementById('totalUsers').innerText=p?.length||0; 
+      document.getElementById('verifiedUsers').innerText=v; 
+      document.getElementById('totalConfessions').innerText=allConfessions.length; 
+      document.getElementById('totalMaterials').innerText=allMaterials.length; 
+    }
+    
+    async function loadFeedback() { 
+      let q = supabaseClient.from('feedback').select('*').order('created_at',{ascending:false}); 
+      const tf=document.getElementById('feedbackFilter')?.value, sf=document.getElementById('feedbackStatusFilter')?.value; 
+      if(tf&&tf!=='all') q=q.eq('type',tf); 
+      if(sf&&sf!=='all') q=q.eq('status',sf); 
+      const {data}=await q; 
+      renderFeedback(data||[]); 
+    }
+    
+    // NEW: Load Testimonials
+    async function loadTestimonials() {
+      const { data } = await supabaseClient.from('testimonials').select('*').order('created_at', { ascending: false });
+      allTestimonials = data || [];
+      renderTestimonials();
+    }
+    
+    // NEW: Delete Testimonial
+    async function deleteTestimonial(id) {
+      if (confirm('Delete this testimonial?')) {
+        const { error } = await supabaseClient.from('testimonials').delete().eq('id', id);
+        if (error) {
+          showToast('❌ Failed to delete');
+        } else {
+          showToast('✅ Testimonial deleted');
+          loadTestimonials();
+        }
+      }
+    }
+    
+    function searchTestimonials() {
+      const search = document.getElementById('testimonialSearch')?.value.toLowerCase() || '';
+      const filtered = allTestimonials.filter(t => 
+        t.name?.toLowerCase().includes(search) || 
+        t.message?.toLowerCase().includes(search) ||
+        t.exam?.toLowerCase().includes(search)
+      );
+      renderTestimonials(filtered);
+    }
+    
+    function renderTestimonials(filteredList = null) {
+      const list = filteredList || allTestimonials;
+      const container = document.getElementById('testimonialsList');
+      if (list.length === 0) {
+        container.innerHTML = '<tr><td colspan="6" style="text-align:center">No testimonials yet</td></tr>';
+        return;
+      }
+      container.innerHTML = list.map(t => `
+        <tr>
+          <td>#${t.id}</td>
+          <td>${escapeHtml(t.name || 'Anonymous')}</td>
+          <td><span class="badge category">${escapeHtml(t.exam || 'Aspirant')}</span></td>
+          <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(t.message?.substring(0, 80))}${t.message?.length > 80 ? '...' : ''}</td>
+          <td>${new Date(t.created_at).toLocaleDateString()}</td>
+          <td><button class="delete-btn" onclick="deleteTestimonial(${t.id})"><i class="fas fa-trash"></i> Delete</button></td>
+        </tr>
+      `).join('');
+    }
+    
+    function renderUsers() { 
+      const s=document.getElementById('userSearch')?.value.toLowerCase()||''; 
+      const f=allUsers.filter(u=>u.name?.toLowerCase().includes(s)||u.location?.toLowerCase().includes(s)||u.category?.toLowerCase().includes(s)); 
+      document.getElementById('usersList').innerHTML=f.length?f.map(u=>`<tr><td><strong>${u.name||'—'}</strong></td><td>${u.email||'—'}</td><td><span class="badge category">${u.category||'—'}</span></td><td>${u.location||'—'}</td><td><span class="badge ${u.is_verified?'verified':'unverified'}">${u.is_verified?'✓ Verified':'○ Unverified'}</span></td><td>${!u.is_verified?`<button class="verify-btn" onclick="verifyUser('${u.id}')"><i class="fas fa-check"></i> Verify</button>`:''}<button class="delete-btn" onclick="deleteUser('${u.id}','${u.name}')"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No users found</td></tr>'; 
+    }
+    
+    function renderConfessions() { 
+      document.getElementById('confessionsList').innerHTML=allConfessions.length?allConfessions.map(c=>`<tr><td>#${c.id}</td><td style="max-width:250px; overflow:hidden; text-overflow:ellipsis;">${c.text?.substring(0,60)}${c.text?.length>60?'...':''}</td><td><span class="badge category">${c.exam||'General'}</span></td><td>${new Date(c.created_at).toLocaleDateString()}</td><td>❤️ ${c.likes||0}</td><td><button class="delete-btn" onclick="deleteConfession(${c.id})"><i class="fas fa-trash"></i> Delete</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No confessions</td></tr>'; 
+    }
+    
+    function renderMaterials() { 
+      document.getElementById('materialsList').innerHTML=allMaterials.length?allMaterials.map(m=>`<tr><td><strong>${m.title}</strong></td><td><span class="badge category">${m.category}</span></td><td><i class="fas fa-file"></i> ${m.file_name}</td><td>⬇️ ${m.downloads||0}</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMaterial(${m.id})"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No materials</td></tr>'; 
+    }
+    
+    function renderLikes() { 
+      document.getElementById('likesList').innerHTML=allLikes.length?allLikes.map(l=>`<tr><td>${l.profiles?.[0]?.name||'Unknown'}</td><td>${l.profiles?.[1]?.name||'Unknown'}</td><td>${new Date(l.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteLike('${l.id}')"><i class="fas fa-trash"></i> Delete</button></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center">No likes</td></tr>'; 
+    }
+    
+    function renderFeedback(feedback) { 
+      document.getElementById('feedbackList').innerHTML=feedback.length?feedback.map(f=>`<tr><td><strong>${f.user_name||f.user_email}</strong><br><small>${f.user_email}</small></td><td><span class="badge category">${getIcon(f.type)} ${f.type}</span></td><td>${f.rating?'⭐'.repeat(f.rating):'—'}</td><td style="max-width:200px;">${escapeHtml(f.message)}</td><td>${new Date(f.created_at).toLocaleDateString()}</td><td><select onchange="updateFeedbackStatus(${f.id},this.value)"><option value="pending" ${f.status==='pending'?'selected':''}>⏳ Pending</option><option value="reviewed" ${f.status==='reviewed'?'selected':''}>👀 Reviewed</option><option value="resolved" ${f.status==='resolved'?'selected':''}>✅ Resolved</option></select></td><td><button class="delete-btn" onclick="deleteFeedback(${f.id})"><i class="fas fa-trash"></i> Del</button></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center">No feedback</td></tr>'; 
+    }
+    
     function getIcon(t){ const i={general:'💬',bug:'🐛',feature:'✨',complaint:'😞'}; return i[t]||'📝'; }
     async function updateFeedbackStatus(id,status){ await supabaseClient.from('feedback').update({status}).eq('id',id); showToast('Status updated'); loadFeedback(); }
     async function deleteFeedback(id){ if(confirm('Delete this feedback?')){ await supabaseClient.from('feedback').delete().eq('id',id); showToast('Feedback deleted'); loadFeedback(); } }

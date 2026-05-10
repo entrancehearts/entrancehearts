@@ -10,7 +10,7 @@
   <script>
     const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
-    const supabaseClient = supabase.createClient(SUPBASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
   
   <style>
@@ -185,17 +185,15 @@
       border: 1px solid rgba(255,20,147,0.2);
       border-radius: 24px;
       overflow: hidden;
-      transition: all 0.3s;
+      transition: all 0.4s ease;
     }
     .swipe-card.hide-left {
       transform: translateX(-120%) rotate(-15deg);
       opacity: 0;
-      transition: all 0.4s ease;
     }
     .swipe-card.hide-right {
       transform: translateX(120%) rotate(15deg);
       opacity: 0;
-      transition: all 0.4s ease;
     }
     
     .card-photo {
@@ -394,6 +392,33 @@
     .nav-item span:first-child { font-size: 1.2rem; }
     .nav-item:hover { color: #FF6B9D; background: rgba(255,20,147,0.1); }
     .nav-item.active { color: #FF6B9D; }
+
+    /* Back Button Footer */
+    .back-footer {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+    }
+    .back-btn-footer {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 40px;
+      padding: 8px 22px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .back-btn-footer:hover {
+      background: rgba(255, 20, 147, 0.08);
+      border-color: #FF6B9D;
+      color: #FF6B9D;
+      transform: translateX(-3px);
+    }
   </style>
 </head>
 <body>
@@ -408,9 +433,7 @@
         <a href="study.html" class="btn-ghost-nav">📚 Study</a>
         <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
         <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
-        <a href="admin.html" class="btn-admin-nav" id="adminBtn" style="display: none;">
-  <i class="fas fa-crown"></i> Admin Panel
-        </a>
+        <a href="admin.html" class="btn-ghost-nav" id="adminBtn" style="display: none;">👑 Admin</a>
         <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
       </div>
       <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
@@ -424,9 +447,9 @@
     <a href="study.html" class="mobile-menu-item">📚 Study</a>
     <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
     <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
-    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin Panel</a>
+    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin</a>
     <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
-    <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
+    <a href="#" class="mobile-menu-item" onclick="logout()">🚪 Logout</a>
   </div>
 
   <div class="hero-banner">
@@ -442,11 +465,11 @@
     </div>
     
     <div class="filter-row">
-      <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
-      <button class="filter-btn" onclick="filterCards('cee',this)">🎓 CEE</button>
-      <button class="filter-btn" onclick="filterCards('ioe',this)">⚙️ IOE</button>
-      <button class="filter-btn" onclick="filterCards('plus2',this)">📚 +2</button>
-      <button class="filter-btn" onclick="filterCards('management',this)">💼 Management</button>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="cee">🎓 CEE</button>
+      <button class="filter-btn" data-filter="ioe">⚙️ IOE</button>
+      <button class="filter-btn" data-filter="plus2">📚 +2</button>
+      <button class="filter-btn" data-filter="management">💼 Management</button>
     </div>
     
     <div id="cardsContainer">
@@ -460,6 +483,13 @@
       <div class="e-emoji">💔</div>
       <h3>No more profiles!</h3>
       <p>You've seen everyone. Check back later!</p>
+    </div>
+
+    <!-- Back Button at Bottom -->
+    <div class="back-footer">
+      <a href="profile.html" class="back-btn-footer">
+        <i class="fas fa-chevron-left"></i> Back to Profile
+      </a>
     </div>
   </div>
 
@@ -494,6 +524,13 @@
     let currentFilter = 'all';
     let currentProfile = null;
 
+    async function logout() {
+      if (confirm('Logout?')) {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+      }
+    }
+
     async function init() {
       const { data } = await supabaseClient.auth.getSession();
       if (!data.session) { 
@@ -502,22 +539,19 @@
       }
       currentUserId = data.session.user.id;
 
-      
-// Check if user is admin
-const { data: profile } = await supabaseClient
-  .from('profiles')
-  .select('role')
-  .eq('id', currentUserId)
-  .single();
+      // Check if user is admin
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('role')
+        .eq('id', currentUserId)
+        .single();
 
-if (profile?.role === 'admin') {
-  const adminBtn = document.getElementById('adminBtn');
-  const mobileAdminBtn = document.getElementById('mobileAdminBtn');
-  if (adminBtn) adminBtn.style.display = 'inline-flex';
-  if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
-}
-
-      
+      if (profile?.role === 'admin') {
+        const adminBtn = document.getElementById('adminBtn');
+        const mobileAdminBtn = document.getElementById('mobileAdminBtn');
+        if (adminBtn) adminBtn.style.display = 'inline-flex';
+        if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
+      }
       
       await loadMatchedUsers();
       await loadProfiles();
@@ -546,10 +580,16 @@ if (profile?.role === 'admin') {
     }
 
     async function loadProfiles() {
-      const { data } = await supabaseClient
+      const { data, error } = await supabaseClient
         .from('profiles')
         .select('*')
         .neq('id', currentUserId);
+      
+      if (error) {
+        console.error('Error loading profiles:', error);
+        document.getElementById('cardsContainer').innerHTML = '<div class="loading-state"><p style="color:#ff6666;">Error loading profiles. Please refresh.</p></div>';
+        return;
+      }
       
       allProfiles = data || [];
       renderNextCard();
@@ -581,7 +621,7 @@ if (profile?.role === 'admin') {
 
     function getAvatarDisplay(profile) {
       if (profile.avatar_url && profile.avatar_url.trim() !== '') {
-        return `<img src="${profile.avatar_url}" alt="${profile.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'fallback-avatar\'>${genderEmoji[profile.gender] || '👤'}</div>'">`;
+               return `<img src="${profile.avatar_url}" alt="${profile.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'fallback-avatar\'>${genderEmoji[profile.gender] || '👤'}</div>'">`;
       } else {
         return `<div class="fallback-avatar">${genderEmoji[profile.gender] || '👤'}</div>`;
       }
@@ -600,6 +640,8 @@ if (profile?.role === 'admin') {
       document.getElementById('emptyState').style.display = 'none';
       currentProfile = filtered[0];
       
+      const interests = currentProfile.interests || [];
+      
       container.innerHTML = `
         <div class="swipe-card" id="currentCard">
           <div class="card-photo" id="cardPhoto">
@@ -617,7 +659,7 @@ if (profile?.role === 'admin') {
             <div class="card-location">📍 ${escapeHtml(currentProfile.location || 'Nepal')}</div>
             ${currentProfile.bio ? `<div class="card-bio">${escapeHtml(currentProfile.bio)}</div>` : ''}
             <div class="card-interests">
-              ${(currentProfile.interests || []).map(i => `<span>${escapeHtml(i)}</span>`).join('')}
+              ${interests.map(i => `<span>${escapeHtml(i)}</span>`).join('')}
             </div>
             <div class="action-row">
               <button class="action-btn btn-pass" onclick="passProfile()">👎 Pass</button>
@@ -631,12 +673,14 @@ if (profile?.role === 'admin') {
     async function likeProfile() {
       if (!currentProfile) return;
       const card = document.getElementById('currentCard');
-      card.classList.add('hide-right');
+      if (card) card.classList.add('hide-right');
       
-      await supabaseClient.from('likes').insert({
+      const { error } = await supabaseClient.from('likes').insert({
         from_user: currentUserId, 
         to_user: currentProfile.id
       });
+      
+      if (error) console.error('Like error:', error);
       
       const { data: mutual } = await supabaseClient
         .from('likes')
@@ -659,7 +703,7 @@ if (profile?.role === 'admin') {
     function passProfile() {
       if (!currentProfile) return;
       const card = document.getElementById('currentCard');
-      card.classList.add('hide-left');
+      if (card) card.classList.add('hide-left');
       
       passedIds.push({ id: currentProfile.id, timestamp: Date.now() });
       localStorage.setItem('ehPassed', JSON.stringify(passedIds));
@@ -696,6 +740,14 @@ if (profile?.role === 'admin') {
       });
     }
 
+    // Filter button event listeners
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterCards(btn.dataset.filter, btn);
+      });
+    });
+
+    // Mobile Menu Toggle
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {

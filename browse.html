@@ -408,6 +408,9 @@
         <a href="study.html" class="btn-ghost-nav">📚 Study</a>
         <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
         <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
+        <a href="admin.html" class="btn-admin-nav" id="adminBtn" style="display: none;">
+  <i class="fas fa-crown"></i> Admin Panel
+        </a>
         <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
       </div>
       <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
@@ -421,6 +424,7 @@
     <a href="study.html" class="mobile-menu-item">📚 Study</a>
     <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
     <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
+    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display: none;">👑 Admin Panel</a>
     <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
     <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
   </div>
@@ -497,6 +501,23 @@
         return; 
       }
       currentUserId = data.session.user.id;
+
+      
+// Check if user is admin
+const { data: profile } = await supabaseClient
+  .from('profiles')
+  .select('role')
+  .eq('id', currentUserId)
+  .single();
+
+if (profile?.role === 'admin') {
+  const adminBtn = document.getElementById('adminBtn');
+  const mobileAdminBtn = document.getElementById('mobileAdminBtn');
+  if (adminBtn) adminBtn.style.display = 'inline-flex';
+  if (mobileAdminBtn) mobileAdminBtn.style.display = 'block';
+}
+
+      
       
       await loadMatchedUsers();
       await loadProfiles();

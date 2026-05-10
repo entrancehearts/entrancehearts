@@ -4,11 +4,15 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Discover — EntranceHearts 💕</title>
-  <link rel="stylesheet" href="style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
+  <script>
+    // Direct Supabase connection
+    const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,28 +22,25 @@
       color: #ffffff;
     }
 
-    /* Premium Navbar */
+    /* Mobile-First Navbar */
     .navbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 18px 32px;
-      background: rgba(10, 10, 15, 0.85);
+      padding: 12px 16px;
+      background: rgba(10, 10, 15, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 20, 147, 0.2);
-      transition: all 0.3s;
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    .navbar.scrolled {
-      padding: 12px 32px;
-      background: rgba(10, 10, 15, 0.95);
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .logo {
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
@@ -47,117 +48,100 @@
       -webkit-text-fill-color: transparent;
       text-decoration: none;
     }
-    .btn-ghost {
-      color: rgba(255, 255, 255, 0.7);
-      padding: 8px 20px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.85rem;
-      transition: all 0.3s;
+    .desktop-nav {
+      display: none;
+      gap: 8px;
+      align-items: center;
     }
-    .btn-ghost:hover {
-      color: #FF6B9D;
-      background: rgba(255, 20, 147, 0.1);
+    .btn-ghost-nav {
+      color: rgba(255, 255, 255, 0.7);
+      padding: 6px 12px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 500;
     }
     .btn-primary-nav {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       color: white;
-      padding: 8px 24px;
-      border-radius: 100px;
+      padding: 6px 14px;
+      border-radius: 50px;
       text-decoration: none;
+      font-size: 0.75rem;
       font-weight: 600;
-      font-size: 0.85rem;
-      transition: all 0.3s;
-    }
-    .btn-primary-nav:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
     }
     .mobile-menu-btn {
-      display: none;
       background: rgba(255,20,147,0.15);
       border: 1px solid rgba(255,20,147,0.3);
-      border-radius: 12px;
-      padding: 10px 14px;
+      border-radius: 10px;
+      padding: 8px 12px;
       color: #FF6B9D;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
-    @media (max-width: 768px) {
-      .mobile-menu-btn { display: block; }
-      .nav-links { display: none; }
+    @media (min-width: 768px) {
+      .desktop-nav { display: flex; }
+      .mobile-menu-btn { display: none; }
     }
     .mobile-menu {
       position: fixed;
-      top: 70px;
+      top: 60px;
       right: -100%;
-      width: 280px;
+      width: 260px;
       background: #141423;
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255,20,147,0.3);
       border-radius: 20px;
-      padding: 20px;
+      padding: 16px;
       z-index: 999;
       transition: right 0.3s;
     }
     .mobile-menu.open { right: 16px; }
     .mobile-menu-item {
       display: block;
-      padding: 12px 16px;
+      padding: 10px 14px;
       color: white;
       text-decoration: none;
-      border-radius: 12px;
-      transition: all 0.2s;
+      border-radius: 10px;
+      font-size: 0.85rem;
     }
-    .mobile-menu-item:hover {
-      background: rgba(255,20,147,0.15);
-      color: #FF6B9D;
-    }
+    .mobile-menu-item:hover { background: rgba(255,20,147,0.15); color: #FF6B9D; }
 
     /* Hero Banner */
     .hero-banner {
-      background: linear-gradient(135deg, rgba(255, 20, 147, 0.15), rgba(255, 107, 157, 0.05));
-      border-bottom: 1px solid rgba(255, 20, 147, 0.15);
-      padding: 100px 24px 50px;
+      padding: 70px 20px 30px;
       text-align: center;
     }
     .hero-icon {
-      font-size: 3rem;
-      margin-bottom: 16px;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      font-size: 2.5rem;
+      margin-bottom: 10px;
     }
     .hero-banner h1 {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
     }
     .hero-banner p {
       color: rgba(255, 255, 255, 0.5);
-      font-size: 0.85rem;
+      font-size: 0.75rem;
     }
 
     /* Main Container */
     .page {
-      max-width: 480px;
+      max-width: 100%;
       margin: 0 auto;
-      padding: 40px 16px 100px;
+      padding: 20px 16px 80px;
     }
     
     .page-header {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       text-align: center;
     }
     .page-title {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
@@ -166,30 +150,30 @@
     }
     .page-sub {
       color: rgba(255, 255, 255, 0.5);
-      font-size: 0.85rem;
-      margin-top: 4px;
+      font-size: 0.75rem;
+      margin-top: 2px;
     }
     
+    /* Filter Row - Scrollable */
     .filter-row {
       display: flex;
       gap: 8px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 8px;
       scrollbar-width: none;
     }
     .filter-row::-webkit-scrollbar { display: none; }
     .filter-btn {
-      padding: 8px 20px;
+      padding: 8px 18px;
       background: rgba(20, 20, 35, 0.8);
       border: 1px solid rgba(255,20,147,0.2);
-      border-radius: 100px;
+      border-radius: 50px;
       color: rgba(255, 255, 255, 0.7);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 500;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s;
     }
     .filter-btn.active {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
@@ -197,17 +181,13 @@
       color: white;
     }
     
+    /* Swipe Card */
     .swipe-card {
       background: #141423;
       border: 1px solid rgba(255,20,147,0.2);
-      border-radius: 28px;
+      border-radius: 24px;
       overflow: hidden;
-      transition: all 0.3s;
-      animation: fadeInScale 0.4s ease;
-    }
-    @keyframes fadeInScale {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      margin-bottom: 20px;
     }
     .swipe-card.hide-left {
       transform: translateX(-120%) rotate(-15deg);
@@ -222,12 +202,11 @@
     
     .card-photo {
       width: 100%;
-      height: 340px;
+      height: 280px;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       overflow: hidden;
     }
     .card-photo img {
@@ -235,109 +214,100 @@
       height: 100%;
       object-fit: cover;
     }
-    .card-photo .fallback-avatar { font-size: 5rem; }
+    .fallback-avatar { font-size: 4rem; }
     
-    .card-body { padding: 20px; }
+    .card-body { padding: 16px; }
     .ai-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: rgba(255, 20, 147, 0.12);
       border: 1px solid rgba(255, 20, 147, 0.25);
       color: #FF6B9D;
-      padding: 4px 12px;
-      border-radius: 100px;
-      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.65rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .card-name-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .card-name { font-size: 1.4rem; font-weight: 700; }
-    .card-age { color: rgba(255, 255, 255, 0.4); font-size: 1rem; }
+    .card-name { font-size: 1.2rem; font-weight: 700; }
+    .card-age { color: rgba(255, 255, 255, 0.4); font-size: 0.9rem; }
     .card-category {
       display: inline-block;
       background: rgba(255, 20, 147, 0.12);
       border: 1px solid rgba(255, 20, 147, 0.25);
       color: #FF6B9D;
-      padding: 4px 12px;
-      border-radius: 100px;
-      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 0.65rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
-    .card-location { color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; margin-bottom: 12px; }
-    .card-bio { color: rgba(255, 255, 255, 0.7); font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px; }
+    .card-location { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; margin-bottom: 10px; }
+    .card-bio { color: rgba(255, 255, 255, 0.7); font-size: 0.8rem; line-height: 1.4; margin-bottom: 12px; }
     .card-interests {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 6px;
+      margin-bottom: 16px;
     }
     .card-interests span {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255,20,147,0.15);
       color: rgba(255, 255, 255, 0.7);
-      padding: 6px 14px;
-      border-radius: 100px;
-      font-size: 0.7rem;
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.65rem;
     }
     
     .action-row {
       display: flex;
-      gap: 16px;
+      gap: 12px;
       justify-content: center;
     }
     .action-btn {
       flex: 1;
-      padding: 14px;
-      border-radius: 100px;
+      padding: 12px;
+      border-radius: 50px;
       border: none;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
     }
     .btn-pass {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: rgba(255, 255, 255, 0.7);
     }
-    .btn-pass:hover {
-      border-color: #ff4444;
-      color: #ff4444;
-      transform: scale(1.02);
-    }
     .btn-like {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       color: white;
     }
-    .btn-like:hover {
-      transform: scale(1.02);
-      box-shadow: 0 8px 30px rgba(255, 20, 147, 0.3);
-    }
     
-    .loading-state { text-align: center; padding: 60px 20px; }
+    .loading-state { text-align: center; padding: 40px 20px; }
     .loading-spin {
-      font-size: 3rem;
+      font-size: 2.5rem;
       animation: spin 1s linear infinite;
       display: block;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
     
-    .empty-state { text-align: center; padding: 60px 20px; display: none; }
-    .e-emoji { font-size: 3rem; margin-bottom: 16px; }
-    .empty-state h3 { font-size: 1.2rem; margin-bottom: 8px; }
-    .empty-state p { color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; }
+    .empty-state { text-align: center; padding: 40px 20px; display: none; }
+    .e-emoji { font-size: 2.5rem; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 1.1rem; margin-bottom: 6px; }
+    .empty-state p { color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; }
     
+    /* Match Popup */
     .match-popup {
       position: fixed;
       top: 0;
@@ -355,62 +325,43 @@
     .match-box {
       background: #141423;
       border: 1px solid rgba(255,20,147,0.4);
-      border-radius: 32px;
-      padding: 40px 32px;
+      border-radius: 28px;
+      padding: 30px 24px;
       text-align: center;
-      max-width: 320px;
-      width: 90%;
-      animation: popIn 0.4s ease;
+      max-width: 300px;
+      width: 85%;
     }
-    @keyframes popIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .match-hearts { font-size: 4rem; margin-bottom: 16px; animation: pulse 1s infinite; }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
+    .match-hearts { font-size: 3rem; margin-bottom: 12px; }
     .match-title {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 900;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
     }
-    .match-sub { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; margin-bottom: 24px; }
+    .match-sub { color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; margin-bottom: 20px; }
     .match-btn {
       display: block;
       width: 100%;
-      padding: 14px;
+      padding: 12px;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      border: none;
-      border-radius: 100px;
+      border-radius: 50px;
       color: white;
-      font-size: 0.9rem;
-      font-weight: 700;
       text-decoration: none;
-      margin-bottom: 12px;
-      transition: all 0.2s;
+      margin-bottom: 10px;
     }
     .skip-btn {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: transparent;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 100px;
+      border-radius: 50px;
       color: rgba(255, 255, 255, 0.7);
       cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-    .skip-btn:hover {
-      border-color: #FF1493;
-      color: #FF6B9D;
     }
     
+    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -421,44 +372,40 @@
       border-top: 1px solid rgba(255,20,147,0.2);
       display: flex;
       justify-content: space-around;
-      padding: 12px 0 20px;
+      padding: 8px 0 18px;
       z-index: 100;
     }
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       color: rgba(255, 255, 255, 0.4);
       text-decoration: none;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 600;
-      transition: all 0.2s;
-      padding: 6px 12px;
-      border-radius: 40px;
+      padding: 5px 10px;
+      border-radius: 30px;
     }
-    .nav-item span:first-child { font-size: 1.3rem; }
-    .nav-item:hover { color: #FF6B9D; background: rgba(255,20,147,0.1); }
+    .nav-item span:first-child { font-size: 1.2rem; }
     .nav-item.active { color: #FF6B9D; }
   </style>
 </head>
 <body>
 
-  <!-- Premium Navbar with Full Navigation -->
+  <!-- Mobile-First Navbar -->
   <nav class="navbar" id="navbar">
-    <div style="max-width: 1280px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center;">
-      <a href="index.html" class="logo">💕 EntranceHearts</a>
-      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-        <a href="browse.html" class="btn-ghost" style="color: #FF6B9D;">🔥 Discover</a>
-        <a href="chat.html" class="btn-ghost">💬 Chats</a>
-        <a href="confessions.html" class="btn-ghost">💌 Confessions</a>
-        <a href="study.html" class="btn-ghost">📚 Study</a>
-        <a href="timer.html" class="btn-ghost">⏱️ Timer</a>
-        <a href="ai-match.html" class="btn-ghost">🤖 AI Match</a>
-        <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
-      </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <a href="index.html" class="logo">💕 EntranceHearts</a>
+    <div class="desktop-nav">
+      <a href="browse.html" class="btn-ghost-nav" style="color: #FF6B9D;">🔥 Discover</a>
+      <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
+      <a href="confessions.html" class="btn-ghost-nav">💌 Confessions</a>
+      <a href="study.html" class="btn-ghost-nav">📚 Study</a>
+      <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
+      <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
+      <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
     </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
   </nav>
 
   <!-- Mobile Menu -->
@@ -630,7 +577,7 @@
       document.getElementById('emptyState').style.display = 'none';
       currentProfile = filtered[0];
       
-          container.innerHTML = `
+      container.innerHTML = `
         <div class="swipe-card" id="currentCard">
           <div class="card-photo" id="cardPhoto">
             ${getAvatarDisplay(currentProfile)}
@@ -742,13 +689,10 @@
       });
     }
 
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');
-      if (navbar && window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else if (navbar) {
-        navbar.classList.remove('scrolled');
-      }
+      if (navbar && window.scrollY > 50) navbar.classList.add('scrolled');
+      else if (navbar) navbar.classList.remove('scrolled');
     });
 
     init();

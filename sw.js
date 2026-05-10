@@ -10,7 +10,13 @@ const ASSETS = [
   '/entrancehearts/chat.html',
   '/entrancehearts/profile.html',
   '/entrancehearts/ai-match.html',
-  '/entrancehearts/supabase.js'
+  '/entrancehearts/confessions.html',
+  '/entrancehearts/study.html',
+  '/entrancehearts/timer.html',
+  '/entrancehearts/verify.html',
+  '/entrancehearts/update-password.html',
+  '/entrancehearts/icon-192.png',
+  '/entrancehearts/icon-512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -40,16 +46,16 @@ self.addEventListener('fetch', e => {
   }
 });
 
-// Add to your sw.js
+// Push notification handler
 self.addEventListener('push', function(event) {
   const data = event.data.json();
   const options = {
     body: data.body,
-    icon: '/icon-192.png',
-    badge: '/icon-192.png',
+    icon: '/entrancehearts/icon-192.png',
+    badge: '/entrancehearts/icon-192.png',
     vibrate: [200, 100, 200],
     data: {
-      url: data.url
+      url: data.url || '/entrancehearts/'
     }
   };
   

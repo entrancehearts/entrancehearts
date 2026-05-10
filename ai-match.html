@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Direct Supabase connection
     const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -22,27 +21,30 @@
       color: #ffffff;
     }
 
-    /* Mobile-First Navbar */
+    /* Navbar */
     .navbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 12px 16px;
+      padding: 14px 20px;
       background: rgba(10, 10, 15, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 20, 147, 0.2);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
     }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .navbar.scrolled { padding: 10px 20px; background: rgba(10, 10, 15, 0.98); }
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
     }
     .back-btn {
       display: flex;
@@ -55,38 +57,32 @@
       border-radius: 50px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 20, 147, 0.2);
+      transition: all 0.3s;
     }
-    .logo {
-      font-size: 1.1rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .nav-right {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    .back-btn:hover { background: rgba(255, 20, 147, 0.15); color: #FF6B9D; transform: translateX(-3px); }
     .btn-ghost-nav {
       color: rgba(255, 255, 255, 0.7);
-      padding: 6px 12px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .btn-primary-nav {
-      background: linear-gradient(135deg, #FF1493, #FF6B9D);
-      color: white;
       padding: 6px 14px;
       border-radius: 50px;
       text-decoration: none;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 500;
+      transition: all 0.3s;
     }
+    .btn-ghost-nav:hover { color: #FF6B9D; background: rgba(255, 20, 147, 0.1); }
+    .btn-primary-nav {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn-primary-nav:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,20,147,0.3); }
     .mobile-menu-btn {
+      display: none;
       background: rgba(255,20,147,0.15);
       border: 1px solid rgba(255,20,147,0.3);
       border-radius: 10px;
@@ -95,15 +91,8 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    /* Hide desktop nav on mobile */
-    @media (max-width: 768px) {
-      .desktop-nav { display: none; }
-      .mobile-menu-btn { display: block; }
-    }
-    @media (min-width: 769px) {
-      .desktop-nav { display: flex; gap: 12px; }
-      .mobile-menu-btn { display: none; }
-    }
+    @media (max-width: 768px) { .mobile-menu-btn { display: block; } .desktop-nav { display: none; } }
+    @media (min-width: 769px) { .desktop-nav { display: flex; gap: 12px; } }
     .mobile-menu {
       position: fixed;
       top: 60px;
@@ -130,13 +119,15 @@
 
     /* Hero Banner */
     .hero-banner {
-      padding: 70px 20px 30px;
+      padding: 80px 20px 40px;
       text-align: center;
     }
     .hero-icon {
       font-size: 3rem;
       margin-bottom: 12px;
+      animation: float 3s ease-in-out infinite;
     }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     .hero-banner h1 {
       font-size: 1.6rem;
       font-weight: 800;
@@ -148,15 +139,13 @@
     .hero-banner p {
       color: rgba(255, 255, 255, 0.5);
       font-size: 0.8rem;
-      max-width: 300px;
-      margin: 8px auto 0;
     }
 
     /* Main Container */
     .ai-container {
-      max-width: 100%;
+      max-width: 600px;
       margin: 0 auto;
-      padding: 20px 16px 80px;
+      padding: 20px 20px 80px;
     }
 
     .question-card {
@@ -164,7 +153,7 @@
       border: 1px solid rgba(255,20,147,0.15);
       border-radius: 20px;
       padding: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     .question-title {
       font-size: 0.7rem;
@@ -180,16 +169,16 @@
     .question-text {
       font-size: 0.9rem;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .options-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 18px;
     }
     .option-btn {
-      padding: 10px 8px;
+      padding: 10px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -200,10 +189,11 @@
       text-align: center;
       transition: all 0.2s;
     }
+    .option-btn:hover { background: rgba(255,20,147,0.08); }
     .option-btn.selected {
       border-color: #FF1493;
       color: #FF6B9D;
-      background: rgba(255, 20, 147, 0.15);
+      background: rgba(255, 20, 147, 0.12);
     }
     .ai-textarea {
       width: 100%;
@@ -237,9 +227,11 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      transition: all 0.3s;
     }
+    .analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,20,147,0.25); }
+    .analyze-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* Loading */
     .loading-area {
       text-align: center;
       padding: 40px 20px;
@@ -254,12 +246,8 @@
       display: block;
       margin-bottom: 16px;
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* Results */
     .result-area { display: none; }
     .result-card {
       background: #141423;
@@ -291,7 +279,9 @@
       padding: 12px;
       border-bottom: 1px solid rgba(255,20,147,0.1);
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .matched-person:hover { background: rgba(255,20,147,0.05); border-radius: 12px; }
     .matched-avatar {
       width: 50px;
       height: 50px;
@@ -304,11 +294,7 @@
       overflow: hidden;
       flex-shrink: 0;
     }
-    .matched-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .matched-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .matched-info { flex: 1; }
     .matched-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
     .matched-meta { font-size: 0.65rem; color: rgba(255, 255, 255, 0.45); margin-bottom: 6px; }
@@ -340,7 +326,9 @@
       font-weight: 600;
       cursor: pointer;
       flex-shrink: 0;
+      transition: all 0.2s;
     }
+    .chat-now-btn:hover { background: #FF1493; color: white; }
     .retry-btn {
       width: 100%;
       padding: 12px;
@@ -351,9 +339,10 @@
       cursor: pointer;
       margin-top: 8px;
       font-size: 0.85rem;
+      transition: all 0.2s;
     }
+    .retry-btn:hover { border-color: #FF1493; color: #FF6B9D; }
 
-    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -380,6 +369,7 @@
       border-radius: 30px;
     }
     .nav-item span:first-child { font-size: 1.2rem; }
+    .nav-item:hover { color: #FF6B9D; background: rgba(255,20,147,0.1); }
     .nav-item.active { color: #FF6B9D; }
 
     .toast {
@@ -395,32 +385,27 @@
       z-index: 200;
       display: none;
     }
-    .toast.show { display: block; }
-
-    @media (min-width: 768px) {
-      .ai-container { max-width: 600px; padding: 30px 24px 100px; }
-      .option-btn { padding: 12px; font-size: 0.85rem; }
-      .matched-avatar { width: 56px; height: 56px; font-size: 1.5rem; }
-    }
+    .toast.show { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
   </style>
 </head>
 <body>
 
-  <!-- Mobile-First Navbar -->
   <nav class="navbar" id="navbar">
-    <div class="nav-left">
-      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
-      <div class="logo">💕 EntranceHearts</div>
+    <div style="max-width: 1280px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+        <a href="index.html" class="logo">💕 EntranceHearts</a>
+      </div>
+      <div class="desktop-nav">
+        <a href="browse.html" class="btn-ghost-nav">🔥 Discover</a>
+        <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
+        <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
-    <div class="desktop-nav">
-      <a href="browse.html" class="btn-ghost-nav">🔥 Discover</a>
-      <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
-      <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
-    </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
   </nav>
 
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
     <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
@@ -432,7 +417,6 @@
     <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
   </div>
 
-  <!-- Hero Banner -->
   <div class="hero-banner">
     <div class="hero-icon">🤖💕</div>
     <h1>AI Matchmaker</h1>
@@ -523,7 +507,6 @@
       }
       currentUserId = data.session.user.id;
       
-      // Fix back button
       const backBtn = document.querySelector('.back-btn');
       if (backBtn) backBtn.href = 'browse.html';
       
@@ -609,7 +592,7 @@
         return;
       }
       container.innerHTML = matches.map(match => `
-             <div class="matched-person" onclick="goToChat('${match.id}')">
+        <div class="matched-person" onclick="goToChat('${match.id}')">
           <div class="matched-avatar">
             ${match.avatar_url ? `<img src="${match.avatar_url}" alt="${match.name}"/>` : genderEmoji[match.gender] || '👤'}
           </div>
@@ -644,7 +627,6 @@
       setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
-    // Mobile menu
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {

@@ -6,62 +6,39 @@
   <title>Study Segment 📚 - EntranceHearts</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
-  
+  <script>
+    const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: #0a0a0f;
       color: #ffffff;
+      min-height: 100vh;
     }
 
-    /* Premium Navbar */
+    /* Navbar - Clean Header (No Back Button) */
     .navbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 18px 32px;
-      background: rgba(10, 10, 15, 0.85);
+      padding: 14px 24px;
+      background: rgba(10, 10, 15, 0.95);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 20, 147, 0.2);
+      border-bottom: 1px solid rgba(255, 20, 147, 0.15);
       transition: all 0.3s;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .navbar.scrolled {
-      padding: 12px 32px;
-      background: rgba(10, 10, 15, 0.95);
-    }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .back-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      padding: 8px 16px;
-      border-radius: 100px;
-      transition: all 0.3s;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 20, 147, 0.2);
-    }
-    .back-btn:hover {
-      background: rgba(255, 20, 147, 0.15);
-      color: #FF6B9D;
-      transform: translateX(-3px);
-    }
+    .navbar.scrolled { padding: 10px 24px; background: rgba(10, 10, 15, 0.98); }
+    .nav-container { max-width: 1280px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
     .logo {
       font-size: 1.3rem;
       font-weight: 800;
@@ -69,202 +46,215 @@
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-decoration: none;
     }
+    .desktop-nav { display: flex; gap: 6px; align-items: center; }
+    .btn-ghost-nav {
+      color: rgba(255, 255, 255, 0.65);
+      padding: 8px 14px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .btn-ghost-nav:hover { color: #FF6B9D; background: rgba(255,20,147,0.08); }
+    .btn-primary-nav {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .btn-primary-nav:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,20,147,0.3); }
+    .mobile-menu-btn {
+      display: none;
+      background: rgba(255,20,147,0.1);
+      border: 1px solid rgba(255,20,147,0.25);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: #FF6B9D;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) { .mobile-menu-btn { display: block; } .desktop-nav { display: none; } }
+    .mobile-menu {
+      position: fixed;
+      top: 62px;
+      right: -100%;
+      width: 260px;
+      background: #13131f;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,20,147,0.25);
+      border-radius: 18px;
+      padding: 16px;
+      z-index: 999;
+      transition: right 0.3s ease;
+    }
+    .mobile-menu.open { right: 16px; }
+    .mobile-menu-item {
+      display: block;
+      padding: 10px 14px;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .mobile-menu-item:hover { background: rgba(255,20,147,0.1); color: #FF6B9D; }
 
     /* Hero Banner */
     .hero-banner {
-      background: linear-gradient(135deg, rgba(255, 20, 147, 0.15), rgba(255, 107, 157, 0.05));
-      border-bottom: 1px solid rgba(255, 20, 147, 0.15);
-      padding: 120px 24px 60px;
+      background: linear-gradient(135deg, rgba(255,20,147,0.05), rgba(255,107,157,0.02));
+      border-bottom: 1px solid rgba(255,20,147,0.1);
+      padding: 90px 24px 50px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-banner::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,20,147,0.08) 0%, transparent 70%);
-      pointer-events: none;
     }
     .hero-icon {
-      font-size: 4rem;
-      margin-bottom: 16px;
-      animation: float 3s ease-in-out infinite;
+      font-size: 3rem;
+      margin-bottom: 12px;
+      animation: gentleFloat 3s ease-in-out infinite;
+      display: inline-block;
     }
-    @keyframes float {
+    @keyframes gentleFloat {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-5px); }
     }
     .hero-banner h1 {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .hero-banner p {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.85rem;
       max-width: 500px;
       margin: 0 auto;
     }
     .hero-stats {
       display: flex;
       justify-content: center;
-      gap: 32px;
-      margin-top: 24px;
+      gap: 30px;
+      margin-top: 20px;
     }
-    .hero-stat {
-      text-align: center;
-    }
+    .hero-stat { text-align: center; }
     .hero-stat .number {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 800;
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .hero-stat .label {
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.4);
-    }
+    .hero-stat .label { font-size: 0.65rem; color: rgba(255, 255, 255, 0.4); }
 
     /* Main Container */
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 40px 24px 100px;
+      padding: 30px 20px 100px;
     }
     
     /* Category Tabs */
     .category-tabs {
       display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
+      gap: 8px;
+      margin-bottom: 25px;
       flex-wrap: wrap;
       justify-content: center;
     }
     .cat-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 20, 147, 0.2);
-      padding: 10px 24px;
+      padding: 8px 20px;
       border-radius: 100px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.8rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .cat-btn i { margin-right: 6px; }
+    .cat-btn i { margin-right: 5px; }
     .cat-btn.active {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       border-color: transparent;
       color: white;
-      box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
     }
-    .cat-btn:hover {
-      transform: translateY(-2px);
-    }
+    .cat-btn:hover { transform: translateY(-2px); background: rgba(255,20,147,0.1); }
     
     /* Upload Section */
     .upload-section {
-      background: #141423;
-      border: 1px solid rgba(255, 20, 147, 0.2);
-      border-radius: 28px;
-      padding: 28px;
-      margin-bottom: 30px;
-      transition: all 0.3s;
-    }
-    .upload-section:hover {
-      border-color: rgba(255, 20, 147, 0.4);
+      background: rgba(18, 18, 26, 0.9);
+      border: 1px solid rgba(255, 20, 147, 0.15);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 28px;
     }
     .upload-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       color: #FF6B9D;
     }
-    .upload-form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+    .upload-form { display: flex; flex-direction: column; gap: 14px; }
     .form-row {
       display: flex;
-      gap: 15px;
+      gap: 12px;
       flex-wrap: wrap;
     }
     .form-row input, .form-row select, .form-row textarea {
       flex: 1;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 20, 147, 0.2);
       border-radius: 14px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       color: white;
       font-family: 'Inter', sans-serif;
       font-size: 0.85rem;
       outline: none;
-      transition: all 0.2s;
     }
-    .form-row textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
+    .form-row textarea { resize: vertical; min-height: 70px; }
     .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
       border-color: #FF1493;
-      background: rgba(255, 20, 147, 0.05);
+      background: rgba(255,20,147,0.05);
     }
     
     .file-input-wrapper {
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px dashed rgba(255, 20, 147, 0.3);
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px dashed rgba(255, 20, 147, 0.25);
       border-radius: 16px;
-      padding: 25px;
+      padding: 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .file-input-wrapper:hover {
-      background: rgba(255, 20, 147, 0.05);
-      border-color: #FF1493;
-    }
-    .file-input-wrapper i {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      display: block;
-      color: #FF6B9D;
-    }
+    .file-input-wrapper:hover { background: rgba(255,20,147,0.05); border-color: #FF1493; }
+    .file-input-wrapper i { font-size: 1.8rem; margin-bottom: 8px; display: block; color: #FF6B9D; }
     .file-input-wrapper input { display: none; }
-    .selected-file {
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-top: 10px;
-    }
+    .selected-file { font-size: 0.7rem; color: rgba(255, 255, 255, 0.4); margin-top: 8px; text-align: center; }
     .upload-btn {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
       border: none;
-      padding: 14px;
+      padding: 13px;
       border-radius: 100px;
       color: white;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.2s;
     }
-    .upload-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
-    }
+    .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255,20,147,0.3); }
+    .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     
     /* Sort Section */
     .sort-section {
@@ -273,25 +263,18 @@
       align-items: center;
       margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 12px;
     }
-    .sort-label {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.5);
-    }
-    .sort-buttons {
-      display: flex;
-      gap: 10px;
-    }
+    .sort-label { font-size: 0.75rem; color: rgba(255, 255, 255, 0.45); }
+    .sort-buttons { display: flex; gap: 8px; }
     .sort-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 20, 147, 0.2);
-      padding: 6px 16px;
+      padding: 5px 14px;
       border-radius: 100px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       cursor: pointer;
-      transition: all 0.2s;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.6);
     }
     .sort-btn.active {
       background: linear-gradient(135deg, #FF1493, #FF6B9D);
@@ -300,143 +283,206 @@
     }
     
     .category-stats {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 20, 147, 0.1);
+      border-bottom: 1px solid rgba(255, 20, 147, 0.08);
     }
     
     /* Materials Grid */
-    .materials-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+    .materials-grid { display: flex; flex-direction: column; gap: 16px; }
     .material-card {
-      background: #141423;
-      border: 1px solid rgba(255, 20, 147, 0.15);
-      border-radius: 24px;
-      padding: 22px;
-      transition: all 0.3s;
+      background: rgba(18, 18, 26, 0.9);
+      border: 1px solid rgba(255, 20, 147, 0.12);
+      border-radius: 20px;
+      padding: 18px;
+      transition: all 0.2s;
     }
-    .material-card:hover {
-      border-color: rgba(255, 20, 147, 0.4);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
+    .material-card:hover { border-color: rgba(255,20,147,0.3); transform: translateY(-2px); }
     .material-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
     .material-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #FF6B9D;
     }
     .material-badge {
-      background: rgba(255, 20, 147, 0.12);
-      padding: 4px 12px;
+      background: rgba(255,20,147,0.1);
+      padding: 3px 10px;
       border-radius: 100px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #FF6B9D;
     }
     .material-description {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 12px;
-      line-height: 1.5;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
     .material-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 15px;
-      font-size: 0.7rem;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.65rem;
       color: rgba(255, 255, 255, 0.4);
     }
-    .material-meta i { margin-right: 4px; }
+    .material-meta i { margin-right: 3px; }
     .download-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 20, 147, 0.2);
-      padding: 8px 20px;
+      padding: 7px 18px;
       border-radius: 100px;
       color: white;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .download-btn:hover {
-      background: #FF1493;
-      border-color: #FF1493;
-      transform: translateY(-2px);
-    }
+    .download-btn:hover { background: #FF1493; border-color: #FF1493; transform: translateY(-1px); }
     
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      background: #141423;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 20, 147, 0.15);
+      padding: 50px 20px;
+      background: rgba(18, 18, 26, 0.9);
+      border-radius: 20px;
+      border: 1px solid rgba(255,20,147,0.12);
     }
-    .empty-state i {
-      font-size: 3rem;
-      color: #FF6B9D;
-      margin-bottom: 16px;
-      display: block;
-    }
-    .empty-state p {
-      color: rgba(255, 255, 255, 0.5);
-    }
+    .empty-state i { font-size: 2.5rem; color: #FF6B9D; margin-bottom: 12px; display: block; opacity: 0.6; }
+    .empty-state p { color: rgba(255, 255, 255, 0.45); font-size: 0.85rem; }
     
     .toast {
       position: fixed;
-      bottom: 100px;
+      bottom: 90px;
       left: 50%;
       transform: translateX(-50%);
-      background: #141423;
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      padding: 12px 24px;
-      border-radius: 100px;
-      font-size: 0.85rem;
+      background: #13131f;
+      border: 1px solid rgba(255,20,147,0.3);
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: 0.8rem;
       z-index: 200;
       display: none;
     }
-    .toast.show {
-      display: block;
-      animation: fadeUp 0.3s ease;
+    .toast.show { display: block; animation: fadeUp 0.25s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 10, 15, 0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,20,147,0.12);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 18px;
+      z-index: 100;
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: rgba(255, 255, 255, 0.45);
+      text-decoration: none;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 30px;
+      transition: all 0.2s;
+    }
+    .nav-item span:first-child { font-size: 1.2rem; }
+    .nav-item:hover { color: #FF6B9D; background: rgba(255,20,147,0.08); }
+    .nav-item.active { color: #FF6B9D; }
+
+    /* Back Button Footer */
+    .back-footer {
+      text-align: center;
+      margin-top: 24px;
+    }
+    .back-btn-footer {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 40px;
+      padding: 8px 22px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .back-btn-footer:hover {
+      background: rgba(255, 20, 147, 0.08);
+      border-color: #FF6B9D;
+      color: #FF6B9D;
+      transform: translateX(-3px);
+    }
+
+    @media (max-width: 550px) {
+      .hero-banner { padding: 80px 16px 35px; }
+      .hero-banner h1 { font-size: 1.4rem; }
+      .container { padding: 20px 16px 90px; }
+      .upload-section { padding: 18px; }
+      .cat-btn { padding: 6px 14px; font-size: 0.7rem; }
+      .material-card { padding: 14px; }
+      .material-title { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Premium Navbar (Admin Button Removed) -->
+  <!-- Navbar - Clean Header (No Back Button) -->
   <nav class="navbar" id="navbar">
-    <div class="nav-left">
-      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
-      <div class="logo">📚 Study Segment</div>
+    <div class="nav-container">
+      <a href="index.html" class="logo">📚 Study Segment</a>
+      <div class="desktop-nav">
+        <a href="browse.html" class="btn-ghost-nav">🔥 Discover</a>
+        <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
+        <a href="confessions.html" class="btn-ghost-nav">💌 Confessions</a>
+        <a href="study.html" class="btn-ghost-nav" style="color: #FF6B9D;">📚 Study</a>
+        <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
+        <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
+        <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
+    <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
+    <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
+    <a href="study.html" class="mobile-menu-item">📚 Study</a>
+    <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+    <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
+    <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
+    <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
+  </div>
 
   <!-- Hero Banner -->
   <div class="hero-banner">
     <div class="hero-icon">📚✨</div>
     <h1>Study Material Library</h1>
-    <p>Share and download notes, past questions, and study resources for CEE, IOE, +2 & Management</p>
+    <p>Share and download notes, past questions, and study resources</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="number" id="totalMaterials">0</div><div class="label">Materials</div></div>
       <div class="hero-stat"><div class="number" id="totalDownloads">0</div><div class="label">Downloads</div></div>
@@ -448,9 +494,9 @@
     <!-- Category Tabs -->
     <div class="category-tabs">
       <button class="cat-btn active" data-cat="all"><i class="fas fa-layer-group"></i> All</button>
-      <button class="cat-btn" data-cat="CEE"><i class="fas fa-stethoscope"></i> CEE (MBBS)</button>
-      <button class="cat-btn" data-cat="IOE"><i class="fas fa-microchip"></i> IOE (Engineering)</button>
-      <button class="cat-btn" data-cat="+2"><i class="fas fa-flask"></i> +2 (Science)</button>
+      <button class="cat-btn" data-cat="CEE"><i class="fas fa-stethoscope"></i> CEE</button>
+      <button class="cat-btn" data-cat="IOE"><i class="fas fa-microchip"></i> IOE</button>
+      <button class="cat-btn" data-cat="+2"><i class="fas fa-flask"></i> +2</button>
       <button class="cat-btn" data-cat="Management"><i class="fas fa-chart-line"></i> Management</button>
     </div>
 
@@ -472,8 +518,8 @@
         </div>
         <div class="file-input-wrapper" onclick="document.getElementById('fileInput').click()">
           <i class="fas fa-file-upload"></i>
-          <div>Click to upload file</div>
-          <div style="font-size: 0.7rem; margin-top: 5px;">PDF, DOC, PPT, JPG, PNG (Max 10MB)</div>
+          <div style="font-size: 0.8rem;">Click to upload file</div>
+          <div style="font-size: 0.65rem; margin-top: 4px;">PDF, DOC, PPT, JPG, PNG (Max 10MB)</div>
           <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png">
         </div>
         <div id="selectedFileName" class="selected-file">No file selected</div>
@@ -485,17 +531,32 @@
     <div class="sort-section">
       <span class="sort-label"><i class="fas fa-sort"></i> Sort by:</span>
       <div class="sort-buttons">
-        <button class="sort-btn active" data-sort="newest">📅 Newest First</button>
-        <button class="sort-btn" data-sort="oldest">📅 Oldest First</button>
+        <button class="sort-btn active" data-sort="newest">📅 Newest</button>
+        <button class="sort-btn" data-sort="oldest">📅 Oldest</button>
         <button class="sort-btn" data-sort="downloads">⬇️ Most Downloads</button>
       </div>
     </div>
 
     <div id="categoryStats" class="category-stats"></div>
     <div id="materialsGrid" class="materials-grid"></div>
+
+    <!-- Back Button Footer -->
+    <div class="back-footer">
+      <a href="browse.html" class="back-btn-footer">
+        <i class="fas fa-chevron-left"></i> Back to Dashboard
+      </a>
+    </div>
   </div>
 
   <div id="toast" class="toast"></div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="browse.html" class="nav-item"><span>🔥</span><span>Discover</span></a>
+    <a href="chat.html" class="nav-item"><span>💬</span><span>Chats</span></a>
+    <a href="ai-match.html" class="nav-item"><span>🤖</span><span>AI Match</span></a>
+    <a href="profile.html" class="nav-item"><span>👤</span><span>Profile</span></a>
+  </div>
 
   <script>
     let materials = [];
@@ -504,30 +565,21 @@
     let currentUserId = null;
     let currentFile = null;
 
-    // Get file icon based on type
+    async function init() {
+      const { data } = await supabaseClient.auth.getSession();
+      if (!data.session) { window.location.href = 'login.html'; return; }
+      currentUserId = data.session.user.id;
+      await loadMaterials();
+    }
+
     function getFileIcon(fileName) {
       const ext = fileName?.split('.').pop()?.toLowerCase() || '';
       if (ext === 'pdf') return '<i class="fas fa-file-pdf" style="color: #ff4444;"></i>';
       if (ext === 'doc' || ext === 'docx') return '<i class="fas fa-file-word" style="color: #2b579a;"></i>';
       if (ext === 'ppt' || ext === 'pptx') return '<i class="fas fa-file-powerpoint" style="color: #d35230;"></i>';
       if (ext === 'jpg' || ext === 'jpeg' || ext === 'png') return '<i class="fas fa-file-image" style="color: #4caf50;"></i>';
-      if (ext === 'txt') return '<i class="fas fa-file-alt" style="color: #ff9800;"></i>';
       return '<i class="fas fa-file"></i>';
     }
-
-    async function init() {
-      const { data } = await supabaseClient.auth.getSession();
-      if (!data.session) { window.location.href = 'login.html'; return; }
-      currentUserId = data.session.user.id;
-
-      
-  // ✅ ADD THIS LINE - Fix back button
-  const backBtn = document.querySelector('.back-btn');
-  if (backBtn) backBtn.href = 'browse.html';
-  
-  await loadMaterials();
-    }
-  
 
     async function loadMaterials() {
       const { data, error } = await supabaseClient
@@ -535,12 +587,7 @@
         .select('*, profiles(name)')
         .order('created_at', { ascending: false });
       
-      if (error) {
-        console.error('Error loading materials:', error);
-        showToast('Failed to load materials');
-        return;
-      }
-      
+      if (error) { showToast('Failed to load materials'); return; }
       materials = data || [];
       updateStats();
       renderMaterials();
@@ -572,50 +619,29 @@
       if (!title) { showToast('Please enter a title'); return; }
       if (!description) { showToast('Please enter a description'); return; }
       if (!currentFile) { showToast('Please select a file to upload'); return; }
-
-      if (currentFile.size > 10 * 1024 * 1024) {
-        showToast('File too large! Max 10MB');
-        return;
-      }
+      if (currentFile.size > 10 * 1024 * 1024) { showToast('File too large! Max 10MB'); return; }
 
       const btn = document.querySelector('.upload-btn');
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+      btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Uploading...';
 
       try {
-        // Upload file to storage
         const fileExt = currentFile.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 6)}.${fileExt}`;
         const filePath = `${currentUserId}/${fileName}`;
 
-        const { error: uploadError } = await supabaseClient.storage
-          .from('study_files')
-          .upload(filePath, currentFile);
-
+        const { error: uploadError } = await supabaseClient.storage.from('study_files').upload(filePath, currentFile);
         if (uploadError) throw uploadError;
 
-        // Get public URL
-        const { data: urlData } = supabaseClient.storage
-          .from('study_files')
-          .getPublicUrl(filePath);
+        const { data: urlData } = supabaseClient.storage.from('study_files').getPublicUrl(filePath);
 
-        // Save to database
-        const { error: dbError } = await supabaseClient
-          .from('study_materials')
-          .insert({
-            title: title,
-            category: category,
-            description: description,
-            file_name: currentFile.name,
-            file_url: urlData.publicUrl,
-            file_type: fileExt,
-            uploaded_by: currentUserId,
-            downloads: 0
-          });
-
+        const { error: dbError } = await supabaseClient.from('study_materials').insert({
+          title, category, description, file_name: currentFile.name,
+          file_url: urlData.publicUrl, file_type: fileExt,
+          uploaded_by: currentUserId, downloads: 0
+        });
         if (dbError) throw dbError;
 
-        // Clear form
         document.getElementById('materialTitle').value = '';
         document.getElementById('materialDesc').value = '';
         document.getElementById('fileInput').value = '';
@@ -624,11 +650,7 @@
 
         showToast('✅ Material uploaded successfully!');
         await loadMaterials();
-
-      } catch (err) {
-        console.error('Upload error:', err);
-        showToast('❌ Upload failed: ' + err.message);
-      }
+      } catch (err) { showToast('❌ Upload failed: ' + err.message); }
 
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-share"></i> Share Material';
@@ -636,44 +658,22 @@
 
     async function downloadMaterial(id, fileUrl, fileName) {
       try {
-        // Update download count
         await supabaseClient.rpc('increment_downloads', { material_id: id });
-        
-        // Open download link
         window.open(fileUrl, '_blank');
         showToast(`📥 Downloading: ${fileName}`);
-        
-        // Refresh to update download count
         await loadMaterials();
-      } catch(err) {
-        showToast('Download failed');
-      }
+      } catch(err) { showToast('Download failed'); }
     }
 
-      function renderMaterials() {
+    function renderMaterials() {
       const container = document.getElementById('materialsGrid');
-      let filtered = materials;
+      let filtered = currentCategory === "all" ? materials : materials.filter(m => m.category === currentCategory);
       
-      if (currentCategory !== "all") {
-        filtered = materials.filter(m => m.category === currentCategory);
-      }
+      if (currentSort === "newest") filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      else if (currentSort === "oldest") filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      else if (currentSort === "downloads") filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
       
-      // Sort
-      if (currentSort === "newest") {
-        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      } else if (currentSort === "oldest") {
-        filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-      } else if (currentSort === "downloads") {
-        filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
-      }
-      
-      const categoryNames = {
-        'all': 'All Categories',
-        'CEE': '🏥 CEE (MBBS)',
-        'IOE': '⚙️ IOE (Engineering)',
-        '+2': '📖 +2 (Science)',
-        'Management': '💼 Management'
-      };
+      const categoryNames = { 'all':'All Categories', 'CEE':'CEE', 'IOE':'IOE', '+2':'+2', 'Management':'Management' };
       document.getElementById('categoryStats').innerHTML = `📚 ${categoryNames[currentCategory]} • ${filtered.length} ${filtered.length === 1 ? 'material' : 'materials'}`;
 
       if (filtered.length === 0) {
@@ -693,7 +693,7 @@
             <span><i class="fas fa-download"></i> ${m.downloads || 0} downloads</span>
           </div>
           <button class="download-btn" onclick="downloadMaterial(${m.id}, '${m.file_url}', '${m.file_name}')">
-            <i class="fas fa-download"></i> Download ${m.file_name}
+            <i class="fas fa-download"></i> Download
           </button>
         </div>
       `).join('');
@@ -709,24 +709,9 @@
       return date.toLocaleDateString();
     }
 
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str).replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-      });
-    }
+    function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    // Category filter
     document.querySelectorAll('.cat-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -736,7 +721,6 @@
       });
     });
 
-    // Sort filter
     document.querySelectorAll('.sort-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
@@ -746,14 +730,18 @@
       });
     });
 
-    // Navbar scroll effect
+    // Mobile Menu
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.onclick = () => { mobileMenu.classList.toggle('open'); menuBtn.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰'; };
+      document.addEventListener('click', (e) => { if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.remove('open'); menuBtn.textContent = '☰'; } });
+    }
+
     window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');
-      if (navbar && window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else if (navbar) {
-        navbar.classList.remove('scrolled');
-      }
+      if (navbar && window.scrollY > 50) navbar.classList.add('scrolled');
+      else if (navbar) navbar.classList.remove('scrolled');
     });
 
     init();

@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Profile — EntranceHearts 💕</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #ffffff;
+    }
+
+    /* Premium Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 18px 32px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 20, 147, 0.2);
+      transition: all 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar.scrolled {
+      padding: 12px 32px;
+      background: rgba(10, 10, 15, 0.95);
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .btn-ghost {
+      color: rgba(255, 255, 255, 0.7);
+      padding: 8px 20px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+    .btn-ghost:hover {
+      color: #FF6B9D;
+      background: rgba(255, 20, 147, 0.1);
+    }
+    .btn-primary-nav {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      color: white;
+      padding: 8px 24px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+    .btn-primary-nav:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 100px;
+      transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+    }
+    .back-btn:hover {
+      background: rgba(255, 20, 147, 0.15);
+      color: #FF6B9D;
+      transform: translateX(-3px);
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: rgba(255,20,147,0.15);
+      border: 1px solid rgba(255,20,147,0.3);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #FF6B9D;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    @media (max-width: 768px) {
+      .mobile-menu-btn { display: block; }
+    }
+    .mobile-menu {
+      position: fixed;
+      top: 70px;
+      right: -100%;
+      width: 280px;
+      background: #141423;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,20,147,0.3);
+      border-radius: 20px;
+      padding: 20px;
+      z-index: 999;
+      transition: right 0.3s;
+    }
+    .mobile-menu.open { right: 16px; }
+    .mobile-menu-item {
+      display: block;
+      padding: 12px 16px;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+    }
+    .mobile-menu-item:hover {
+      background: rgba(255,20,147,0.15);
+      color: #FF6B9D;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(255, 20, 147, 0.15), rgba(255, 107, 157, 0.05));
+      border-bottom: 1px solid rgba(255, 20, 147, 0.15);
+      padding: 100px 24px 50px;
+      text-align: center;
+    }
+    .hero-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .hero-banner h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .hero-banner p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.85rem;
+    }
+
+    /* Main Container */
+    .page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 16px 100px;
+    }
+    
+    .profile-hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .profile-avatar-wrap {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      padding: 4px;
+      margin: 0 auto 20px;
+      transition: all 0.3s;
+    }
+    .profile-avatar-wrap:hover {
+      transform: scale(1.02);
+    }
+    .profile-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #0a0a0f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      overflow: hidden;
+    }
+    .profile-avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .name-badge-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .profile-name {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .badge-gold {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      color: #FFD700;
+    }
+    .profile-tag {
+      display: inline-block;
+      background: rgba(255, 20, 147, 0.12);
+      border: 1px solid rgba(255, 20, 147, 0.25);
+      color: #FF6B9D;
+      padding: 6px 18px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .profile-location {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.85rem;
+    }
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      margin-top: 18px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    .progress-text {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: right;
+      margin-top: 6px;
+    }
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: #141423;
+      border: 1px solid rgba(255,20,147,0.15);
+      border-radius: 20px;
+      padding: 18px 12px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .stat-box:hover {
+      border-color: rgba(255,20,147,0.4);
+      transform: translateY(-3px);
+    }
+    .stat-box strong {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-box span {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .info-card {
+      background: #141423;
+      border: 1px solid rgba(255,20,147,0.15);
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .info-card:hover {
+      border-color: rgba(255,20,147,0.3);
+    }
+    .info-card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #FF6B9D;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,20,147,0.08);
+    }
+    .info-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .info-label {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .info-val {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: right;
+      max-width: 60%;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,20,147,0.2);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+    }
+    .tag:hover {
+      border-color: #FF6B9D;
+      color: #FF6B9D;
+    }
+    
+    .action-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .edit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      border: none;
+      border-radius: 100px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .edit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+    }
+    .delete-account-btn {
+      width: 100%;
+      padding: 15px;
+      background: rgba(255, 68, 68, 0.15);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      border-radius: 100px;
+      color: #ff6666;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    .delete-account-btn:hover {
+      background: rgba(255, 68, 68, 0.3);
+      border-color: #ff4444;
+      color: #ff4444;
+      transform: translateY(-2px);
+    }
+    .logout-btn {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      border: 1px solid rgba(255,20,147,0.3);
+      border-radius: 100px;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .logout-btn:hover {
+      border-color: #FF1493;
+      color: #FF6B9D;
+    }
+
+    /* Edit Sheet */
+    .sheet-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 300;
+    }
+    .sheet-overlay.open { display: block; }
+    .edit-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #141423;
+      border-radius: 32px 32px 0 0;
+      border-top: 1px solid rgba(255,20,147,0.3);
+      z-index: 400;
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding-bottom: 30px;
+    }
+    .edit-sheet.open { transform: translateY(0); }
+    .sheet-handle {
+      width: 50px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      margin: 16px auto 0;
+    }
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px 12px;
+      border-bottom: 1px solid rgba(255,20,147,0.15);
+    }
+    .sheet-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .sheet-close {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      padding: 4px;
+    }
+    .sheet-close:hover { color: #FF6B9D; }
+    .sheet-body { padding: 24px; }
+    
+    .photo-picker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    .photo-preview-wrap {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      padding: 4px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      position: relative;
+    }
+    .photo-preview-wrap:hover { transform: scale(1.02); }
+    .photo-preview-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #0a0a0f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      overflow: hidden;
+    }
+    .photo-preview-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .photo-change-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      border: 2px solid #141423;
+    }
+    .photo-hint {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    #photoFileInput { display: none; }
+    .upload-progress {
+      font-size: 0.75rem;
+      color: #FF6B9D;
+      margin-top: 6px;
+      display: none;
+    }
+    
+    .field-group { margin-bottom: 20px; }
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.55);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .field-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,20,147,0.2);
+      border-radius: 14px;
+      color: white;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+    .field-input:focus {
+      border-color: #FF1493;
+      background: rgba(255, 20, 147, 0.08);
+    }
+    textarea.field-input {
+      resize: none;
+      height: 100px;
+      line-height: 1.5;
+    }
+    select.field-input { appearance: none; cursor: pointer; }
+    
+    .interests-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .int-tag {
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,20,147,0.2);
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .int-tag:hover {
+      border-color: #FF6B9D;
+      color: #FF6B9D;
+    }
+    .int-tag.selected {
+      background: rgba(255, 20, 147, 0.15);
+      border-color: #FF1493;
+      color: #FF6B9D;
+      font-weight: 600;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      border: none;
+      border-radius: 100px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+    .save-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+    }
+    .save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #141423;
+      border: 1px solid rgba(255,20,147,0.4);
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,20,147,0.2);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 22px;
+      z-index: 100;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      font-size: 0.65rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      padding: 8px 16px;
+      border-radius: 40px;
+    }
+    .nav-item span:first-child { font-size: 1.3rem; }
+    .nav-item:hover { color: #FF6B9D; background: rgba(255,20,147,0.1); }
+    .nav-item.active { color: #FF6B9D; }
+    
+    .loading-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Premium Navbar -->
+  <nav class="navbar" id="navbar">
+    <div style="max-width: 1280px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+        <a href="index.html" class="logo">💕 EntranceHearts</a>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <a href="browse.html" class="btn-ghost">🔥 Discover</a>
+        <a href="chat.html" class="btn-ghost">💬 Chats</a>
+        <a href="confessions.html" class="btn-ghost">💌 Confessions</a>
+        <a href="study.html" class="btn-ghost">📚 Study</a>
+        <a href="timer.html" class="btn-ghost">⏱️ Timer</a>
+        <a href="ai-match.html" class="btn-ghost">🤖 AI Match</a>
+        <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
+    <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
+    <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
+    <a href="study.html" class="mobile-menu-item">📚 Study</a>
+    <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+    <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
+    <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
+    <a href="login.html" class="mobile-menu-item">🚪 Logout</a>
+  </div>
+
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <div class="hero-icon">👤✨</div>
+    <h1>My Profile</h1>
+    <p>Manage your personal information and preferences</p>
+  </div>
+
+  <div class="page" id="profilePage">
+    <div class="loading-state">
+      <div style="font-size: 3rem; margin-bottom: 16px;">💕</div>
+      <p style="color: rgba(255,255,255,0.5);">Loading profile...</p>
+    </div>
+  </div>
+
+  <!-- Edit Sheet -->
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeEdit()"></div>
+  <div class="edit-sheet" id="editSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title"><i class="fas fa-edit"></i> Edit Profile</div>
+      <div class="sheet-close" onclick="closeEdit()">✕</div>
+    </div>
+    <div class="sheet-body">
+
+      <div class="photo-picker">
+        <div class="photo-preview-wrap" onclick="document.getElementById('photoFileInput').click()">
+          <div class="photo-preview-inner" id="editPhotoPreview">👤</div>
+          <div class="photo-change-badge">📷</div>
+        </div>
+        <div class="photo-hint">Tap to change profile photo</div>
+        <div class="upload-progress" id="uploadProgress">Uploading photo...</div>
+        <input type="file" id="photoFileInput" accept="image/*"/>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-user"></i> Name</div>
+            <input class="field-input" id="editName" type="text" placeholder="Your full name" maxlength="40"/>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-calendar-alt"></i> Age</div>
+        <input class="field-input" id="editAge" type="number" placeholder="Your age" min="14" max="30"/>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-map-marker-alt"></i> Location</div>
+        <input class="field-input" id="editLocation" type="text" placeholder="e.g. Kathmandu" maxlength="40"/>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-align-left"></i> Bio</div>
+        <textarea class="field-input" id="editBio" placeholder="Write something about yourself..." maxlength="200"></textarea>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-graduation-cap"></i> Exam / Category</div>
+        <select class="field-input" id="editCategory">
+          <option value="cee">🏥 CEE Aspirant</option>
+          <option value="ioe">⚙️ IOE Aspirant</option>
+          <option value="plus2">📖 +2 Student</option>
+          <option value="management">💼 Management Student</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-heart"></i> Looking For</div>
+        <select class="field-input" id="editLookingFor">
+          <option value="friendship">🤝 Friendship</option>
+          <option value="relationship">💕 Relationship</option>
+          <option value="studybuddy">📚 Study Buddy</option>
+          <option value="any">✨ Open to Anything</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label"><i class="fas fa-star"></i> Interests</div>
+        <div class="interests-grid" id="interestsGrid"></div>
+      </div>
+
+      <button class="save-btn" id="saveBtn" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="bottom-nav">
+    <a href="browse.html" class="nav-item"><span>🔥</span><span>Discover</span></a>
+    <a href="chat.html" class="nav-item"><span>💬</span><span>Chats</span></a>
+    <a href="ai-match.html" class="nav-item"><span>🤖</span><span>AI Match</span></a>
+    <a href="profile.html" class="nav-item active"><span>👤</span><span>Profile</span></a>
+  </div>
+
+  <script>
+    const categoryLabels = {
+      cee:'CEE Aspirant', ioe:'IOE Aspirant',
+      plus2:'+2 Student', management:'Management Student'
+    };
+    const genderEmoji = { male:'👨', female:'👩', other:'🧑' };
+    const ALL_INTERESTS = [
+      '📚 Studying','🎵 Music','🏏 Cricket','⚽ Football',
+      '🎮 Gaming','🎨 Art','📷 Photography','✈️ Travel',
+      '🍜 Food','💻 Coding','📖 Reading','🏃 Fitness',
+      '🎬 Movies','🎤 Singing','🧘 Meditation','🌿 Nature'
+    ];
+
+    let currentUserId = null;
+    let currentProfile = null;
+    let newAvatarUrl = null;
+
+    async function checkVerification() {
+      try {
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('is_verified')
+          .eq('id', currentUserId)
+          .single();
+        if (profile?.is_verified) {
+          const badge = document.getElementById('verifiedBadge');
+          if (badge) badge.style.display = 'inline-flex';
+        }
+      } catch(e) { console.log('Verification check failed:', e); }
+    }
+
+    async function init() {
+      const { data } = await supabaseClient.auth.getSession();
+      if (!data.session) { window.location.href = 'login.html'; return; }
+      currentUserId = data.session.user.id;
+
+      // Fix back button for logged-in users
+      const backBtn = document.querySelector('.back-btn');
+      if (backBtn) backBtn.href = 'browse.html';
+
+      const { data: profile } = await supabaseClient
+        .from('profiles').select('*').eq('id', currentUserId).single();
+      
+      if (!profile) { window.location.href = 'signup.html'; return; }
+      currentProfile = profile;
+
+      await checkVerification();
+
+      const { data: likes } = await supabaseClient
+        .from('likes').select('*').eq('from_user', currentUserId);
+      const { data: myLikes } = await supabaseClient
+        .from('likes').select('to_user').eq('from_user', currentUserId);
+      let matchCount = 0;
+      if (myLikes && myLikes.length > 0) {
+        const likedIds = myLikes.map(l => l.to_user);
+        const { data: mutual } = await supabaseClient
+          .from('likes').select('*')
+          .eq('to_user', currentUserId).in('from_user', likedIds);
+        matchCount = mutual ? mutual.length : 0;
+      }
+      const { data: msgs } = await supabaseClient
+        .from('messages').select('*').eq('from_user', currentUserId);
+
+      const fields = [profile.name, profile.age, profile.gender,
+        profile.category, profile.location,
+        profile.interests && profile.interests.length >= 3];
+      const completion = Math.round(fields.filter(Boolean).length / fields.length * 100);
+
+      render(profile, likes?.length || 0, matchCount, msgs?.length || 0, completion);
+      buildInterestsGrid(profile.interests || []);
+    }
+
+    function render(p, likes, matches, msgs, completion) {
+      const avatarContent = p.avatar_url
+        ? `<img src="${p.avatar_url}" alt="${p.name}"/>`
+        : genderEmoji[p.gender] || '👤';
+      
+      const isVerified = p.is_verified === true;
+      const verifiedBadgeHTML = isVerified ? '<span class="badge badge-gold" id="verifiedBadge">⭐ Verified</span>' : '<span id="verifiedBadge" style="display:none;"></span>';
+      
+      document.getElementById('profilePage').innerHTML = `
+        <div class="profile-hero">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar-inner">${avatarContent}</div>
+          </div>
+          <div class="name-badge-container">
+            <div class="profile-name">${escapeHtml(p.name || 'Your Name')}</div>
+            ${verifiedBadgeHTML}
+          </div>
+          <div class="profile-tag">${categoryLabels[p.category] || 'Aspirant'}</div>
+          <div class="profile-location">
+            <i class="fas fa-map-marker-alt"></i> ${escapeHtml(p.location || 'Nepal')}
+            ${p.age ? ` • ${p.age} yrs` : ''}
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${completion}%"></div>
+          </div>
+          <div class="progress-text">Profile ${completion}% complete</div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-box"><strong>${likes}</strong><span><i class="fas fa-heart"></i> Likes</span></div>
+          <div class="stat-box"><strong>${matches}</strong><span><i class="fas fa-handshake"></i> Matches</span></div>
+          <div class="stat-box"><strong>${msgs}</strong><span><i class="fas fa-comment"></i> Messages</span></div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title"><i class="fas fa-user-circle"></i> Personal Info</div>
+          <div class="info-row"><span class="info-label">Name</span><span class="info-val">${escapeHtml(p.name || '—')}</span></div>
+          <div class="info-row"><span class="info-label">Age</span><span class="info-val">${p.age || '—'}</span></div>
+          <div class="info-row"><span class="info-label">Gender</span><span class="info-val">${p.gender ? p.gender.charAt(0).toUpperCase() + p.gender.slice(1) : '—'}</span></div>
+          <div class="info-row"><span class="info-label">Location</span><span class="info-val">${escapeHtml(p.location || '—')}</span></div>
+          ${p.bio ? `<div class="info-row"><span class="info-label">Bio</span><span class="info-val">${escapeHtml(p.bio)}</span></div>` : ''}
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title"><i class="fas fa-graduation-cap"></i> Study Info</div>
+          <div class="info-row"><span class="info-label">Category</span><span class="info-val">${categoryLabels[p.category] || '—'}</span></div>
+          <div class="info-row"><span class="info-label">Looking For</span><span class="info-val">${p.looking_for ? p.looking_for.charAt(0).toUpperCase() + p.looking_for.slice(1) : '—'}</span></div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title"><i class="fas fa-heart"></i> Interests</div>
+          <div class="tags-wrap">${(p.interests || []).map(i => `<span class="tag">${escapeHtml(i)}</span>`).join('') || '<span style="color:rgba(255,255,255,0.4);font-size:0.85rem;">No interests added yet</span>'}</div>
+        </div>
+
+        <div class="action-btns">
+          <button class="edit-btn" onclick="openEdit()"><i class="fas fa-edit"></i> Edit Profile</button>
+          <button class="feedback-btn" onclick="openFeedbackModal()">
+  <i class="fas fa-comment-dots"></i> Send Feedback
+</button>
+          <button class="delete-account-btn" onclick="deleteMyAccount()"><i class="fas fa-trash-alt"></i> Delete My Account</button>
+          <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>`;
+    }
+
+    function buildInterestsGrid(selected) {
+      const selectedSet = new Set(selected);
+      document.getElementById('interestsGrid').innerHTML = ALL_INTERESTS.map(tag => `
+        <div class="int-tag ${selectedSet.has(tag) ? 'selected' : ''}" onclick="toggleInterest(this, '${tag}')">${tag}</div>
+      `).join('');
+    }
+
+    function toggleInterest(el, tag) {
+      el.classList.toggle('selected');
+    }
+
+    function getSelectedInterests() {
+      return [...document.querySelectorAll('.int-tag.selected')].map(el => el.textContent.trim());
+    }
+
+    function openEdit() {
+      const p = currentProfile;
+      document.getElementById('editName').value = p.name || '';
+      document.getElementById('editAge').value = p.age || '';
+      document.getElementById('editLocation').value = p.location || '';
+      document.getElementById('editBio').value = p.bio || '';
+      document.getElementById('editCategory').value = p.category || 'cee';
+      document.getElementById('editLookingFor').value = p.looking_for || 'friendship';
+
+      const preview = document.getElementById('editPhotoPreview');
+      preview.innerHTML = p.avatar_url ? `<img src="${p.avatar_url}" alt="photo"/>` : genderEmoji[p.gender] || '👤';
+      newAvatarUrl = null;
+
+      buildInterestsGrid(p.interests || []);
+
+      document.getElementById('editSheet').classList.add('open');
+      document.getElementById('sheetOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEdit() {
+      document.getElementById('editSheet').classList.remove('open');
+      document.getElementById('sheetOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('photoFileInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { showToast('❌ Photo must be under 5MB'); return; }
+
+      const progressEl = document.getElementById('uploadProgress');
+      progressEl.style.display = 'block';
+      progressEl.textContent = 'Uploading photo...';
+
+      const ext = file.name.split('.').pop();
+      const path = `${currentUserId}/avatar_${Date.now()}.${ext}`;
+
+      const { error } = await supabaseClient.storage.from('avatars').upload(path, file, { upsert: true });
+
+      if (error) {
+        progressEl.textContent = '❌ Upload failed';
+        setTimeout(() => { progressEl.style.display = 'none'; }, 2000);
+        return;
+      }
+
+      const { data: urlData } = supabaseClient.storage.from('avatars').getPublicUrl(path);
+      newAvatarUrl = urlData.publicUrl;
+
+      document.getElementById('editPhotoPreview').innerHTML = `<img src="${newAvatarUrl}" alt="photo"/>`;
+      progressEl.textContent = '✅ Photo ready!';
+      setTimeout(() => { progressEl.style.display = 'none'; }, 1500);
+    });
+
+    async function deleteMyAccount() {
+      if (!confirm('⚠️ WARNING: This will permanently delete your account, all your messages, likes, confessions, and study materials. This action CANNOT be undone.\n\nAre you sure you want to delete your account?')) {
+        return;
+      }
+      
+      const confirmation = prompt('Type "DELETE" to confirm account deletion:');
+      if (confirmation !== 'DELETE') {
+        showToast('Account deletion cancelled');
+        return;
+      }
+      
+      const btn = event.target;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+      
+      try {
+        await supabaseClient.from('likes').delete().eq('from_user', currentUserId);
+        await supabaseClient.from('likes').delete().eq('to_user', currentUserId);
+        await supabaseClient.from('messages').delete().or(`from_user.eq.${currentUserId},to_user.eq.${currentUserId}`);
+        await supabaseClient.from('confessions').delete().eq('user_id', currentUserId);
+        await supabaseClient.from('confession_comments').delete().eq('user_id', currentUserId);
+        await supabaseClient.from('study_materials').delete().eq('uploaded_by', currentUserId);
+        
+        const { data: files } = await supabaseClient.storage.from('avatars').list(currentUserId);
+        if (files && files.length > 0) {
+          for (const file of files) {
+            await supabaseClient.storage.from('avatars').remove([`${currentUserId}/${file.name}`]);
+          }
+        }
+        
+        const { data: voiceFiles } = await supabaseClient.storage.from('chat_voice').list(currentUserId);
+        if (voiceFiles && voiceFiles.length > 0) {
+          for (const file of voiceFiles) {
+            await supabaseClient.storage.from('chat_voice').remove([`${currentUserId}/${file.name}`]);
+          }
+        }
+        
+        await supabaseClient.from('profiles').delete().eq('id', currentUserId);
+        await supabaseClient.auth.signOut();
+        localStorage.clear();
+        
+        alert('✅ Your account has been permanently deleted.');
+        window.location.href = 'index.html';
+        
+      } catch (err) {
+        console.error('Delete error:', err);
+        showToast('❌ Failed to delete account: ' + err.message);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete My Account';
+      }
+    }
+
+    async function saveProfile() {
+      const saveBtn = document.getElementById('saveBtn');
+      const name = document.getElementById('editName').value.trim();
+      const age = parseInt(document.getElementById('editAge').value);
+      const location = document.getElementById('editLocation').value.trim();
+      const bio = document.getElementById('editBio').value.trim();
+      const category = document.getElementById('editCategory').value;
+      const looking_for = document.getElementById('editLookingFor').value;
+      const interests = getSelectedInterests();
+
+      if (!name) { showToast('❌ Name is required'); return; }
+      if (age && (age < 14 || age > 30)) { showToast('❌ Please enter a valid age'); return; }
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+
+      const updates = { name, age: age || null, location, bio, category, looking_for, interests };
+      if (newAvatarUrl) updates.avatar_url = newAvatarUrl;
+
+      const { error } = await supabaseClient.from('profiles').update(updates).eq('id', currentUserId);
+
+      if (error) {
+        showToast('❌ Failed to save. Try again.');
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Changes';
+        return;
+      }
+
+      currentProfile = { ...currentProfile, ...updates };
+
+      const fields = [currentProfile.name, currentProfile.age, currentProfile.gender,
+        currentProfile.category, currentProfile.location,
+        currentProfile.interests && currentProfile.interests.length >= 3];
+      const completion = Math.round(fields.filter(Boolean).length / fields.length * 100);
+
+      const { data: likes } = await supabaseClient.from('likes').select('*').eq('from_user', currentUserId);
+      const { data: myLikes } = await supabaseClient.from('likes').select('to_user').eq('from_user', currentUserId);
+      let matchCount = 0;
+      if (myLikes && myLikes.length > 0) {
+        const likedIds = myLikes.map(l => l.to_user);
+        const { data: mutual } = await supabaseClient.from('likes').select('*').eq('to_user', currentUserId).in('from_user', likedIds);
+        matchCount = mutual ? mutual.length : 0;
+      }
+      const { data: msgs } = await supabaseClient.from('messages').select('*').eq('from_user', currentUserId);
+
+      render(currentProfile, likes?.length || 0, matchCount, msgs?.length || 0, completion);
+      closeEdit();
+      showToast('✅ Profile saved successfully!');
+
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Changes';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    async function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        await supabaseClient.auth.signOut();
+        localStorage.clear();
+        window.location.href = 'index.html';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+
+    <!-- Feedback Modal -->
+<div id="feedbackModal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 500px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3 style="font-size: 1.3rem;"><i class="fas fa-comment-dots"></i> Send Feedback</h3>
+      <button onclick="closeFeedbackModal()" style="background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.5rem; cursor: pointer;">&times;</button>
+    </div>
+    <p style="color: rgba(255,255,255,0.5); margin-bottom: 20px;">Help us improve EntranceHearts! Share your thoughts, report bugs, or suggest features.</p>
+    
+    <div class="form-group">
+      <label>Feedback Type</label>
+      <select id="feedbackType" class="field-input">
+        <option value="general">💬 General Feedback</option>
+        <option value="bug">🐛 Bug Report</option>
+        <option value="feature">✨ Feature Request</option>
+        <option value="complaint">😞 Complaint / Issue</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Rating (Optional)</label>
+      <div style="display: flex; gap: 10px; margin-top: 5px;">
+        <button type="button" class="rating-star" data-rating="1">⭐</button>
+        <button type="button" class="rating-star" data-rating="2">⭐</button>
+        <button type="button" class="rating-star" data-rating="3">⭐</button>
+        <button type="button" class="rating-star" data-rating="4">⭐</button>
+        <button type="button" class="rating-star" data-rating="5">⭐</button>
+      </div>
+      <input type="hidden" id="feedbackRating" value="0">
+    </div>
+    
+    <div class="form-group">
+      <label>Your Message</label>
+      <textarea id="feedbackMessage" class="field-input" rows="5" placeholder="Tell us what you think... (min 10 characters)"></textarea>
+    </div>
+    
+    <div style="display: flex; gap: 12px; margin-top: 10px;">
+      <button onclick="submitFeedback()" class="submit-btn" style="flex: 1;">Send Feedback</button>
+      <button onclick="closeFeedbackModal()" class="back-btn" style="flex: 1;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+      // Feedback Modal Functions
+function openFeedbackModal() {
+  document.getElementById('feedbackModal').classList.add('active');
+  document.getElementById('feedbackMessage').value = '';
+  document.getElementById('feedbackType').value = 'general';
+  document.getElementById('feedbackRating').value = '0';
+  // Reset star ratings
+  document.querySelectorAll('.rating-star').forEach(star => {
+    star.style.opacity = '0.5';
+  });
+}
+
+function closeFeedbackModal() {
+  document.getElementById('feedbackModal').classList.remove('active');
+}
+
+// Star rating handler
+document.querySelectorAll('.rating-star').forEach(star => {
+  star.addEventListener('click', () => {
+    const rating = parseInt(star.dataset.rating);
+    document.getElementById('feedbackRating').value = rating;
+    document.querySelectorAll('.rating-star').forEach((s, index) => {
+      s.style.opacity = index < rating ? '1' : '0.5';
+    });
+  });
+});
+
+async function submitFeedback() {
+  const type = document.getElementById('feedbackType').value;
+  const rating = parseInt(document.getElementById('feedbackRating').value);
+  const message = document.getElementById('feedbackMessage').value.trim();
+  
+  if (!message) {
+    showToast('Please enter your feedback message');
+    return;
+  }
+  
+  if (message.length < 10) {
+    showToast('Please write at least 10 characters');
+    return;
+  }
+  
+  const btn = event.target;
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  
+  try {
+    const { data: userData } = await supabaseClient.auth.getUser();
+    const user = userData.user;
+    
+    // Get user profile to get name
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('name')
+      .eq('id', user.id)
+      .single();
+    
+    const { error } = await supabaseClient
+      .from('feedback')
+      .insert({
+        user_id: user.id,
+        user_name: profile?.name || 'Anonymous',
+        user_email: user.email,
+        type: type,
+        message: message,
+        rating: rating || null
+      });
+    
+    if (error) throw error;
+    
+    showToast('✅ Thank you for your feedback!');
+    closeFeedbackModal();
+    
+  } catch (err) {
+    console.error('Feedback error:', err);
+    showToast('❌ Failed to send feedback. Please try again.');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = originalText;
+}
+    
+
+
+    
+    // Mobile Menu
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.onclick = () => {
+        mobileMenu.classList.toggle('open');
+        menuBtn.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+      };
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+          mobileMenu.classList.remove('open');
+          menuBtn.textContent = '☰';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (navbar && window.scrollY > 50) navbar.classList.add('scrolled');
+      else if (navbar) navbar.classList.remove('scrolled');
+    });
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Study Segment 📚 - EntranceHearts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #ffffff;
+    }
+
+    /* Premium Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 18px 32px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 20, 147, 0.2);
+      transition: all 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar.scrolled {
+      padding: 12px 32px;
+      background: rgba(10, 10, 15, 0.95);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 100px;
+      transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+    }
+    .back-btn:hover {
+      background: rgba(255, 20, 147, 0.15);
+      color: #FF6B9D;
+      transform: translateX(-3px);
+    }
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(255, 20, 147, 0.15), rgba(255, 107, 157, 0.05));
+      border-bottom: 1px solid rgba(255, 20, 147, 0.15);
+      padding: 120px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,20,147,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero-banner h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    .hero-banner p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 24px;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat .number {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-stat .label {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 100px;
+    }
+    
+    /* Category Tabs */
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cat-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      padding: 10px 24px;
+      border-radius: 100px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cat-btn i { margin-right: 6px; }
+    .cat-btn.active {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+    }
+    .cat-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* Upload Section */
+    .upload-section {
+      background: #141423;
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 28px;
+      padding: 28px;
+      margin-bottom: 30px;
+      transition: all 0.3s;
+    }
+    .upload-section:hover {
+      border-color: rgba(255, 20, 147, 0.4);
+    }
+    .upload-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #FF6B9D;
+    }
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .form-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .form-row input, .form-row select, .form-row textarea {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-row textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      border-color: #FF1493;
+      background: rgba(255, 20, 147, 0.05);
+    }
+    
+    .file-input-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed rgba(255, 20, 147, 0.3);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .file-input-wrapper:hover {
+      background: rgba(255, 20, 147, 0.05);
+      border-color: #FF1493;
+    }
+    .file-input-wrapper i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      display: block;
+      color: #FF6B9D;
+    }
+    .file-input-wrapper input { display: none; }
+    .selected-file {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 10px;
+    }
+    .upload-btn {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      border: none;
+      padding: 14px;
+      border-radius: 100px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
+    }
+    
+    /* Sort Section */
+    .sort-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .sort-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .sort-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .sort-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .sort-btn.active {
+      background: linear-gradient(135deg, #FF1493, #FF6B9D);
+      color: white;
+      border-color: transparent;
+    }
+    
+    .category-stats {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 20, 147, 0.1);
+    }
+    
+    /* Materials Grid */
+    .materials-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .material-card {
+      background: #141423;
+      border: 1px solid rgba(255, 20, 147, 0.15);
+      border-radius: 24px;
+      padding: 22px;
+      transition: all 0.3s;
+    }
+    .material-card:hover {
+      border-color: rgba(255, 20, 147, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .material-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .material-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FF6B9D;
+    }
+    .material-badge {
+      background: rgba(255, 20, 147, 0.12);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      color: #FF6B9D;
+    }
+    .material-description {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .material-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 15px;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .material-meta i { margin-right: 4px; }
+    .download-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.2);
+      padding: 8px 20px;
+      border-radius: 100px;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .download-btn:hover {
+      background: #FF1493;
+      border-color: #FF1493;
+      transform: translateY(-2px);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: #141423;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 20, 147, 0.15);
+    }
+    .empty-state i {
+      font-size: 3rem;
+      color: #FF6B9D;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .empty-state p {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #141423;
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      z-index: 200;
+      display: none;
+    }
+    .toast.show {
+      display: block;
+      animation: fadeUp 0.3s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Premium Navbar (Admin Button Removed) -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-left">
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      <div class="logo">📚 Study Segment</div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <div class="hero-icon">📚✨</div>
+    <h1>Study Material Library</h1>
+    <p>Share and download notes, past questions, and study resources for CEE, IOE, +2 & Management</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="number" id="totalMaterials">0</div><div class="label">Materials</div></div>
+      <div class="hero-stat"><div class="number" id="totalDownloads">0</div><div class="label">Downloads</div></div>
+      <div class="hero-stat"><div class="number" id="totalContributors">0</div><div class="label">Contributors</div></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      <button class="cat-btn active" data-cat="all"><i class="fas fa-layer-group"></i> All</button>
+      <button class="cat-btn" data-cat="CEE"><i class="fas fa-stethoscope"></i> CEE (MBBS)</button>
+      <button class="cat-btn" data-cat="IOE"><i class="fas fa-microchip"></i> IOE (Engineering)</button>
+      <button class="cat-btn" data-cat="+2"><i class="fas fa-flask"></i> +2 (Science)</button>
+      <button class="cat-btn" data-cat="Management"><i class="fas fa-chart-line"></i> Management</button>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="upload-section">
+      <div class="upload-title"><i class="fas fa-cloud-upload-alt"></i> Share Your Study Material</div>
+      <div class="upload-form">
+        <div class="form-row">
+          <input type="text" id="materialTitle" placeholder="Title (e.g., Physics Notes - Unit 1)">
+          <select id="materialCategory">
+            <option value="CEE">🏥 CEE (MBBS)</option>
+            <option value="IOE">⚙️ IOE (Engineering)</option>
+            <option value="+2">📖 +2 (Science)</option>
+            <option value="Management">💼 Management</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <textarea id="materialDesc" placeholder="Description (what's included, which chapter, etc.)"></textarea>
+        </div>
+        <div class="file-input-wrapper" onclick="document.getElementById('fileInput').click()">
+          <i class="fas fa-file-upload"></i>
+          <div>Click to upload file</div>
+          <div style="font-size: 0.7rem; margin-top: 5px;">PDF, DOC, PPT, JPG, PNG (Max 10MB)</div>
+          <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png">
+        </div>
+        <div id="selectedFileName" class="selected-file">No file selected</div>
+        <button class="upload-btn" onclick="uploadMaterial()"><i class="fas fa-share"></i> Share Material</button>
+      </div>
+    </div>
+
+    <!-- Sort Options -->
+    <div class="sort-section">
+      <span class="sort-label"><i class="fas fa-sort"></i> Sort by:</span>
+      <div class="sort-buttons">
+        <button class="sort-btn active" data-sort="newest">📅 Newest First</button>
+        <button class="sort-btn" data-sort="oldest">📅 Oldest First</button>
+        <button class="sort-btn" data-sort="downloads">⬇️ Most Downloads</button>
+      </div>
+    </div>
+
+    <div id="categoryStats" class="category-stats"></div>
+    <div id="materialsGrid" class="materials-grid"></div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let materials = [];
+    let currentCategory = "all";
+    let currentSort = "newest";
+    let currentUserId = null;
+    let currentFile = null;
+
+    // Get file icon based on type
+    function getFileIcon(fileName) {
+      const ext = fileName?.split('.').pop()?.toLowerCase() || '';
+      if (ext === 'pdf') return '<i class="fas fa-file-pdf" style="color: #ff4444;"></i>';
+      if (ext === 'doc' || ext === 'docx') return '<i class="fas fa-file-word" style="color: #2b579a;"></i>';
+      if (ext === 'ppt' || ext === 'pptx') return '<i class="fas fa-file-powerpoint" style="color: #d35230;"></i>';
+      if (ext === 'jpg' || ext === 'jpeg' || ext === 'png') return '<i class="fas fa-file-image" style="color: #4caf50;"></i>';
+      if (ext === 'txt') return '<i class="fas fa-file-alt" style="color: #ff9800;"></i>';
+      return '<i class="fas fa-file"></i>';
+    }
+
+    async function init() {
+      const { data } = await supabaseClient.auth.getSession();
+      if (!data.session) { window.location.href = 'login.html'; return; }
+      currentUserId = data.session.user.id;
+
+      
+  // ✅ ADD THIS LINE - Fix back button
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.href = 'browse.html';
+  
+  await loadMaterials();
+    }
+  
+
+    async function loadMaterials() {
+      const { data, error } = await supabaseClient
+        .from('study_materials')
+        .select('*, profiles(name)')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error loading materials:', error);
+        showToast('Failed to load materials');
+        return;
+      }
+      
+      materials = data || [];
+      updateStats();
+      renderMaterials();
+    }
+
+    function updateStats() {
+      const uniqueContributors = [...new Set(materials.map(m => m.uploaded_by))];
+      const totalDownloads = materials.reduce((sum, m) => sum + (m.downloads || 0), 0);
+      document.getElementById('totalMaterials').innerText = materials.length;
+      document.getElementById('totalDownloads').innerText = totalDownloads;
+      document.getElementById('totalContributors').innerText = uniqueContributors.length;
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      currentFile = e.target.files[0];
+      if (currentFile) {
+        const sizeMB = (currentFile.size / (1024 * 1024)).toFixed(2);
+        document.getElementById('selectedFileName').innerHTML = `<i class="fas fa-check-circle" style="color:#4caf50;"></i> ${currentFile.name} (${sizeMB} MB)`;
+      } else {
+        document.getElementById('selectedFileName').innerHTML = "No file selected";
+      }
+    });
+
+    async function uploadMaterial() {
+      const title = document.getElementById('materialTitle').value.trim();
+      const category = document.getElementById('materialCategory').value;
+      const description = document.getElementById('materialDesc').value.trim();
+
+      if (!title) { showToast('Please enter a title'); return; }
+      if (!description) { showToast('Please enter a description'); return; }
+      if (!currentFile) { showToast('Please select a file to upload'); return; }
+
+      if (currentFile.size > 10 * 1024 * 1024) {
+        showToast('File too large! Max 10MB');
+        return;
+      }
+
+      const btn = document.querySelector('.upload-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+      try {
+        // Upload file to storage
+        const fileExt = currentFile.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 6)}.${fileExt}`;
+        const filePath = `${currentUserId}/${fileName}`;
+
+        const { error: uploadError } = await supabaseClient.storage
+          .from('study_files')
+          .upload(filePath, currentFile);
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: urlData } = supabaseClient.storage
+          .from('study_files')
+          .getPublicUrl(filePath);
+
+        // Save to database
+        const { error: dbError } = await supabaseClient
+          .from('study_materials')
+          .insert({
+            title: title,
+            category: category,
+            description: description,
+            file_name: currentFile.name,
+            file_url: urlData.publicUrl,
+            file_type: fileExt,
+            uploaded_by: currentUserId,
+            downloads: 0
+          });
+
+        if (dbError) throw dbError;
+
+        // Clear form
+        document.getElementById('materialTitle').value = '';
+        document.getElementById('materialDesc').value = '';
+        document.getElementById('fileInput').value = '';
+        document.getElementById('selectedFileName').innerHTML = "No file selected";
+        currentFile = null;
+
+        showToast('✅ Material uploaded successfully!');
+        await loadMaterials();
+
+      } catch (err) {
+        console.error('Upload error:', err);
+        showToast('❌ Upload failed: ' + err.message);
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-share"></i> Share Material';
+    }
+
+    async function downloadMaterial(id, fileUrl, fileName) {
+      try {
+        // Update download count
+        await supabaseClient.rpc('increment_downloads', { material_id: id });
+        
+        // Open download link
+        window.open(fileUrl, '_blank');
+        showToast(`📥 Downloading: ${fileName}`);
+        
+        // Refresh to update download count
+        await loadMaterials();
+      } catch(err) {
+        showToast('Download failed');
+      }
+    }
+
+      function renderMaterials() {
+      const container = document.getElementById('materialsGrid');
+      let filtered = materials;
+      
+      if (currentCategory !== "all") {
+        filtered = materials.filter(m => m.category === currentCategory);
+      }
+      
+      // Sort
+      if (currentSort === "newest") {
+        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      } else if (currentSort === "oldest") {
+        filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      } else if (currentSort === "downloads") {
+        filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+      }
+      
+      const categoryNames = {
+        'all': 'All Categories',
+        'CEE': '🏥 CEE (MBBS)',
+        'IOE': '⚙️ IOE (Engineering)',
+        '+2': '📖 +2 (Science)',
+        'Management': '💼 Management'
+      };
+      document.getElementById('categoryStats').innerHTML = `📚 ${categoryNames[currentCategory]} • ${filtered.length} ${filtered.length === 1 ? 'material' : 'materials'}`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><p>No study materials yet. Be the first to share!</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => `
+        <div class="material-card">
+          <div class="material-header">
+            <div class="material-title">${getFileIcon(m.file_name)} ${escapeHtml(m.title)}</div>
+            <span class="material-badge">${m.category}</span>
+          </div>
+          <div class="material-description">${escapeHtml(m.description)}</div>
+          <div class="material-meta">
+            <span><i class="fas fa-user"></i> ${m.profiles?.name || 'Anonymous'} • <i class="far fa-clock"></i> ${formatDate(m.created_at)}</span>
+            <span><i class="fas fa-download"></i> ${m.downloads || 0} downloads</span>
+          </div>
+          <button class="download-btn" onclick="downloadMaterial(${m.id}, '${m.file_url}', '${m.file_name}')">
+            <i class="fas fa-download"></i> Download ${m.file_name}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = Math.floor((now - date) / 86400000);
+      if (diff === 0) return 'Today';
+      if (diff === 1) return 'Yesterday';
+      if (diff < 7) return `${diff} days ago`;
+      return date.toLocaleDateString();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Category filter
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.cat;
+        renderMaterials();
+      });
+    });
+
+    // Sort filter
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentSort = btn.dataset.sort;
+        renderMaterials();
+      });
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (navbar && window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else if (navbar) {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

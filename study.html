@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Study Library 📚 — EntranceHearts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://dzfrwjuugeqzsxrykgjc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6ZnJ3anV1Z2VxenN4cnlrZ2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzc3MzQsImV4cCI6MjA5MzcxMzczNH0.ahwhlTxsd9v69hVskZv6j34jZDRktEcv6by4kwLkuNQ';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-track{background:rgba(255,255,255,0.04);}
+    ::-webkit-scrollbar-thumb{background:#FF1493;border-radius:10px;}
+
+    /* ── BACKGROUND ── */
+    .bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+    .bg-glow::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,20,147,0.05) 0%,transparent 70%);top:-150px;left:-150px;animation:glowDrift 30s ease-in-out infinite;}
+    .bg-glow::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,20,147,0.04) 0%,transparent 70%);bottom:-100px;right:-100px;animation:glowDrift2 35s ease-in-out infinite;}
+    @keyframes glowDrift{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
+    @keyframes glowDrift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-60px)}}
+
+    /* ── NAVBAR ── */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 24px;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,20,147,0.15);transition:all 0.3s;}
+    .navbar.scrolled{padding:10px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.4);}
+    .nav-container{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+    .logo{font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,#FF1493,#FF6B9D);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;}
+    .desktop-nav{display:flex;gap:6px;align-items:center;}
+    .btn-ghost-nav{color:rgba(255,255,255,0.62);padding:7px 13px;border-radius:100px;text-decoration:none;font-size:0.82rem;font-weight:500;transition:all 0.2s;}
+    .btn-ghost-nav:hover{color:#FF6B9D;background:rgba(255,20,147,0.08);}
+    .btn-primary-nav{background:linear-gradient(135deg,#FF1493,#FF6B9D);color:white;padding:7px 18px;border-radius:100px;text-decoration:none;font-size:0.82rem;font-weight:600;transition:all 0.2s;}
+    .btn-primary-nav:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(255,20,147,0.3);}
+    .mobile-menu-btn{display:none;background:rgba(255,20,147,0.1);border:1px solid rgba(255,20,147,0.25);border-radius:10px;padding:8px 12px;color:#FF6B9D;cursor:pointer;font-size:1rem;transition:all 0.2s;}
+    @media(max-width:768px){.desktop-nav{display:none;}.mobile-menu-btn{display:block;}}
+    .mobile-menu{position:fixed;top:62px;right:-100%;width:265px;background:#13131f;backdrop-filter:blur(20px);border:1px solid rgba(255,20,147,0.2);border-radius:20px;padding:14px;z-index:999;transition:right 0.3s ease;box-shadow:0 20px 50px rgba(0,0,0,0.5);}
+    .mobile-menu.open{right:16px;}
+    .mobile-menu-item{display:block;padding:10px 14px;color:rgba(255,255,255,0.85);text-decoration:none;border-radius:12px;font-size:0.85rem;transition:all 0.2s;}
+    .mobile-menu-item:hover{background:rgba(255,20,147,0.1);color:#FF6B9D;}
+    .menu-divider{height:1px;background:rgba(255,255,255,0.06);margin:6px 0;}
+
+    /* ── HERO ── */
+    .hero{position:relative;z-index:1;padding:100px 24px 44px;text-align:center;}
+    .hero-icon{font-size:2.8rem;margin-bottom:14px;display:inline-block;animation:gentleFloat 3s ease-in-out infinite;}
+    @keyframes gentleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+    .hero h1{font-size:1.9rem;font-weight:800;background:linear-gradient(135deg,#FF1493,#FF6B9D);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+    .hero p{color:rgba(255,255,255,0.45);font-size:0.88rem;max-width:500px;margin:0 auto;}
+    .stats-row{display:flex;justify-content:center;gap:36px;margin-top:22px;}
+    .stat{text-align:center;}
+    .stat-number{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#FF1493,#FF6B9D);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+    .stat-label{font-size:0.68rem;color:rgba(255,255,255,0.38);}
+
+    /* ── LIVE BADGE ── */
+    .live-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,20,147,0.1);border:1px solid rgba(255,20,147,0.25);color:#FF6B9D;font-size:0.65rem;font-weight:600;padding:3px 10px;border-radius:50px;margin-top:12px;}
+    .live-dot{width:5px;height:5px;border-radius:50%;background:#FF1493;animation:blink 1s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+    /* ── CONTAINER ── */
+    .container{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:24px 20px 110px;}
+
+    /* ── SEARCH BAR ── */
+    .search-wrap{position:relative;margin-bottom:20px;}
+    .search-input{width:100%;background:rgba(18,18,26,0.9);border:1px solid rgba(255,20,147,0.18);border-radius:16px;padding:13px 16px 13px 46px;color:white;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.2s;}
+    .search-input:focus{border-color:#FF1493;background:rgba(255,20,147,0.04);}
+    .search-input::placeholder{color:rgba(255,255,255,0.25);}
+    .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:0.9rem;}
+    .search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;display:none;}
+    .search-clear.show{display:block;}
+
+    /* ── TABS (Category) ── */
+    .tabs-wrap{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
+    .tabs-wrap::-webkit-scrollbar{height:2px;}
+    .tabs-wrap::-webkit-scrollbar-thumb{background:#FF1493;border-radius:10px;}
+    .cat-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,20,147,0.15);padding:8px 18px;border-radius:100px;color:rgba(255,255,255,0.6);font-size:0.78rem;font-weight:600;white-space:nowrap;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+    .cat-btn:hover{transform:translateY(-2px);border-color:rgba(255,20,147,0.35);}
+    .cat-btn.active{background:linear-gradient(135deg,#FF1493,#FF6B9D);border-color:transparent;color:white;box-shadow:0 4px 14px rgba(255,20,147,0.3);}
+
+    /* ── SUBJECT TAGS ── */
+    .subject-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px;}
+    .subj-tag{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:5px 13px;border-radius:50px;color:rgba(255,255,255,0.5);font-size:0.72rem;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+    .subj-tag:hover{border-color:rgba(255,20,147,0.3);color:#FF6B9D;}
+    .subj-tag.active{background:rgba(255,20,147,0.12);border-color:rgba(255,20,147,0.4);color:#FF6B9D;font-weight:600;}
+
+    /* ── SORT BAR ── */
+    .sort-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+    .sort-label{font-size:0.78rem;color:rgba(255,255,255,0.38);}
+    .sort-buttons{display:flex;gap:7px;}
+    .sort-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,20,147,0.15);padding:6px 14px;border-radius:100px;font-size:0.72rem;cursor:pointer;transition:all 0.2s;color:rgba(255,255,255,0.55);font-family:'Inter',sans-serif;}
+    .sort-btn.active{background:linear-gradient(135deg,#FF1493,#FF6B9D);color:white;border-color:transparent;}
+
+    /* ── VIEW TOGGLE ── */
+    .view-toggle{display:flex;gap:6px;}
+    .view-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,20,147,0.15);width:34px;height:34px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,0.45);display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:all 0.2s;}
+    .view-btn.active{background:rgba(255,20,147,0.15);border-color:#FF1493;color:#FF1493;}
+
+    /* ── UPLOAD SECTION ── */
+    .upload-section{background:rgba(18,18,26,0.92);border:1px solid rgba(255,20,147,0.15);border-radius:24px;padding:24px;margin-bottom:24px;transition:border-color 0.2s;display:none;}
+    .upload-section.visible{display:block;animation:fadeInUp 0.4s ease;}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .upload-section:focus-within{border-color:rgba(255,20,147,0.35);}
+    .upload-title{font-size:1rem;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;color:#FF6B9D;}
+    .upload-form{display:flex;flex-direction:column;gap:14px;}
+    .form-row{display:flex;gap:12px;flex-wrap:wrap;}
+    .form-row input,.form-row select,.form-row textarea{flex:1;min-width:200px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,20,147,0.18);border-radius:14px;padding:12px 14px;color:white;font-family:'Inter',sans-serif;font-size:0.85rem;outline:none;transition:all 0.2s;}
+    .form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:#FF1493;background:rgba(255,20,147,0.04);}
+    .form-row input::placeholder,.form-row textarea::placeholder{color:rgba(255,255,255,0.22);}
+    .form-row select option{background:#13131f;}
+    .form-row textarea{resize:none;min-height:80px;line-height:1.5;}
+
+    /* File drop zone */
+    .file-drop{background:rgba(255,255,255,0.02);border:2px dashed rgba(255,20,147,0.22);border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
+    .file-drop.drag-over{background:rgba(255,20,147,0.06);border-color:#FF1493;}
+    .file-drop.has-file{background:rgba(255,20,147,0.05);border-color:rgba(255,20,147,0.4);border-style:solid;}
+    .file-drop i{font-size:1.8rem;color:#FF6B9D;margin-bottom:8px;display:block;}
+    .file-drop-text{font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:4px;}
+    .file-drop-hint{font-size:0.68rem;color:rgba(255,255,255,0.28);}
+    .file-selected-info{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:#4ade80;}
+
+    /* Subject tag picker */
+    .tag-picker{display:flex;gap:7px;flex-wrap:wrap;}
+    .tag-pick-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:5px 13px;border-radius:50px;color:rgba(255,255,255,0.5);font-size:0.72rem;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+    .tag-pick-btn.selected{background:rgba(255,20,147,0.15);border-color:#FF1493;color:#FF6B9D;font-weight:600;}
+
+    .upload-btn{background:linear-gradient(135deg,#FF1493,#FF6B9D);border:none;padding:13px;border-radius:100px;color:white;font-size:0.92rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .upload-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,20,147,0.3);}
+    .upload-btn:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+
+    /* Progress bar */
+    .upload-progress{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:8px;overflow:hidden;display:none;}
+    .upload-progress.show{display:block;}
+    .progress-fill{height:100%;background:linear-gradient(135deg,#FF1493,#FF6B9D);border-radius:2px;width:0%;transition:width 0.3s ease;}
+
+    /* Login prompt */
+    .login-prompt{background:rgba(255,20,147,0.06);border:1px solid rgba(255,20,147,0.18);border-radius:20px;padding:24px;text-align:center;margin-bottom:24px;}
+    .login-prompt i{font-size:1.8rem;color:#FF6B9D;margin-bottom:10px;display:block;}
+    .login-prompt p{color:rgba(255,255,255,0.55);font-size:0.85rem;margin-bottom:14px;}
+    .login-prompt a{background:linear-gradient(135deg,#FF1493,#FF6B9D);color:white;padding:9px 22px;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.83rem;display:inline-block;}
+
+    /* ── TAB NAV (Browse / My Uploads) ── */
+    .page-tabs{display:flex;gap:4px;background:rgba(18,18,26,0.9);border:1px solid rgba(255,20,147,0.12);border-radius:14px;padding:4px;margin-bottom:20px;}
+    .page-tab{flex:1;padding:9px;border-radius:10px;border:none;background:transparent;color:rgba(255,255,255,0.45);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+    .page-tab.active{background:linear-gradient(135deg,#FF1493,#FF6B9D);color:white;box-shadow:0 2px 8px rgba(255,20,147,0.3);}
+
+    /* ── MATERIALS GRID ── */
+    .materials-grid{display:flex;flex-direction:column;gap:14px;}
+    .materials-grid.grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+
+    .material-card{background:rgba(18,18,26,0.92);border:1px solid rgba(255,20,147,0.1);border-radius:22px;padding:20px;transition:all 0.25s;animation:cardIn 0.4s ease;}
+    @keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .material-card:hover{border-color:rgba(255,20,147,0.32);transform:translateY(-4px);box-shadow:0 12px 30px rgba(255,20,147,0.07);}
+
+    .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px;}
+    .card-icon-title{display:flex;align-items:flex-start;gap:12px;flex:1;min-width:0;}
+    .file-icon-wrap{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+    .file-icon-pdf{background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.2);}
+    .file-icon-doc{background:rgba(43,87,154,0.15);border:1px solid rgba(43,87,154,0.25);}
+    .file-icon-ppt{background:rgba(211,82,48,0.12);border:1px solid rgba(211,82,48,0.2);}
+    .file-icon-img{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);}
+    .file-icon-txt{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);}
+    .card-title-wrap{flex:1;min-width:0;}
+    .card-title{font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:4px;word-break:break-word;line-height:1.3;}
+    .card-badges{display:flex;gap:6px;flex-wrap:wrap;}
+    .badge{padding:2px 10px;border-radius:50px;font-size:0.62rem;font-weight:600;}
+    .badge-cat{background:rgba(255,20,147,0.12);color:#FF6B9D;border:1px solid rgba(255,20,147,0.2);}
+    .badge-subj{background:rgba(96,165,250,0.1);color:#60a5fa;border:1px solid rgba(96,165,250,0.2);}
+    .card-desc{font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:12px;}
+    .card-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:0.68rem;color:rgba(255,255,255,0.35);margin-bottom:14px;}
+    .card-meta i{margin-right:3px;color:rgba(255,20,147,0.5);}
+    .card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .download-btn{background:linear-gradient(135deg,#FF1493,#FF6B9D);border:none;padding:8px 18px;border-radius:50px;color:white;font-size:0.75rem;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+    .download-btn:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(255,20,147,0.3);}
+    .comment-toggle-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:7px 14px;border-radius:50px;color:rgba(255,255,255,0.5);font-size:0.72rem;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;}
+    .comment-toggle-btn:hover{border-color:rgba(255,20,147,0.3);color:#FF6B9D;}
+    .admin-del-btn{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.2);padding:7px 12px;border-radius:50px;color:#ff4444;font-size:0.72rem;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;display:none;}
+    .admin-del-btn:hover{background:rgba(255,68,68,0.2);}
+    .admin-del-btn.show{display:flex;align-items:center;gap:5px;}
+
+    /* ── COMMENTS SECTION ── */
+    .comments-section{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,20,147,0.08);display:none;}
+    .comments-section.open{display:block;}
+    .comment-form{display:flex;gap:8px;margin-bottom:12px;}
+    .comment-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,20,147,0.15);border-radius:50px;padding:9px 16px;color:white;font-size:0.78rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;}
+    .comment-input:focus{border-color:#FF1493;}
+    .comment-input::placeholder{color:rgba(255,255,255,0.22);}
+    .comment-send-btn{background:linear-gradient(135deg,#FF1493,#FF6B9D);border:none;padding:8px 16px;border-radius:50px;color:white;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;}
+    .comment-item{background:rgba(255,255,255,0.03);border-radius:14px;padding:10px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;}
+    .comment-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#FF1493,#FF6B9D);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+    .comment-body{flex:1;min-width:0;}
+    .comment-author{font-size:0.68rem;font-weight:700;color:#FF6B9D;margin-bottom:2px;}
+    .comment-text{font-size:0.75rem;color:rgba(255,255,255,0.72);line-height:1.4;word-break:break-word;}
+    .comment-time{font-size:0.58rem;color:rgba(255,255,255,0.28);margin-top:3px;}
+    .no-comments{font-size:0.72rem;color:rgba(255,255,255,0.28);text-align:center;padding:10px;}
+    .comments-login-prompt{font-size:0.75rem;color:rgba(255,255,255,0.35);text-align:center;padding:8px;}
+    .comments-login-prompt a{color:#FF6B9D;text-decoration:none;font-weight:600;}
+
+    /* ── SKELETON ── */
+    .skel{background:rgba(255,255,255,0.05);border-radius:10px;animation:skelPulse 1.5s ease-in-out infinite;}
+    @keyframes skelPulse{0%,100%{opacity:0.4}50%{opacity:0.8}}
+    .skel-card{background:rgba(18,18,26,0.9);border:1px solid rgba(255,20,147,0.07);border-radius:22px;padding:20px;}
+
+    /* ── EMPTY ── */
+    .empty-state{text-align:center;padding:60px 20px;background:rgba(18,18,26,0.88);border-radius:22px;border:1px solid rgba(255,20,147,0.08);}
+    .empty-state i{font-size:2.5rem;color:#FF6B9D;margin-bottom:14px;display:block;opacity:0.5;}
+    .empty-state p{color:rgba(255,255,255,0.42);font-size:0.85rem;}
+
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:#13131f;border:1px solid rgba(255,20,147,0.3);padding:10px 22px;border-radius:50px;font-size:0.8rem;z-index:9999;display:none;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.5);}
+    .toast.show{display:block;animation:toastIn 0.25s ease;}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+    /* ── SCROLL TO TOP ── */
+    .scroll-top{position:fixed;bottom:80px;right:18px;z-index:500;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#FF1493,#FF6B9D);border:none;color:white;font-size:1rem;cursor:pointer;box-shadow:0 4px 16px rgba(255,20,147,0.4);opacity:0;transform:translateY(14px);transition:all 0.3s;pointer-events:none;display:flex;align-items:center;justify-content:center;}
+    .scroll-top.visible{opacity:1;transform:translateY(0);pointer-events:all;}
+    .scroll-top:hover{transform:translateY(-3px);}
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,20,147,0.1);display:flex;justify-content:space-around;padding:8px 0 18px;z-index:100;}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.6rem;font-weight:600;padding:5px 12px;border-radius:30px;transition:all 0.2s;}
+    .nav-item span:first-child{font-size:1.2rem;}
+    .nav-item:hover,.nav-item.active{color:#FF6B9D;}
+
+    .back-footer{text-align:center;margin-top:20px;padding-bottom:10px;}
+    .back-btn-footer{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,20,147,0.18);border-radius:40px;padding:8px 22px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.8rem;font-weight:500;transition:all 0.2s;}
+    .back-btn-footer:hover{background:rgba(255,20,147,0.08);border-color:#FF6B9D;color:#FF6B9D;transform:translateX(-3px);}
+
+    /* ── REVEAL ── */
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px){
+      .hero h1{font-size:1.5rem;}
+      .stats-row{gap:22px;}
+      .form-row input,.form-row select{min-width:100%;}
+      .materials-grid.grid-view{grid-template-columns:1fr;}
+    }
+    @media(max-width:480px){
+      .hero{padding:80px 16px 30px;}
+      .container{padding:16px 14px 110px;}
+      .sort-bar{flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+  <div class="toast" id="toast"></div>
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">📚 Study Library</a>
+      <div class="desktop-nav">
+        <a href="browse.html" class="btn-ghost-nav">🔥 Discover</a>
+        <a href="chat.html" class="btn-ghost-nav">💬 Chats</a>
+        <a href="confessions.html" class="btn-ghost-nav">💌 Confessions</a>
+        <a href="study.html" class="btn-ghost-nav" style="color:#FF6B9D;">📚 Study</a>
+        <a href="timer.html" class="btn-ghost-nav">⏱️ Timer</a>
+        <a href="ai-match.html" class="btn-ghost-nav">🤖 AI Match</a>
+        <a href="admin.html" class="btn-ghost-nav" id="adminBtn" style="display:none;">👑 Admin</a>
+        <a href="profile.html" class="btn-primary-nav">👤 Profile</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="browse.html" class="mobile-menu-item">🔥 Discover</a>
+    <a href="chat.html" class="mobile-menu-item">💬 Chats</a>
+    <a href="confessions.html" class="mobile-menu-item">💌 Confessions</a>
+    <a href="study.html" class="mobile-menu-item">📚 Study</a>
+    <a href="timer.html" class="mobile-menu-item">⏱️ Timer</a>
+    <a href="ai-match.html" class="mobile-menu-item">🤖 AI Match</a>
+    <a href="admin.html" class="mobile-menu-item" id="mobileAdminBtn" style="display:none;">👑 Admin</a>
+    <div class="menu-divider"></div>
+    <a href="profile.html" class="mobile-menu-item">👤 Profile</a>
+    <a href="#" class="mobile-menu-item" onclick="logout()">🚪 Logout</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-icon">📚</div>
+    <h1>Study Material Library</h1>
+    <p>Share notes, past questions and resources with fellow aspirants</p>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-number" id="statMaterials">0</div><div class="stat-label">Materials</div></div>
+      <div class="stat"><div class="stat-number" id="statDownloads">0</div><div class="stat-label">Downloads</div></div>
+      <div class="stat"><div class="stat-number" id="statContributors">0</div><div class="stat-label">Contributors</div></div>
+    </div>
+    <div><div class="live-badge"><div class="live-dot"></div> Live Updates</div></div>
+  </section>
+
+  <div class="container">
+
+    <!-- LOGIN PROMPT / UPLOAD SECTION -->
+    <div id="loginPrompt" class="login-prompt reveal">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>Login to upload study materials and help fellow aspirants!</p>
+      <a href="login.html">Login to Contribute →</a>
+    </div>
+
+    <div id="uploadSection" class="upload-section">
+      <div class="upload-title"><i class="fas fa-cloud-upload-alt"></i> Share Your Study Material</div>
+      <div class="upload-form">
+        <div class="form-row">
+          <input type="text" id="matTitle" placeholder="Title (e.g., Physics Notes — Unit 1)" maxlength="100"/>
+          <select id="matCategory">
+            <option value="CEE">🏥 CEE (MBBS)</option>
+            <option value="IOE">⚙️ IOE (Engineering)</option>
+            <option value="+2">📖 +2 (Science)</option>
+            <option value="Management">💼 Management</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <textarea id="matDesc" placeholder="Description — what's included, which chapter, topic..." maxlength="500"></textarea>
+        </div>
+        <div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.38);margin-bottom:8px;">Subject Tag</div>
+          <div class="tag-picker" id="tagPicker"></div>
+        </div>
+        <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()">
+          <i class="fas fa-file-upload" id="dropIcon"></i>
+          <div class="file-drop-text" id="dropText">Tap to upload or drag & drop</div>
+          <div class="file-drop-hint">PDF, DOC, PPT, TXT, JPG, PNG — Max 10MB</div>
+          <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png" style="display:none"/>
+          <div class="file-selected-info" id="fileSelectedInfo" style="display:none"></div>
+        </div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <button class="upload-btn" id="uploadBtn" onclick="uploadMaterial()">
+          <i class="fas fa-share"></i> Share Material
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE TABS -->
+    <div class="page-tabs reveal">
+      <button class="page-tab active" id="tabBrowse" onclick="switchTab('browse')">📚 Browse All</button>
+      <button class="page-tab" id="tabMine" onclick="switchTab('mine')">👤 My Uploads</button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap reveal">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search materials, topics, subjects..."/>
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="tabs-wrap reveal">
+      <button class="cat-btn active" data-cat="all">📌 All</button>
+      <button class="cat-btn" data-cat="CEE">🏥 CEE</button>
+      <button class="cat-btn" data-cat="IOE">⚙️ IOE</button>
+      <button class="cat-btn" data-cat="+2">📖 +2</button>
+      <button class="cat-btn" data-cat="Management">💼 Management</button>
+    </div>
+
+    <!-- SUBJECT TAGS -->
+    <div class="subject-tags reveal" id="subjectTagsFilter"></div>
+
+    <!-- SORT BAR -->
+    <div class="sort-bar reveal">
+      <div class="sort-label" id="resultCount">Loading...</div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="sort-buttons">
+          <button class="sort-btn active" data-sort="newest">Newest</button>
+          <button class="sort-btn" data-sort="downloads">Top</button>
+          <button class="sort-btn" data-sort="oldest">Oldest</button>
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" id="listViewBtn" onclick="setView('list')" title="List view">
+            <i class="fas fa-list"></i>
+          </button>
+          <button class="view-btn" id="gridViewBtn" onclick="setView('grid')" title="Grid view">
+            <i class="fas fa-th-large"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATERIALS GRID -->
+    <div id="materialsGrid" class="materials-grid">
+      <div class="skel-card">
+        <div style="display:flex;gap:12px;margin-bottom:14px;">
+          <div class="skel" style="width:44px;height:44px;border-radius:12px;flex-shrink:0;"></div>
+          <div style="flex:1;"><div class="skel" style="height:14px;width:60%;border-radius:6px;margin-bottom:8px;"></div><div class="skel" style="height:10px;width:35%;border-radius:6px;"></div></div>
+        </div>
+        <div class="skel" style="height:40px;border-radius:8px;margin-bottom:12px;"></div>
+        <div class="skel" style="height:10px;width:80%;border-radius:6px;"></div>
+      </div>
+      <div class="skel-card">
+        <div style="display:flex;gap:12px;margin-bottom:14px;">
+          <div class="skel" style="width:44px;height:44px;border-radius:12px;flex-shrink:0;"></div>
+          <div style="flex:1;"><div class="skel" style="height:14px;width:50%;border-radius:6px;margin-bottom:8px;"></div><div class="skel" style="height:10px;width:30%;border-radius:6px;"></div></div>
+        </div>
+        <div class="skel" style="height:40px;border-radius:8px;margin-bottom:12px;"></div>
+        <div class="skel" style="height:10px;width:70%;border-radius:6px;"></div>
+      </div>
+    </div>
+
+    <div class="back-footer">
+      <a href="index.html" class="back-btn-footer"><i class="fas fa-chevron-left"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="browse.html" class="nav-item"><span>🔥</span><span>Discover</span></a>
+    <a href="chat.html" class="nav-item"><span>💬</span><span>Chats</span></a>
+    <a href="study.html" class="nav-item active"><span>📚</span><span>Study</span></a>
+    <a href="profile.html" class="nav-item"><span>👤</span><span>Profile</span></a>
+  </div>
+
+<script>
+  /* ════════ STATE ════════ */
+  let currentUserId   = null;
+  let isLoggedIn      = false;
+  let isAdmin         = false;
+  let materials       = [];
+  let currentCat      = 'all';
+  let currentSort     = 'newest';
+  let currentSubj     = '';
+  let searchQuery     = '';
+  let currentTab      = 'browse';
+  let currentView     = 'list';
+  let selectedFile    = null;
+  let selectedTag     = '';
+  let rtChannel       = null;
+
+  const SUBJECTS = ['Physics','Chemistry','Math','Biology','English',
+    'Computer','Nepali','Economics','Accounts','Social'];
+
+  const ALL_TAGS = [...SUBJECTS];
+
+  /* ════════ INIT ════════ */
+  async function init() {
+    try {
+      const { data } = await supabaseClient.auth.getSession();
+      if (data.session) {
+        currentUserId = data.session.user.id;
+        isLoggedIn    = true;
+        const { data: prof } = await supabaseClient
+          .from('profiles').select('role').eq('id', currentUserId).single();
+        isAdmin = prof?.role === 'admin';
+        if (isAdmin) {
+          document.getElementById('adminBtn').style.display = 'inline-flex';
+          document.getElementById('mobileAdminBtn').style.display = 'block';
+        }
+        document.getElementById('loginPrompt').style.display  = 'none';
+        document.getElementById('uploadSection').classList.add('visible');
+      }
+      buildTagPicker();
+      buildSubjectFilter();
+      await loadMaterials();
+      subscribeRealtime();
+    } catch(e) {
+      showToast('Failed to load. Please refresh.');
+    }
+  }
+
+  /* ════════ TAG PICKER (upload form) ════════ */
+  function buildTagPicker() {
+    document.getElementById('tagPicker').innerHTML = ALL_TAGS.map(t =>
+      `<button class="tag-pick-btn" onclick="selectTag(this,'${t}')">${t}</button>`
+    ).join('');
+  }
+
+  function selectTag(el, tag) {
+    document.querySelectorAll('.tag-pick-btn').forEach(b => b.classList.remove('selected'));
+    if (selectedTag === tag) { selectedTag = ''; return; }
+    el.classList.add('selected');
+    selectedTag = tag;
+  }
+
+  /* ════════ SUBJECT FILTER ════════ */
+  function buildSubjectFilter() {
+    document.getElementById('subjectTagsFilter').innerHTML =
+      ['All Subjects', ...ALL_TAGS].map((t, i) =>
+        `<button class="subj-tag ${i===0?'active':''}" onclick="filterSubject(this,'${i===0?'':t}')">${t}</button>`
+      ).join('');
+  }
+
+  function filterSubject(el, subj) {
+    document.querySelectorAll('.subj-tag').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    currentSubj = subj;
+    renderMaterials();
+  }
+
+  /* ════════ LOAD MATERIALS ════════ */
+  async function loadMaterials() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('study_materials')
+        .select('*, profiles(name, avatar_url)')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      materials = data || [];
+      updateStats();
+      renderMaterials();
+    } catch {
+      document.getElementById('materialsGrid').innerHTML =
+        '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Failed to load materials. Check your connection.</p></div>';
+    }
+  }
+
+  /* ════════ STATS ════════ */
+  function updateStats() {
+    const total     = materials.length;
+    const downloads = materials.reduce((s, m) => s + (m.downloads || 0), 0);
+    const contrib   = new Set(materials.map(m => m.uploaded_by)).size;
+    animCount(document.getElementById('statMaterials'),   total);
+    animCount(document.getElementById('statDownloads'),   downloads);
+    animCount(document.getElementById('statContributors'), contrib);
+  }
+
+  function animCount(el, target) {
+    let c = 0; const step = Math.max(1, Math.floor(target/40));
+    const t = setInterval(() => {
+      c = Math.min(c + step, target);
+      el.textContent = c;
+      if (c >= target) clearInterval(t);
+    }, 30);
+  }
+
+  /* ════════ RENDER ════════ */
+  function renderMaterials() {
+    const grid = document.getElementById('materialsGrid');
+    grid.className = 'materials-grid' + (currentView === 'grid' ? ' grid-view' : '');
+
+    let list = currentTab === 'mine'
+      ? materials.filter(m => m.uploaded_by === currentUserId)
+      : materials;
+
+    if (currentCat !== 'all') list = list.filter(m => m.category === currentCat);
+    if (currentSubj)           list = list.filter(m => m.subject === currentSubj);
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(m =>
+        (m.title||'').toLowerCase().includes(q) ||
+        (m.description||'').toLowerCase().includes(q) ||
+        (m.subject||'').toLowerCase().includes(q)
+      );
+    }
+
+    if (currentSort === 'newest')    list.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    if (currentSort === 'oldest')    list.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
+    if (currentSort === 'downloads') list.sort((a,b) => (b.downloads||0) - (a.downloads||0));
+
+    document.getElementById('resultCount').textContent =
+      `${list.length} material${list.length!==1?'s':''} found`;
+
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty-state"><i class="fas fa-book-open"></i><p>No materials found. Be the first to share!</p></div>';
+      return;
+    }
+
+    grid.innerHTML = list.map(m => renderCard(m)).join('');
+  }
+
+  function renderCard(m) {
+    const { icon, cls } = getFileIcon(m.file_name);
+    const uploader = m.profiles?.name || 'Anonymous';
+    const sizeTxt  = m.file_size ? formatSize(m.file_size) : '';
+    const isOwner  = m.uploaded_by === currentUserId;
+
+    return `
+      <div class="material-card" id="card-${m.id}">
+        <div class="card-top">
+          <div class="card-icon-title">
+            <div class="file-icon-wrap ${cls}">${icon}</div>
+            <div class="card-title-wrap">
+              <div class="card-title">${escapeHtml(m.title)}</div>
+              <div class="card-badges">
+                <span class="badge badge-cat">${m.category}</span>
+                ${m.subject ? `<span class="badge badge-subj">${m.subject}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+        ${m.description ? `<div class="card-desc">${escapeHtml(m.description)}</div>` : ''}
+        <div class="card-meta">
+          <span><i class="fas fa-user"></i>${escapeHtml(uploader)}</span>
+          <span><i class="fas fa-download"></i>${m.downloads||0} downloads</span>
+          ${sizeTxt ? `<span><i class="fas fa-hdd"></i>${sizeTxt}</span>` : ''}
+          <span><i class="far fa-clock"></i>${formatDate(m.created_at)}</span>
+        </div>
+        <div class="card-actions">
+          <button class="download-btn" onclick="downloadMaterial('${m.id}','${m.file_url}','${escapeAttr(m.file_name||'file')}')">
+            <i class="fas fa-download"></i> Download
+          </button>
+          <button class="comment-toggle-btn" onclick="toggleComments('${m.id}')">
+            <i class="fas fa-comment"></i> <span id="cmtCount-${m.id}">Comments</span>
+          </button>
+          <button class="admin-del-btn ${isAdmin ? 'show' : ''}"
+            onclick="adminDelete('${m.id}','${escapeAttr(m.file_name||'')}')">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+        <div class="comments-section" id="comments-${m.id}">
+          ${isLoggedIn ? `
+            <div class="comment-form">
+              <input type="text" class="comment-input" id="cmtInput-${m.id}"
+                placeholder="Add a comment..."
+                onkeypress="if(event.key==='Enter') postComment('${m.id}')"/>
+              <button class="comment-send-btn" onclick="postComment('${m.id}')">Post</button>
+            </div>` :
+            `<div class="comments-login-prompt"><a href="login.html">Login to comment</a></div>`
+          }
+          <div id="cmtList-${m.id}"><div class="no-comments">Loading comments...</div></div>
+        </div>
+      </div>`;
+  }
+
+  /* ════════ TOGGLE COMMENTS ════════ */
+  async function toggleComments(id) {
+    const section = document.getElementById('comments-' + id);
+    const isOpen  = section.classList.contains('open');
+    section.classList.toggle('open');
+    if (!isOpen) await loadComments(id);
+  }
+
+  /* ════════ LOAD COMMENTS ════════ */
+  async function loadComments(matId) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('study_comments').select('*, profiles(name)')
+        .eq('material_id', matId)
+        .order('created_at', { ascending: true });
+      if (error) throw error;
+      const list = data || [];
+      const countEl = document.getElementById('cmtCount-' + matId);
+      if (countEl) countEl.textContent = list.length + ' Comment' + (list.length!==1?'s':'');
+      const listEl = document.getElementById('cmtList-' + matId);
+      if (!listEl) return;
+      if (!list.length) {
+        listEl.innerHTML = '<div class="no-comments">No comments yet. Be first!</div>';
+        return;
+      }
+      listEl.innerHTML = list.map(c => `
+        <div class="comment-item">
+          <div class="comment-avatar">👤</div>
+          <div class="comment-body">
+            <div class="comment-author">${escapeHtml(c.profiles?.name || 'Anonymous')}</div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
+            <div class="comment-time">${formatDate(c.created_at)}</div>
+          </div>
+        </div>`).join('');
+    } catch {
+      const listEl = document.getElementById('cmtList-' + matId);
+      if (listEl) listEl.innerHTML = '<div class="no-comments">Failed to load comments.</div>';
+    }
+  }
+
+  /* ════════ POST COMMENT ════════ */
+  async function postComment(matId) {
+    if (!isLoggedIn) { showToast('Please login to comment'); return; }
+    const input = document.getElementById('cmtInput-' + matId);
+    const text  = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    try {
+      const { error } = await supabaseClient.from('study_comments').insert({
+        material_id: matId, user_id: currentUserId, text
+      });
+      if (error) throw error;
+      await loadComments(matId);
+    } catch {
+      showToast('Failed to post comment');
+    }
+  }
+
+  /* ════════ DOWNLOAD ════════ */
+  async function downloadMaterial(id, fileUrl, fileName) {
+    if (!isLoggedIn) {
+      showToast('🔒 Please login to download');
+      setTimeout(() => window.location.href = 'login.html', 1200);
+      return;
+    }
+    try {
+      // Increment download count directly (no RPC needed)
+      const mat = materials.find(m => m.id === id);
+      if (mat) {
+        await supabaseClient.from('study_materials')
+          .update({ downloads: (mat.downloads||0) + 1 }).eq('id', id);
+      }
+      window.open(fileUrl, '_blank');
+      showToast('📥 Downloading: ' + fileName);
+      await loadMaterials();
+    } catch {
+      showToast('Download failed. Try again.');
+    }
+  }
+
+  /* ════════ UPLOAD ════════ */
+  async function uploadMaterial() {
+    if (!isLoggedIn) { showToast('Please login to upload'); return; }
+    const title    = document.getElementById('matTitle').value.trim();
+    const category = document.getElementById('matCategory').value;
+    const desc     = document.getElementById('matDesc').value.trim();
+
+    if (!title)        { showToast('❌ Please enter a title'); return; }
+    if (!desc)         { showToast('❌ Please enter a description'); return; }
+    if (!selectedFile) { showToast('❌ Please select a file'); return; }
+    if (selectedFile.size > 10 * 1024 * 1024) { showToast('❌ File too large — max 10MB'); return; }
+
+    const btn      = document.getElementById('uploadBtn');
+    const progress = document.getElementById('uploadProgress');
+    const fill     = document.getElementById('progressFill');
+    btn.disabled   = true;
+    btn.innerHTML  = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+    progress.classList.add('show');
+
+    // Fake progress animation
+    let pct = 0;
+    const pTimer = setInterval(() => {
+      pct = Math.min(pct + 8, 85);
+      fill.style.width = pct + '%';
+    }, 200);
+
+    try {
+      const ext      = selectedFile.name.split('.').pop();
+      const fileName = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '.' + ext;
+      const filePath = currentUserId + '/' + fileName;
+
+      const { error: upErr } = await supabaseClient.storage
+        .from('study_files').upload(filePath, selectedFile);
+      if (upErr) throw upErr;
+
+      clearInterval(pTimer);
+      fill.style.width = '100%';
+
+      const { data: urlData } = supabaseClient.storage.from('study_files').getPublicUrl(filePath);
+
+      const { error: dbErr } = await supabaseClient.from('study_materials').insert({
+        title, category, description: desc,
+        subject:   selectedTag || null,
+        file_name: selectedFile.name,
+        file_url:  urlData.publicUrl,
+        file_type: ext,
+        file_size: selectedFile.size,
+        uploaded_by: currentUserId,
+        downloads: 0
+      });
+      if (dbErr) throw dbErr;
+
+      // Reset form
+      document.getElementById('matTitle').value = '';
+      document.getElementById('matDesc').value  = '';
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileSelectedInfo').style.display = 'none';
+      document.getElementById('dropText').textContent = 'Tap to upload or drag & drop';
+      document.getElementById('dropIcon').className   = 'fas fa-file-upload';
+      document.getElementById('fileDrop').classList.remove('has-file');
+      document.querySelectorAll('.tag-pick-btn').forEach(b => b.classList.remove('selected'));
+      selectedFile = null; selectedTag = '';
+
+      showToast('✅ Material shared successfully!');
+      await loadMaterials();
+    } catch(e) {
+      clearInterval(pTimer);
+      showToast('❌ Upload failed: ' + (e.message || 'Unknown error'));
+    }
+
+    setTimeout(() => { progress.classList.remove('show'); fill.style.width='0%'; }, 800);
+    btn.disabled  = false;
+    btn.innerHTML = '<i class="fas fa-share"></i> Share Material';
+  }
+
+  /* ════════ ADMIN DELETE ════════ */
+  async function adminDelete(id, fileName) {
+    if (!isAdmin) return;
+    if (!confirm('Delete this material? This cannot be undone.')) return;
+    try {
+      await supabaseClient.from('study_comments').delete().eq('material_id', id);
+      await supabaseClient.from('study_materials').delete().eq('id', id);
+      showToast('🗑️ Material deleted');
+      await loadMaterials();
+    } catch {
+      showToast('❌ Delete failed');
+    }
+  }
+
+  /* ════════ REALTIME ════════ */
+  function subscribeRealtime() {
+    if (rtChannel) supabaseClient.removeChannel(rtChannel);
+    rtChannel = supabaseClient.channel('study-rt')
+      .on('postgres_changes', { event:'*', schema:'public', table:'study_materials' },
+        () => loadMaterials())
+      .subscribe();
+  }
+
+  /* ════════ FILE DROP ════════ */
+  const fileDrop = document.getElementById('fileDrop');
+  fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('drag-over'); });
+  fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('drag-over'));
+  fileDrop.addEventListener('drop', e => {
+    e.preventDefault();
+    fileDrop.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) setFile(file);
+  });
+
+  document.getElementById('fileInput').addEventListener('change', e => {
+    if (e.target.files[0]) setFile(e.target.files[0]);
+  });
+
+  function setFile(file) {
+    selectedFile = file;
+    const sizeMB = (file.size / 1048576).toFixed(2);
+    document.getElementById('dropText').textContent     = '';
+    document.getElementById('dropIcon').className       = 'fas fa-check-circle';
+    document.getElementById('dropIcon').style.color     = '#4ade80';
+    document.getElementById('fileDrop').classList.add('has-file');
+    document.getElementById('fileSelectedInfo').style.display = 'flex';
+    document.getElementById('fileSelectedInfo').innerHTML =
+      '<i class="fas fa-check-circle" style="color:#4ade80"></i>' +
+      escapeHtml(file.name) + ' (' + sizeMB + ' MB)';
+  }
+
+  /* ════════ SEARCH ════════ */
+  let searchTimer;
+  document.getElementById('searchInput').addEventListener('input', function() {
+    searchQuery = this.value.trim();
+    document.getElementById('searchClear').classList.toggle('show', searchQuery.length > 0);
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(renderMaterials, 300);
+  });
+
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchClear').classList.remove('show');
+    searchQuery = '';
+    renderMaterials();
+  }
+
+  /* ════════ TABS ════════ */
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tabBrowse').className = 'page-tab' + (tab==='browse' ? ' active' : '');
+    document.getElementById('tabMine').className   = 'page-tab' + (tab==='mine'   ? ' active' : '');
+    renderMaterials();
+  }
+
+  /* ════════ VIEW TOGGLE ════════ */
+  function setView(view) {
+    currentView = view;
+    document.getElementById('listViewBtn').classList.toggle('active', view==='list');
+    document.getElementById('gridViewBtn').classList.toggle('active', view==='grid');
+    renderMaterials();
+  }
+
+  /* ════════ CATEGORY TABS ════════ */
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      renderMaterials();
+    });
+  });
+
+  /* ════════ SORT ════════ */
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSort = btn.dataset.sort;
+      renderMaterials();
+    });
+  });
+
+  /* ════════ HELPERS ════════ */
+  function getFileIcon(fileName) {
+    const ext = (fileName||'').split('.').pop().toLowerCase();
+    if (ext==='pdf')              return { icon:'📄', cls:'file-icon-pdf' };
+    if (ext==='doc'||ext==='docx') return { icon:'📝', cls:'file-icon-doc' };
+    if (ext==='ppt'||ext==='pptx') return { icon:'📊', cls:'file-icon-ppt' };
+    if (['jpg','jpeg','png'].includes(ext)) return { icon:'🖼️', cls:'file-icon-img' };
+    return { icon:'📃', cls:'file-icon-txt' };
+  }
+
+  function formatSize(bytes) {
+    if (bytes < 1024)        return bytes + ' B';
+    if (bytes < 1048576)     return (bytes/1024).toFixed(1) + ' KB';
+    return (bytes/1048576).toFixed(1) + ' MB';
+  }
+
+  function formatDate(str) {
+    const diff = Math.floor((Date.now() - new Date(str)) / 86400000);
+    if (diff === 0) return 'Today';
+    if (diff === 1) return 'Yesterday';
+    if (diff < 7)   return diff + ' days ago';
+    return new Date(str).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  }
+
+  function escapeHtml(s) {
+    if (!s) return '';
+    const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+  }
+
+  function escapeAttr(s) {
+    return (s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  async function logout() {
+    if (confirm('Are you sure?')) {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'index.html';
+    }
+  }
+
+  /* ════════ SCROLL + NAVBAR ════════ */
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  }, { passive: true });
+
+  /* ════════ MOBILE MENU ════════ */
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  const mobMenu = document.getElementById('mobileMenu');
+  menuBtn.onclick = () => {
+    const open = mobMenu.classList.toggle('open');
+    menuBtn.textContent = open ? '✕' : '☰';
+  };
+  document.addEventListener('click', e => {
+    if (!mobMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+      mobMenu.classList.remove('open'); menuBtn.textContent = '☰';
+    }
+  });
+
+  /* ════════ REVEAL ════════ */
+  new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.08 }).observe.bind(
+    new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 })
+  );
+  const rObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => rObs.observe(el));
+
+  init();
+</script>
+</body>
+</html>
